@@ -1,0 +1,7 @@
+0.0
+True
+0.0
+False
+False
+False
+YARD
