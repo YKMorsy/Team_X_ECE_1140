@@ -144,7 +144,7 @@
      </property>
     </column>
    </widget>
-   <widget class="QTableWidget" name="RailwayCrossin_Table">
+   <widget class="QTableWidget" name="RailwayCrossing_Table">
     <property name="geometry">
      <rect>
       <x>1200</x>
@@ -196,7 +196,7 @@
      <string>Currently Running PLC: </string>
     </property>
    </widget>
-   <widget class="QPushButton" name="UploadNewPLCButton_2">
+   <widget class="QPushButton" name="run_PLC_button">
     <property name="geometry">
      <rect>
       <x>1420</x>

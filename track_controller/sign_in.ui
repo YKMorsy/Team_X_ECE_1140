@@ -82,16 +82,6 @@
       <height>51</height>
      </rect>
     </property>
-    <item>
-     <property name="text">
-      <string>Track1</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Track2</string>
-     </property>
-    </item>
    </widget>
    <widget class="QLabel" name="TrackSelection_Label">
     <property name="geometry">
