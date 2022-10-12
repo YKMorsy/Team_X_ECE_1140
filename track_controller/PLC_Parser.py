@@ -43,6 +43,7 @@ class PLC_Parser ():
 					logic_queue.put("{")
 				elif (arg == "}"):
 					logic_queue.get()
+					logic_queue.get()
 					condition =  None
 				elif (arg == "="):
 					logic_queue.put("=")
@@ -50,8 +51,10 @@ class PLC_Parser ():
 					logic_queue.put("&")
 				elif (arg == "|"):
 					logic_queue.put("|")
+				elif (arg == "!"):
+					logic_queue.put("!")
 				else:
-					if(condition == False and self.get_state(logic_queue) == "{"):
+					if(condition == False and (self.get_state(logic_queue) == "{" or self.get_state(logic_queue) == "=")):
 						continue
 					var = arg.split('-')
 					value = None
@@ -66,42 +69,57 @@ class PLC_Parser ():
 								set_var.append("S")
 								set_var.append(var[1])
 							else:
-								condition = self.set_condition(switchPos, var[1], condition, state)
+								val = self.get_table_value(switchPos, var[1])
+								condition = self.set_condition(val, var[1], condition, logic_queue)
 						elif (var[0] == "O"):
 							state = self.get_state(logic_queue)
 							if ( state == "{" ):
 								set_var.append("O")
 								set_var.append(var[1])
 							else:
-								condition = self.set_condition(Occupancy, var[1], condition, state)
+								val = self.get_table_value(Occupancy, var[1])
+								condition = self.set_condition(val, var[1], condition, logic_queue)
 						elif (var[0] == "L"):
 							if ( state == "{" ):
 								set_var.append("L")
 								set_var.append(var[1])
-						elif (var[0] == "A"):
-							print("Authority")
+						#elif (var[0] == "A"):
+							#print("Authority")
+						elif (var[0] == "CS"):
+							set_var.append("CS")
+							set_var.append(0)
 						elif(state == "="):
 							if(var[0] == '0'):
 								theBool = "False"
 							else:
 								theBool = "True"
-							tup= (set_var[0], set_var[1], theBool)
+							if(set_var[0] == "CS"):
+								tup= (set_var[0], var[0])
+							else:
+								tup= (set_var[0], set_var[1], theBool)
 							set_var.clear()
 							changes.append(tup)
 					except  Exception as e:
 						print(e)
 		return changes
 
-	def set_condition(self, data, block, condition, state):
+	def set_condition(self, val, block, condition, logic_queue):
+		state = self.get_state(logic_queue)
 		if ( state == "(" ):
-			val = self.get_table_value(data, block)
 			condition = val == "True"
 		elif ( state == "|" ):
-			val = self.get_table_value(data, block)
 			condition = condition or (val == "True")
+			logic_queue.get()
 		elif ( state == "&" ):
-			val = self.get_table_value(data, block)
 			condition = condition and (val == "True")
+			logic_queue.get()
+		elif ( state == "!" ):
+			if (val == "True"):
+				val ="False"
+			else:
+				val = "True"
+			logic_queue.get()
+			condition = self.set_condition(val, block, condition, logic_queue)
 		return condition
 
 	def get_state(self, qu):
