@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>TestingWindow</class>
+ <widget class="QMainWindow" name="TestingWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>2163</width>
+    <height>986</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Testing Window</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QTableWidget" name="SwitchPosInput_Table">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>40</y>
+      <width>541</width>
+      <height>400</height>
+     </rect>
+    </property>
+    <property name="rowCount">
+     <number>0</number>
+    </property>
+    <property name="columnCount">
+     <number>2</number>
+    </property>
+    <column>
+     <property name="text">
+      <string>Block Number</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Switch Position</string>
+     </property>
+    </column>
+   </widget>
+   <widget class="QTableWidget" name="Suggested_Speed_Table">
+    <property name="geometry">
+     <rect>
+      <x>1620</x>
+      <y>40</y>
+      <width>541</width>
+      <height>400</height>
+     </rect>
+    </property>
+    <property name="rowCount">
+     <number>0</number>
+    </property>
+    <property name="columnCount">
+     <number>2</number>
+    </property>
+    <column>
+     <property name="text">
+      <string>Block Number</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Suggested Speed</string>
+     </property>
+    </column>
+   </widget>
+   <widget class="QTableWidget" name="Occupancy_Table">
+    <property name="geometry">
+     <rect>
+      <x>540</x>
+      <y>40</y>
+      <width>541</width>
+      <height>400</height>
+     </rect>
+    </property>
+    <property name="rowCount">
+     <number>0</number>
+    </property>
+    <property name="columnCount">
+     <number>2</number>
+    </property>
+    <column>
+     <property name="text">
+      <string>Block Number</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Occupancy</string>
+     </property>
+    </column>
+   </widget>
+   <widget class="QTableWidget" name="SwitchPosOutput_Table">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>540</y>
+      <width>551</width>
+      <height>400</height>
+     </rect>
+    </property>
+    <property name="rowCount">
+     <number>0</number>
+    </property>
+    <property name="columnCount">
+     <number>2</number>
+    </property>
+    <column>
+     <property name="text">
+      <string>Block Number</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Switch Position</string>
+     </property>
+    </column>
+   </widget>
+   <widget class="QTableWidget" name="LightColor_Table">
+    <property name="geometry">
+     <rect>
+      <x>539</x>
+      <y>540</y>
+      <width>541</width>
+      <height>400</height>
+     </rect>
+    </property>
+    <property name="rowCount">
+     <number>0</number>
+    </property>
+    <property name="columnCount">
+     <number>2</number>
+    </property>
+    <column>
+     <property name="text">
+      <string>Block Number</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Light Colors</string>
+     </property>
+    </column>
+   </widget>
+   <widget class="QTableWidget" name="RailwayCrossing_Table">
+    <property name="geometry">
+     <rect>
+      <x>1080</x>
+      <y>540</y>
+      <width>541</width>
+      <height>400</height>
+     </rect>
+    </property>
+    <property name="rowCount">
+     <number>0</number>
+    </property>
+    <property name="columnCount">
+     <number>2</number>
+    </property>
+    <column>
+     <property name="text">
+      <string>Block Number</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Railway Crossing</string>
+     </property>
+    </column>
+   </widget>
+   <widget class="QPushButton" name="UploadNewPLCButton">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>470</y>
+      <width>371</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Upload New PLC</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="CurrentPLCLabel">
+    <property name="geometry">
+     <rect>
+      <x>410</x>
+      <y>470</y>
+      <width>1361</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Currently Running PLC: </string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="run_PLC_button">
+    <property name="geometry">
+     <rect>
+      <x>1780</x>
+      <y>470</y>
+      <width>371</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Run PLC</string>
+    </property>
+   </widget>
+   <widget class="QTableWidget" name="Commanded_Speed_Table">
+    <property name="geometry">
+     <rect>
+      <x>1620</x>
+      <y>540</y>
+      <width>541</width>
+      <height>400</height>
+     </rect>
+    </property>
+    <property name="rowCount">
+     <number>0</number>
+    </property>
+    <property name="columnCount">
+     <number>2</number>
+    </property>
+    <column>
+     <property name="text">
+      <string>Block Number</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Command Speed</string>
+     </property>
+    </column>
+   </widget>
+   <widget class="QTableWidget" name="Authority_Table">
+    <property name="geometry">
+     <rect>
+      <x>1080</x>
+      <y>40</y>
+      <width>541</width>
+      <height>400</height>
+     </rect>
+    </property>
+    <property name="rowCount">
+     <number>0</number>
+    </property>
+    <property name="columnCount">
+     <number>2</number>
+    </property>
+    <column>
+     <property name="text">
+      <string>Block Number</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Authority</string>
+     </property>
+    </column>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>2163</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
