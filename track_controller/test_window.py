@@ -26,7 +26,7 @@ class test_window (QtWidgets.QMainWindow, Ui_TestingWindow):
         self.Occupancy_Table.itemChanged.connect(self.item_changed)
 
         cspeed = self.track_control_data.get_commanded_speed()
-        self.commanded_speed_label.setText("Commanded Speed: "+ str(cspeed))
+        #self.commanded_speed_label.setText("Commanded Speed: "+ str(cspeed))
 
         self.update_tables()
 
@@ -48,10 +48,12 @@ class test_window (QtWidgets.QMainWindow, Ui_TestingWindow):
     def update_tables(self):
         self.update_table(self.track_control_data.get_switch_positions(), self.SwitchPosInput_Table, True)
         self.update_table(self.track_control_data.get_authority(), self.Authority_Table, True)
+        self.update_table(self.track_control_data.get_suggested_speed(), self.Suggested_Speed_Table, True)
         self.update_table(self.track_control_data.get_occupancy(), self.Occupancy_Table, True)
         self.update_table(self.track_control_data.get_switch_positions(), self.SwitchPosOutput_Table, False)
         self.update_light_table(self.track_control_data.get_light_colors(), self.LightColor_Table, False)
         self.update_table(self.track_control_data.get_railway_crossings(), self.RailwayCrossing_Table, False)
+        self.update_table(self.track_control_data.get_commanded_speed(), self.Commanded_Speed_Table, False)
         
     def update_table(self, data, table, changable):
         numrows = len(data)
@@ -85,10 +87,10 @@ class test_window (QtWidgets.QMainWindow, Ui_TestingWindow):
         self.make_changes()
         self.track_control_data.ParsePLC()
         self.update_tables()
-        #TODO: run plc logic
 
     def make_changes(self):
         self.get_table_change(self.track_control_data.get_switch_positions(), self.SwitchPosInput_Table)
+        self.get_table_change(self.track_control_data.get_suggested_speed(), self.Suggested_Speed_Table)
         self.get_table_change(self.track_control_data.get_authority(), self.Authority_Table)
         self.get_table_change(self.track_control_data.get_occupancy(), self.Occupancy_Table)
         self.update_tables()
@@ -108,6 +110,8 @@ trackTest.set_occupancy([(1,True), (2, True), (4, False)])
 trackTest.set_railway_crossings([(1,True), (2, True), (3, False)])
 trackTest.set_light_colors([(1,True,True), (5, True,True), (3, False,True)])
 trackTest.set_statuses([(1,True), (2, True), (3, True)])
+trackTest.set_suggested_speed([(1,0b00011010), (2, 0b00100111), (3, 0b00010101)])
+trackTest.set_commanded_speed([(1,0b000000010), (2, 0b00100000), (3, 0b00000100)])
 trackTest.set_PLC("track_controller/testPLCfile.txt")
 app = QtWidgets.QApplication(sys.argv)
 window = test_window(trackTest)

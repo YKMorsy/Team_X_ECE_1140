@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1802</width>
+    <width>2163</width>
     <height>986</height>
    </rect>
   </property>
@@ -18,8 +18,8 @@
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>50</y>
-      <width>600</width>
+      <y>40</y>
+      <width>541</width>
       <height>400</height>
      </rect>
     </property>
@@ -40,12 +40,12 @@
      </property>
     </column>
    </widget>
-   <widget class="QTableWidget" name="Authority_Table">
+   <widget class="QTableWidget" name="Suggested_Speed_Table">
     <property name="geometry">
      <rect>
-      <x>600</x>
-      <y>50</y>
-      <width>600</width>
+      <x>1620</x>
+      <y>40</y>
+      <width>541</width>
       <height>400</height>
      </rect>
     </property>
@@ -62,16 +62,16 @@
     </column>
     <column>
      <property name="text">
-      <string>Authority</string>
+      <string>Suggested Speed</string>
      </property>
     </column>
    </widget>
    <widget class="QTableWidget" name="Occupancy_Table">
     <property name="geometry">
      <rect>
-      <x>1200</x>
-      <y>50</y>
-      <width>600</width>
+      <x>540</x>
+      <y>40</y>
+      <width>541</width>
       <height>400</height>
      </rect>
     </property>
@@ -97,7 +97,7 @@
      <rect>
       <x>0</x>
       <y>540</y>
-      <width>600</width>
+      <width>551</width>
       <height>400</height>
      </rect>
     </property>
@@ -121,9 +121,9 @@
    <widget class="QTableWidget" name="LightColor_Table">
     <property name="geometry">
      <rect>
-      <x>600</x>
+      <x>539</x>
       <y>540</y>
-      <width>600</width>
+      <width>541</width>
       <height>400</height>
      </rect>
     </property>
@@ -147,9 +147,9 @@
    <widget class="QTableWidget" name="RailwayCrossing_Table">
     <property name="geometry">
      <rect>
-      <x>1200</x>
+      <x>1080</x>
       <y>540</y>
-      <width>600</width>
+      <width>541</width>
       <height>400</height>
      </rect>
     </property>
@@ -188,7 +188,7 @@
      <rect>
       <x>410</x>
       <y>470</y>
-      <width>991</width>
+      <width>1361</width>
       <height>51</height>
      </rect>
     </property>
@@ -199,7 +199,7 @@
    <widget class="QPushButton" name="run_PLC_button">
     <property name="geometry">
      <rect>
-      <x>1420</x>
+      <x>1780</x>
       <y>470</y>
       <width>371</width>
       <height>51</height>
@@ -209,18 +209,57 @@
      <string>Run PLC</string>
     </property>
    </widget>
-   <widget class="QLabel" name="commanded_speed_label">
+   <widget class="QTableWidget" name="Commanded_Speed_Table">
     <property name="geometry">
      <rect>
-      <x>1040</x>
-      <y>0</y>
-      <width>741</width>
-      <height>41</height>
+      <x>1620</x>
+      <y>540</y>
+      <width>541</width>
+      <height>400</height>
      </rect>
     </property>
-    <property name="text">
-     <string>Commanded Speed: </string>
+    <property name="rowCount">
+     <number>0</number>
     </property>
+    <property name="columnCount">
+     <number>2</number>
+    </property>
+    <column>
+     <property name="text">
+      <string>Block Number</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Command Speed</string>
+     </property>
+    </column>
+   </widget>
+   <widget class="QTableWidget" name="Authority_Table">
+    <property name="geometry">
+     <rect>
+      <x>1080</x>
+      <y>40</y>
+      <width>541</width>
+      <height>400</height>
+     </rect>
+    </property>
+    <property name="rowCount">
+     <number>0</number>
+    </property>
+    <property name="columnCount">
+     <number>2</number>
+    </property>
+    <column>
+     <property name="text">
+      <string>Block Number</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Authority</string>
+     </property>
+    </column>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -228,7 +267,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1802</width>
+     <width>2163</width>
      <height>22</height>
     </rect>
    </property>

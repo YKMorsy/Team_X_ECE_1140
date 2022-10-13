@@ -12,6 +12,8 @@ class track_control_controller():
         self.track_controller_list[0].set_railway_crossings([(1,True), (2, True), (3, False)])
         self.track_controller_list[0].set_light_colors([(1,True,True), (5, True,True), (3, False,True)])
         self.track_controller_list[0].set_statuses([(1,True), (2, True), (3, True)])
+        self.track_controller_list[0].set_suggested_speed([(1,0b00011010), (2, 0b00100111), (3, 0b00010101)])
+        self.track_controller_list[0].set_commanded_speed([(1,0b000000000), (2, 0b00000000), (3, 0b00000000)])
         self.track_controller_list[0].set_PLC("track_controller/testPLCfile.txt")
 
         self.track_controller_list[1].set_authority([(1,True), (2, False), (3, False)])

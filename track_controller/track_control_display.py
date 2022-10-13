@@ -192,7 +192,7 @@ class test_window (QtWidgets.QMainWindow, Ui_TestingWindow):
         self.Occupancy_Table.itemChanged.connect(self.item_changed)
 
         cspeed = self.track_control_data.get_commanded_speed()
-        self.commanded_speed_label.setText("Commanded Speed: "+ str(cspeed))
+        #self.commanded_speed_label.setText("Commanded Speed: "+ str(cspeed))
 
         self.update_tables()
 
@@ -214,10 +214,12 @@ class test_window (QtWidgets.QMainWindow, Ui_TestingWindow):
     def update_tables(self):
         self.update_table(self.track_control_data.get_switch_positions(), self.SwitchPosInput_Table, True)
         self.update_table(self.track_control_data.get_authority(), self.Authority_Table, True)
+        self.update_table(self.track_control_data.get_suggested_speed(), self.Suggested_Speed_Table, True)
         self.update_table(self.track_control_data.get_occupancy(), self.Occupancy_Table, True)
         self.update_table(self.track_control_data.get_switch_positions(), self.SwitchPosOutput_Table, False)
         self.update_light_table(self.track_control_data.get_light_colors(), self.LightColor_Table, False)
         self.update_table(self.track_control_data.get_railway_crossings(), self.RailwayCrossing_Table, False)
+        self.update_table(self.track_control_data.get_commanded_speed(), self.Commanded_Speed_Table, False)
         
     def update_table(self, data, table, changable):
         numrows = len(data)
@@ -251,10 +253,10 @@ class test_window (QtWidgets.QMainWindow, Ui_TestingWindow):
         self.make_changes()
         self.track_control_data.ParsePLC()
         self.update_tables()
-        #TODO: run plc logic
 
     def make_changes(self):
         self.get_table_change(self.track_control_data.get_switch_positions(), self.SwitchPosInput_Table)
+        self.get_table_change(self.track_control_data.get_suggested_speed(), self.Suggested_Speed_Table)
         self.get_table_change(self.track_control_data.get_authority(), self.Authority_Table)
         self.get_table_change(self.track_control_data.get_occupancy(), self.Occupancy_Table)
         self.update_tables()

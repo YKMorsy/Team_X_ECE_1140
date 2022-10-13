@@ -10,8 +10,8 @@ class WaysideController ():
         self.railway_crossings = []
         self.light_colors = []
         self.statuses = []
-        self.suggested_speed = 0b00010100 #20 in binary
-        self.commanded_speed = 0b00010100 #20 in binary
+        self.suggested_speed = [] #0b00010100 #20 in binary
+        self.commanded_speed = []#0b00010100 #20 in binary
 
     def ParsePLC(self):
         changes = self.PLC_info.parse_PLC(self.switch_positions, self.occupancy)

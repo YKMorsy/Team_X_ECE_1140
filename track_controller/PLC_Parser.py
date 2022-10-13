@@ -94,11 +94,12 @@ class PLC_Parser ():
 							else:
 								theBool = "True"
 							if(set_var[0] == "CS"):
-								tup= (set_var[0], var[0])
+								tup= (set_var[0], set_var[1], var[0])
 							else:
 								tup= (set_var[0], set_var[1], theBool)
 							set_var.clear()
 							changes.append(tup)
+							logic_queue.get()
 					except  Exception as e:
 						print(e)
 		return changes
