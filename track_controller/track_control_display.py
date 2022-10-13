@@ -20,7 +20,7 @@ class sign_in_window (QtWidgets.QMainWindow, Ui_sign_in_window):
     def __init__(self):
         #self.main_wind = MainWindow()
         QtWidgets.QMainWindow.__init__(self)
-        Ui_MainWindow.__init__(self)
+        Ui_sign_in_window.__init__(self)
         self.setupUi(self)
         self.SignInButton.clicked.connect(self.open_main_window)
         self.Password_TextBox.installEventFilter(self)
@@ -180,7 +180,7 @@ class test_window (QtWidgets.QMainWindow, Ui_TestingWindow):
     def __init__(self, trc):
         self.track_control_data = copy.copy(trc)
         QtWidgets.QMainWindow.__init__(self)
-        Ui_MainWindow.__init__(self)
+        Ui_TestingWindow.__init__(self)
         self.setupUi(self)
         self.UploadNewPLCButton.clicked.connect(self.openFileNameDialog)
         self.run_PLC_button.clicked.connect(self.run_plc)
