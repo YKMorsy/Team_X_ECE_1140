@@ -129,6 +129,7 @@ class TrainController:
         if self.trainModelInput.currentSetPoint > self.speedLimit * 0.277778:
             self.power = 0.0
             self.serviceBrakes = True
+            self.uValue = 0.0
         else:
             self.serviceBrakes = self.trainDriverInput.serviceBrake
         
@@ -137,16 +138,18 @@ class TrainController:
         if not self.authority:
             self.power = 0.0
             self.emergencyBrakes = True
+            self.uValue = 0.0
         else:
             self.emergencyBrakes = self.trainDriverInput.emergencyBrake or self.passengerInput.emergencyBrake
 
         if self.serviceBrakes or self.emergencyBrakes:
             self.power = 0.0
+            self.uValue = 0.0
             
     def __calculatePower(self):
         if self.power < self.maxPower:
             self.uValue = self.uValue + (self.timeStep / 2 * (self.commandSetPoint - self.trainModelInput.currentSetPoint + self.eValue))
-            if(self.uValue  < 0):
+            if(self.uValue  < 0 or self.commandSetPoint <= self.trainModelInput.currentSetPoint):
                 self.uValue = 0
         self.power = self.engineerInput.Kp * (self.commandSetPoint - self.trainModelInput.currentSetPoint) + self.engineerInput.Ki * self.uValue
         if self.power < 0:
