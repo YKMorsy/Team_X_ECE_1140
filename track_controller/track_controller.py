@@ -14,7 +14,7 @@ class WaysideController ():
         self.commanded_speed = []#0b00010100 #20 in binary
 
     def ParsePLC(self):
-        changes = self.PLC_info.parse_PLC(self.switch_positions, self.occupancy)
+        changes = self.PLC_info.parse_PLC(self.switch_positions, self.occupancy, self.authority,self.suggested_speed, self.statuses)
         for change in changes:
             (typeS, bl, val) = change
             if typeS == "S":
@@ -24,7 +24,11 @@ class WaysideController ():
             elif typeS == "R":
                 self.make_changes(change, self.railway_crossings)
             elif typeS == "L":
-                self.make_changes(change, self.light_colors)
+                self.make_light_changes(change, self.light_colors)
+            elif typeS == "F":
+                self.make_changes(change, self.statuses)
+            elif typeS == "CS":
+                self.make_changes(change, self.commanded_speed)
 
     def make_changes(self, change, table):
         t= len(table)
@@ -33,6 +37,23 @@ class WaysideController ():
             (block, state) = table[row]
             if str(block) == bl:
                 table[row] = (bl, val)
+
+    def make_light_changes(self, change, table):
+        t= len(table)
+        (typeS, bl, val) = change
+        if(val[0]=='1'):
+            val1 = True
+        else:
+            val1 = False
+        if(val[0]=='1'):
+            val2 = True
+        else:
+            val2 = False
+
+        for row in range(t):
+            (block, state1, state2) = table[row]
+            if str(block) == bl:
+                table[row] = (bl, val1, val2)
 
     def RunTrackLogic ():
         print('Logic wow')

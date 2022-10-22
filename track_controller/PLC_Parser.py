@@ -13,7 +13,7 @@ class PLC_Parser ():
 				return state
 		return False
 
-	def parse_PLC (self, switchPos, Occupancy):
+	def parse_PLC (self, switchPos, Occupancy, Authority, sugSpeed, status):
 		logic_queue = queue.LifoQueue()
 		if(self.PLC_file == ""):
 			return False;
@@ -23,6 +23,7 @@ class PLC_Parser ():
 			return False
 
 		Lines = plcFile.readlines()
+		plcFile.close()
 		changes = []
 		logic_queue = queue.LifoQueue()
 		condition = None
@@ -33,7 +34,10 @@ class PLC_Parser ():
 			for arg in args:
 				arg = arg.strip('\n')
 				if (arg == "IF"):
+					condition =  None
 					logic_queue.put("if")
+				elif (arg == "ELSE"):
+					condition =  not(condition)
 				elif (arg == "("):
 					logic_queue.put("(")
 					condition =  None
@@ -44,7 +48,6 @@ class PLC_Parser ():
 				elif (arg == "}"):
 					logic_queue.get()
 					logic_queue.get()
-					condition =  None
 				elif (arg == "="):
 					logic_queue.put("=")
 				elif (arg == "&"):
@@ -61,11 +64,13 @@ class PLC_Parser ():
 					try:
 						state = self.get_state(logic_queue) 
 						if (var[0] == "R"):
-							if ( state == "{" ):
+							if ( state == "{" or state == " "):
 								set_var.append("R")
 								set_var.append(var[1])
+							else:
+								print("no")
 						elif (var[0] == "S"):
-							if ( state == "{" ):
+							if ( state == "{" or state == " "):
 								set_var.append("S")
 								set_var.append(var[1])
 							else:
@@ -73,30 +78,52 @@ class PLC_Parser ():
 								condition = self.set_condition(val, var[1], condition, logic_queue)
 						elif (var[0] == "O"):
 							state = self.get_state(logic_queue)
-							if ( state == "{" ):
+							if ( state == "{" or state == " "):
 								set_var.append("O")
 								set_var.append(var[1])
 							else:
 								val = self.get_table_value(Occupancy, var[1])
 								condition = self.set_condition(val, var[1], condition, logic_queue)
 						elif (var[0] == "L"):
-							if ( state == "{" ):
+							if ( state == "{" or state == " "):
 								set_var.append("L")
 								set_var.append(var[1])
-						#elif (var[0] == "A"):
-							#print("Authority")
+							else:
+								print("no")
+						elif (var[0] == "F"):
+							if ( state == "{" or state == " "):
+								print("no")
+							else:
+								val = self.get_table_value(status, var[1])
+								condition = self.set_condition(val, var[1], condition, logic_queue)
+						elif (var[0] == "A"):
+							state = self.get_state(logic_queue)
+							if ( state == "{" or state == " "):
+								print("no")
+							else:
+								val = self.get_table_value(Authority, var[1])
+								condition = self.set_condition(val, var[1], condition, logic_queue)
 						elif (var[0] == "CS"):
-							set_var.append("CS")
-							set_var.append(0)
+							if ( state == "{" or state == " "):
+								set_var.append("CS")
+								set_var.append(var[1])
+							else:
+								print("no")
 						elif(state == "="):
 							if(var[0] == '0'):
 								theBool = "False"
-							else:
+							elif(var[0] == '1'):
 								theBool = "True"
+
 							if(set_var[0] == "CS"):
-								tup= (set_var[0], set_var[1], var[0])
+								if var[0] == "D":
+									sug = self.get_table_value(sugSpeed, var[1])
+									tup= (set_var[0], set_var[1], sug)
+								else:
+									tup= (set_var[0], set_var[1], int(var[0]))
 							else:
 								tup= (set_var[0], set_var[1], theBool)
+
 							set_var.clear()
 							changes.append(tup)
 							logic_queue.get()
@@ -124,6 +151,8 @@ class PLC_Parser ():
 		return condition
 
 	def get_state(self, qu):
+		if qu.empty() :
+			return " "
 		state = qu.get()
 		qu.put(state)
 		return state

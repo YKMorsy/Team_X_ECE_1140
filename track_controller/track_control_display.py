@@ -33,10 +33,14 @@ class sign_in_window (QtWidgets.QMainWindow, Ui_sign_in_window):
 
     def open_main_window(self):
         if self.UserName_TextBox.toPlainText() =="" and self.Password_TextBox.toPlainText() == "":
+            self.error_label.setText(" ")
             content = self.Track_comboBox.currentText()
 
-            self.main_wind = MainWindow(self.all_tracks.get_track_control_instance(content))
+            self.main_wind = track_control_display(self.all_tracks.get_track_control_instance(content))
             self.main_wind.show()
+        else:
+            self.error_label.setText("Error: username or password is incorrect")
+            self.error_label.setStyleSheet("color: red;")
 
     def eventFilter(self, obj, event):
         if obj is self.Password_TextBox and event.type() == QtCore.QEvent.KeyPress:
@@ -49,7 +53,7 @@ class sign_in_window (QtWidgets.QMainWindow, Ui_sign_in_window):
                 return True
         return False
 
-class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
+class track_control_display (QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self, trc):
         self.testWind = test_window(trc)
         QtWidgets.QMainWindow.__init__(self)
@@ -61,7 +65,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         text=open(self.track_data.get_PLC()).read()
         self.PLCTextBrowser.setPlainText(text)
 
-        self.TestPLCButton.clicked.connect(self.OpenTest)
+        self.TestPLCButton.clicked.connect(self.open_test)
         self.UploadPLCButton.clicked.connect(self.openFileNameDialog)
         self.maint_make_change.clicked.connect(self.make_changes)
         self.maintenance_check_box.stateChanged.connect(self.update_tables)
@@ -91,7 +95,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 item.setText( "Green" )
             self.unsaved_changes_label.setText("Warning: your have unsaved changes")
 
-    def OpenTest(self):
+    def open_test(self):
         if self.testWind.isVisible():
             self.testWind.hide()
         else:
@@ -190,6 +194,7 @@ class test_window (QtWidgets.QMainWindow, Ui_TestingWindow):
         self.SwitchPosInput_Table.itemChanged.connect(self.item_changed)
         self.Authority_Table.itemChanged.connect(self.item_changed)
         self.Occupancy_Table.itemChanged.connect(self.item_changed)
+        self.Status_Table.itemChanged.connect(self.item_changed)
 
         cspeed = self.track_control_data.get_commanded_speed()
         #self.commanded_speed_label.setText("Commanded Speed: "+ str(cspeed))
@@ -216,6 +221,7 @@ class test_window (QtWidgets.QMainWindow, Ui_TestingWindow):
         self.update_table(self.track_control_data.get_authority(), self.Authority_Table, True)
         self.update_table(self.track_control_data.get_suggested_speed(), self.Suggested_Speed_Table, True)
         self.update_table(self.track_control_data.get_occupancy(), self.Occupancy_Table, True)
+        self.update_table(self.track_control_data.get_statuses(), self.Status_Table, True)
         self.update_table(self.track_control_data.get_switch_positions(), self.SwitchPosOutput_Table, False)
         self.update_light_table(self.track_control_data.get_light_colors(), self.LightColor_Table, False)
         self.update_table(self.track_control_data.get_railway_crossings(), self.RailwayCrossing_Table, False)
@@ -259,6 +265,7 @@ class test_window (QtWidgets.QMainWindow, Ui_TestingWindow):
         self.get_table_change(self.track_control_data.get_suggested_speed(), self.Suggested_Speed_Table)
         self.get_table_change(self.track_control_data.get_authority(), self.Authority_Table)
         self.get_table_change(self.track_control_data.get_occupancy(), self.Occupancy_Table)
+        self.get_table_change(self.track_control_data.get_statuses(), self.Status_Table)
         self.update_tables()
 
     def get_table_change (self, table_data, table):
