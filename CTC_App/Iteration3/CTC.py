@@ -149,7 +149,6 @@ class CTC:
                 authority_list[line_index][max(block_switches[1], block_switches[0])] = False
                 authority_list[line_index][min(block_switches[1], block_switches[0])] = True
 
-        print(track_linked_list)
         # update linked list and authority list in dictionary
         self.__track_dictionary["track_block_linked_list"] = track_linked_list
         self.__track_dictionary["track_block_authority"] = authority_list
@@ -174,21 +173,7 @@ class CTC:
 
 ctc_test = CTC()
 ctc_test.add_track("Iteration3/Track_Layout_Blue.xlsx")
-ctc_test.set_fault_status([(1003, True)])
+# ctc_test.set_fault_status([(1003, True)])
 ctc_test.set_switch_position([(1005, True)])
 authority_tuple_list = ctc_test.get_authority()
 print(authority_tuple_list)
-
-
-        
-        
-
-
-
-        
-
-
-
-    
-
-
