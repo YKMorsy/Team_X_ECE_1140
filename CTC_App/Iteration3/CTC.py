@@ -44,19 +44,6 @@ class CTC:
                 block_switches.append([switches_1[i], switches_2[i]])
         self.__track_dictionary["track_block_switches"].append(block_switches)
 
-        # set track block "linked list" based on switches
-        block_linked = {}
-        end_block = df_track_layout.loc[:,"End"]
-        for i in range(0, len(all_blocks)):
-            if switches_1[i] == None:
-                if end_block[i] == 1:
-                    block_linked[all_blocks[i]] = None
-                else:
-                    block_linked[all_blocks[i]] = all_blocks[i+1]
-            else:
-                block_linked[all_blocks[i]] = switches_1[i]
-        self.__track_dictionary["track_block_linked_list"].append(block_linked)
-
         # set block length, speed limit, suggested speed, fault status, maintenance status, occupancy, crossing, station, authority in dictionary
         block_length = df_track_layout.loc[:,"Block Length (m)"]
         block_speed_limit = df_track_layout.loc[:,"Speed Limit (Km/Hr)"]
@@ -87,6 +74,21 @@ class CTC:
                 block_station_dict[all_blocks[i]] = None
             else:
                 block_station_dict[all_blocks[i]] = block_station[i]
+
+        # set track block "linked list" and authority based on switches
+        block_linked = {}
+        end_block = df_track_layout.loc[:,"End"]
+        for i in range(0, len(all_blocks)):
+            if switches_1[i] == 0:
+                if end_block[i] == 1:
+                    block_linked[all_blocks[i]] = None
+                else:
+                    block_linked[all_blocks[i]] = all_blocks[i+1]
+            else:
+                block_linked[all_blocks[i]] = switches_1[i]
+                block_authority_dict[switches_2[i]] = False
+                
+        self.__track_dictionary["track_block_linked_list"].append(block_linked)
             
         self.__track_dictionary["track_block_length"].append(block_length_dict)
         self.__track_dictionary["track_block_speed_limit"].append(block_speed_limit_dict)
@@ -121,13 +123,29 @@ class CTC:
         self.__track_dictionary["track_block_fault_status"] = fault_status_list
         self.__track_dictionary["track_block_authority"] = authority_list
 
-    # def get_authority(self, block_bool):
+    # output is list of tuples -> [(x0,y0),(x1,y1),...,(xn,yn)] -> [(1001, 0), (1002, 1),...]
+    def get_authority(self):
+        track_id = self.__track_dictionary["track_id_external"]
+        authority_list = self.__track_dictionary["track_block_authority"]
+        authority_tuple_list = []
+        # Loop through lines
+        for i in range(0,len(authority_list)):
+            line_num = track_id[i]
+            authority_dict = authority_list[i]
+            # Loop through authority of 
+            for key in authority_dict:
+                authority_tuple_list.append((((line_num*1000) + key), authority_dict[key]))
+
+        return authority_tuple_list
+
 
 
 
 ctc_test = CTC()
 ctc_test.add_track("Iteration3/Track_Layout_Blue.xlsx")
 ctc_test.set_fault_status([(1003, True)])
+authority_tuple_list = ctc_test.get_authority()
+# print(authority_tuple_list)
 
 
         
