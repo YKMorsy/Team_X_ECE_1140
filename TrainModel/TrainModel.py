@@ -1,8 +1,8 @@
 from math import sin, pi
 
 class TrainModel:
-    def __init__(self, handler, ID, mass, crew_count, passenger_capacity, speed_limit, acceleration_limit, 
-    service_deceleration, emergency_deceleration, max_engine_power, length, height, width):
+    def __init__(self, handler, ID, mass = 40.9, crew_count = 2, passenger_capacity = 74, speed_limit = 43.50, acceleration_limit = 1.64, 
+    service_deceleration = 3.94, emergency_deceleration = 8.96, max_engine_power = 480, length = 106, height = 11.2, width = 8.69):
 		
         #Copy all the inputs to the class, with all the necessary conversions
         self.handler = handler
@@ -35,6 +35,8 @@ class TrainModel:
         self.exterior_lights = False
         self.left_doors_opened = False
         self.right_doors_opened = False
+        self.commanded_authority = ""
+        self.commanded_speed = 0
         
     def modify_train(self, ID, mass, crew_count, passenger_capacity, speed_limit, acceleration_limit, 
     service_deceleration, emergency_deceleration, max_engine_power, length, height, width):
@@ -60,7 +62,12 @@ class TrainModel:
         self.brake_failure = False
         self.engine_failure = False
         self.signal_failure = False
-        
+
+    
+    def clear_all_failures(self):
+        self.brake_failure = False        
+        self.engine_failure = False
+        self.signal_failure = False
     
     def generate_brake_failure(self):
         self.brake_failure = True

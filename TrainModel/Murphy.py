@@ -2,7 +2,7 @@ from PyQt6.QtWidgets import QApplication, QWidget, QFrame, QDialog, QGridLayout,
 from PyQt6.QtWidgets import QLabel, QPushButton, QRadioButton, QSlider, QSizePolicy, QTableWidget, QTableView, QAbstractItemView, QHeaderView
 from PyQt6.QtCore import Qt, QRect, QTimer, QSortFilterProxyModel
 from PyQt6.QtGui import QFont, QStandardItemModel, QStandardItem
-from Test import TestUI
+from Test import TestUI, ExpandedTableUI
 from FontStyles import *
 from common import *
     
@@ -12,17 +12,27 @@ class MurphyUI(QFrame):
         super().__init__()
 
         #Set up some basic window settings
-        self.setGeometry(100,100, 500, 600)
+        self.setGeometry(100,100, 500, 700)
         self.setWindowTitle("Train Model")
         self.setAttribute(Qt.WidgetAttribute.WA_AlwaysShowToolTips, True)
+        
+        #Set up list of expanded table windows
+        self.expanded_tables = []
 
         #Declare labels & buttons
         self.testing_button = QPushButton("Test This Module...");
         self.train_info_select_label = QLabel("Train Information & Selection");
         self.train_info_select_table = QTableView()
+        self.train_proxy_model = train_proxy_model
+        self.train_info_model = train_info_model
+        self.expand_table_button = QPushButton("Expand Table...")
         self.failure_generation_label = QLabel("Failure Generation");
         self.engine_failure_button = QPushButton("Generate Engine Failure for Selected Train");
         self.signal_pickup_failure_button = QPushButton("Generate Signal Pickup Failure for Selected Train");
+        self.brake_failure_button = QPushButton("Generate Brake Failure for Selected Train");
+        self.failure_removal_label = QLabel("Failure Removal");
+        self.train_failure_removal_button = QPushButton("Remove all Failures for Selected Train");
+        self.all_failure_removal_button = QPushButton("Remove all Train Failures");
         self.brake_failure_button = QPushButton("Generate Brake Failure for Selected Train");
         self.random_failure_generation_label = QLabel("Random Train Failure Generation");
         self.radiobuttonOff = QRadioButton("Off")
@@ -38,52 +48,50 @@ class MurphyUI(QFrame):
         self.random_brake_generation_value = QLabel("0.0");
             
         #Set up button functions
+        self.expand_table_button.clicked.connect(self.launch_expanded_table)
         self.testing_button.clicked.connect(self.test_launch)
         self.engine_failure_button.clicked.connect(self.generate_engine_failure)
         self.signal_pickup_failure_button.clicked.connect(self.generate_signal_failure)
         self.brake_failure_button.clicked.connect(self.generate_brake_failure)
+        self.train_failure_removal_button.clicked.connect(self.remove_train_failures)
+        self.all_failure_removal_button.clicked.connect(self.remove_all_failures)
 
         #Set up the table settings
-        train_proxy_model.setSourceModel(train_info_model)
-        self.train_info_select_table.setModel(train_proxy_model)
-        train_info_model.setHorizontalHeaderLabels(['Train ID', 'Velocity\n(MPH)', 'Distance\n(Feet)', 'Commanded Engine Power\n(Watts)', 'Braking', 
+        self.train_proxy_model.setSourceModel(self.train_info_model)
+        self.train_info_select_table.setModel(self.train_proxy_model)
+        self.train_info_model.setHorizontalHeaderLabels(['Train ID', 'Velocity\n(MPH)', 'Distance\n(Feet)', 'Commanded Engine Power\n(Watts)', 'Braking', 
                                                                 'Track Grade\n(°)', 'Passenger Count', 'Fault(s)', 'Interior Temperature\n(Fahrenheit)',
-                                                                'Interior Lights\n(On/Off)', 'Exterior Lights\n(On/Off)', 'Left Doors\n(Open/Closed)', 'Right Doors\n(Open/Closed)'])
-
-        #Hide all the columns except the ID and Faults
-        self.train_info_select_table.setColumnHidden(1, True)
-        self.train_info_select_table.setColumnHidden(2, True)
-        self.train_info_select_table.setColumnHidden(3, True)
-        self.train_info_select_table.setColumnHidden(4, True)
-        self.train_info_select_table.setColumnHidden(5, True)
-        self.train_info_select_table.setColumnHidden(6, True)
-        self.train_info_select_table.setColumnHidden(8, True)
-        self.train_info_select_table.setColumnHidden(9, True)
-        self.train_info_select_table.setColumnHidden(10, True)
-        self.train_info_select_table.setColumnHidden(11, True)
-        self.train_info_select_table.setColumnHidden(12, True)
+                                                                'Interior Lights\n(On/Off)', 'Exterior Lights\n(On/Off)', 'Left Doors\n(Open/Closed)', 
+                                                                'Right Doors\n(Open/Closed)','Commanded Authority\n(Binary String)', 'Commanded Setpoint Speed\n(MPH)'])
 
         self.train_info_select_table.verticalHeader().hide()
         self.train_info_select_table.setSortingEnabled(True)
-        self.train_info_select_table.horizontalHeader().setStretchLastSection(True)
-        self.train_info_select_table.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows); 
-        self.train_info_select_table.horizontalHeader().setHighlightSections(False);
+        self.train_info_select_table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.ResizeToContents)
+        self.train_info_select_table.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows);
+        self.train_info_select_table.horizontalHeader().setHighlightSections(False)
         self.train_info_select_table.setSelectionMode(QAbstractItemView.SelectionMode.SingleSelection)
-        self.train_info_select_table.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers);
+        self.train_info_select_table.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
+        
+        #Rearrange table s.t. faults are the first column
+        self.train_info_select_table.horizontalHeader().moveSection(7,1)
 
         #Set label fonts & buttons
         self.testing_button.setFont(small_font)
         self.train_info_select_label.setFont(section_font);
         self.train_info_select_table.setFont(normal_font);
         self.train_info_select_table.horizontalHeader().setFont(normal_font);
-        self.train_info_select_table.verticalHeader().setFont(normal_font);
+        self.train_info_select_table.verticalHeader().setFont(normal_font)
+        self.expand_table_button.setFont(small_font)
         self.failure_generation_label.setFont(section_font);
         self.engine_failure_button.setFont(normal_font);
         self.signal_pickup_failure_button.setFont(normal_font);
         self.brake_failure_button.setFont(normal_font);
+        self.failure_removal_label.setFont(section_font);
+        self.train_failure_removal_button.setFont(normal_font);
+        self.all_failure_removal_button.setFont(normal_font);
         self.random_failure_generation_label.setFont(section_font);
-        self.radiobuttonOff.setFont(normal_font);
-        self.radiobuttonOn.setFont(normal_font);
+        self.radiobuttonOff.setFont(normal_font)
+        self.radiobuttonOn.setFont(normal_font)
         self.random_engine_generation_label.setFont(normal_font)
         self.random_engine_generation_value.setFont(normal_font)
         self.random_signal_generation_label.setFont(normal_font)
@@ -96,10 +104,14 @@ class MurphyUI(QFrame):
         self.train_info_select_label.setStyleSheet(section_label_stylesheet)
         self.train_info_select_table.setStyleSheet(table_stylesheet)
         self.train_info_select_table.setAlternatingRowColors(True);
+        self.expand_table_button.setStyleSheet(yellow_button_stylesheet)
         self.failure_generation_label.setStyleSheet(section_label_stylesheet)
         self.engine_failure_button.setStyleSheet(red_button_stylesheet)
         self.signal_pickup_failure_button.setStyleSheet(red_button_stylesheet)
         self.brake_failure_button.setStyleSheet(red_button_stylesheet)
+        self.failure_removal_label.setStyleSheet(section_label_stylesheet)
+        self.train_failure_removal_button.setStyleSheet(green_button_stylesheet)
+        self.all_failure_removal_button.setStyleSheet(green_button_stylesheet)
         self.random_failure_generation_label.setStyleSheet(section_label_stylesheet)
         self.radiobuttonOff.setStyleSheet(radio_stylesheet)
         self.radiobuttonOn.setStyleSheet(radio_stylesheet)
@@ -138,27 +150,32 @@ class MurphyUI(QFrame):
         #Set the random train generation off by default
         self.radiobuttonOff.setChecked(True)
 
+
         #Declare the grid and add the necessary widgets to it
         murphy_grid = QGridLayout()
         murphy_grid.addWidget(self.testing_button, 0, 0, 1, 4, alignment=Qt.AlignmentFlag.AlignCenter)
         murphy_grid.addWidget(self.train_info_select_label, 1, 0, 1, 4, alignment=Qt.AlignmentFlag.AlignCenter)
-        murphy_grid.addWidget(self.train_info_select_table, 2, 0, 1, 4, alignment=Qt.AlignmentFlag.AlignCenter)
+        murphy_grid.addWidget(self.train_info_select_table, 2, 0, 1, 3)
+        murphy_grid.addWidget(self.expand_table_button, 2, 3, alignment=Qt.AlignmentFlag.AlignBottom | Qt.AlignmentFlag.AlignLeft)
         murphy_grid.addWidget(self.failure_generation_label, 3, 0, 1, 4, alignment=Qt.AlignmentFlag.AlignCenter)
         murphy_grid.addWidget(self.engine_failure_button, 4, 0, 1, 4, alignment=Qt.AlignmentFlag.AlignCenter)
         murphy_grid.addWidget(self.signal_pickup_failure_button, 5, 0, 1, 4, alignment=Qt.AlignmentFlag.AlignCenter)
         murphy_grid.addWidget(self.brake_failure_button, 6, 0, 1, 4, alignment=Qt.AlignmentFlag.AlignCenter)
-        murphy_grid.addWidget(self.random_failure_generation_label, 7, 0, 1, 4, alignment=Qt.AlignmentFlag.AlignCenter)
-        murphy_grid.addWidget(self.radiobuttonOff, 8, 0, 1, 1, alignment=Qt.AlignmentFlag.AlignRight)
-        murphy_grid.addWidget(self.radiobuttonOn, 8, 1, 1, 1, alignment=Qt.AlignmentFlag.AlignRight)
-        murphy_grid.addWidget(self.random_engine_generation_label, 9, 0, 1, 2, alignment=Qt.AlignmentFlag.AlignRight)
-        murphy_grid.addWidget(self.random_engine_generation_slider, 9, 2, 1, 1, alignment=Qt.AlignmentFlag.AlignCenter)
-        murphy_grid.addWidget(self.random_engine_generation_value, 9, 3, 1, 1, alignment=Qt.AlignmentFlag.AlignLeft)
-        murphy_grid.addWidget(self.random_signal_generation_label, 10, 0, 1, 2, alignment=Qt.AlignmentFlag.AlignRight)
-        murphy_grid.addWidget(self.random_signal_generation_slider, 10, 2, 1, 1, alignment=Qt.AlignmentFlag.AlignCenter)
-        murphy_grid.addWidget(self.random_signal_generation_value, 10, 3, 1, 1, alignment=Qt.AlignmentFlag.AlignLeft)
-        murphy_grid.addWidget(self.random_brake_generation_label, 11, 0, 1, 2, alignment=Qt.AlignmentFlag.AlignRight)
-        murphy_grid.addWidget(self.random_brake_generation_slider, 11, 2, 1, 1, alignment=Qt.AlignmentFlag.AlignCenter)
-        murphy_grid.addWidget(self.random_brake_generation_value, 11, 3, 1, 1, alignment=Qt.AlignmentFlag.AlignLeft)
+        murphy_grid.addWidget(self.failure_removal_label, 7, 0, 1, 4, alignment=Qt.AlignmentFlag.AlignCenter)
+        murphy_grid.addWidget(self.train_failure_removal_button, 8, 0, 1, 4, alignment=Qt.AlignmentFlag.AlignCenter)
+        murphy_grid.addWidget(self.all_failure_removal_button, 9, 0, 1, 4, alignment=Qt.AlignmentFlag.AlignCenter)
+        murphy_grid.addWidget(self.random_failure_generation_label, 10, 0, 1, 4, alignment=Qt.AlignmentFlag.AlignCenter)
+        murphy_grid.addWidget(self.radiobuttonOff, 11, 0, 1, 1, alignment=Qt.AlignmentFlag.AlignRight)
+        murphy_grid.addWidget(self.radiobuttonOn, 11, 1, 1, 1, alignment=Qt.AlignmentFlag.AlignRight)
+        murphy_grid.addWidget(self.random_engine_generation_label, 12, 0, 1, 2, alignment=Qt.AlignmentFlag.AlignRight)
+        murphy_grid.addWidget(self.random_engine_generation_slider, 12, 2, 1, 1, alignment=Qt.AlignmentFlag.AlignCenter)
+        murphy_grid.addWidget(self.random_engine_generation_value, 12, 3, 1, 1, alignment=Qt.AlignmentFlag.AlignLeft)
+        murphy_grid.addWidget(self.random_signal_generation_label, 13, 0, 1, 2, alignment=Qt.AlignmentFlag.AlignRight)
+        murphy_grid.addWidget(self.random_signal_generation_slider, 13, 2, 1, 1, alignment=Qt.AlignmentFlag.AlignCenter)
+        murphy_grid.addWidget(self.random_signal_generation_value, 13, 3, 1, 1, alignment=Qt.AlignmentFlag.AlignLeft)
+        murphy_grid.addWidget(self.random_brake_generation_label, 14, 0, 1, 2, alignment=Qt.AlignmentFlag.AlignRight)
+        murphy_grid.addWidget(self.random_brake_generation_slider, 14, 2, 1, 1, alignment=Qt.AlignmentFlag.AlignCenter)
+        murphy_grid.addWidget(self.random_brake_generation_value, 14, 3, 1, 1, alignment=Qt.AlignmentFlag.AlignLeft)
 
         #Disable widgets that should be disabled on startup
         self.random_engine_generation_label.setEnabled(False)
@@ -180,21 +197,41 @@ class MurphyUI(QFrame):
         #Connect the grid, and show the window
         self.setLayout(murphy_grid);
 
+	#This function launches an expanded table
+    def launch_expanded_table(self):
+        temp = ExpandedTableUI(self.train_proxy_model)
+        temp.show()
+        for i, c in enumerate(self.expanded_tables):
+            if not c.isVisible():
+                self.expanded_tables[i] = temp
+                return
+        self.expanded_tables.append(temp) 
+        
     def generate_brake_failure(self):
         try:
             #First, get the selected ID
-            ID = int(train_proxy_model.data(train_proxy_model.index(self.train_info_select_table.selectedIndexes()[0].row(), 0)))
+            ID = int(self.train_proxy_model.data(self.train_proxy_model.index(self.train_info_select_table.selectedIndexes()[0].row(), 0)))
 
             #Throw up a warning window to make sure it wasn't a misclick
             if not my_warning(msg = "Are you sure you want to generate a brake\nfailure for Train " + str(ID) + "?", title = "Failure Generation Confirmation", parent = self).exec(): return
             
             #Next, update the actual train
-            handler.train_list[handler.get_train_from_ID(ID)].generate_brake_failure()
+            handler.train_list[ID].generate_brake_failure()
 
             #Finally, update the table
-            for i in range(train_info_model.rowCount()):
-                if int(train_info_model.item(i, 0).text()) == ID:
-                    train_info_model.setItem(i, 7, QStandardItem("Brake Failure")) 
+            for i in range(self.train_info_model.rowCount()):
+                if int(self.train_info_model.item(i, 0).text()) == ID:
+                    
+                    #Figure out what the new fault string should be
+                    fault = "None"
+                    T = handler.train_list[ID]
+                    if T.brake_failure and not T.engine_failure and not T.signal_failure: fault = "Brake Failure"
+                    elif T.brake_failure and T.engine_failure and not T.signal_failure: fault = "Brake Failure, Engine Failure"
+                    elif T.brake_failure and not T.engine_failure and T.signal_failure: fault = "Brake Failure, Signal Pickup Failure"
+                    elif T.brake_failure and T.engine_failure and T.signal_failure: fault = "Brake Failure, Engine Failure, Signal Pickup Failure"
+
+
+                    self.train_info_model.setItem(i, 7, QStandardItem(fault)) 
 
             #Show a confirmation message to the user
             my_message(msg = "Brake failure successfully generated for Train " + str(ID) + "!", title = "Brake Failure Generated", error = False, parent = self).exec()
@@ -207,18 +244,27 @@ class MurphyUI(QFrame):
     def generate_engine_failure(self):
         try:
             #First, get the selected ID
-            ID = int(train_proxy_model.data(train_proxy_model.index(self.train_info_select_table.selectedIndexes()[0].row(), 0)))
+            ID = int(self.train_proxy_model.data(self.train_proxy_model.index(self.train_info_select_table.selectedIndexes()[0].row(), 0)))
 
             #Throw up a warning window to make sure it wasn't a misclick
             if not my_warning(msg = "Are you sure you want to generate an engine\nfailure for Train " + str(ID) + "?", title = "Failure Generation Confirmation", parent = self).exec(): return
             
             #Next, update the actual train
-            handler.train_list[handler.get_train_from_ID(ID)].generate_engine_failure()
+            handler.train_list[ID].generate_engine_failure()
 
             #Finally, update the table
-            for i in range(train_info_model.rowCount()):
-                if int(train_info_model.item(i, 0).text()) == ID:
-                    train_info_model.setItem(i, 7, QStandardItem("Engine Failure"))
+            for i in range(self.train_info_model.rowCount()):
+                if int(self.train_info_model.item(i, 0).text()) == ID:
+
+                    #Figure out what the new fault string should be
+                    fault = "None"
+                    T = handler.train_list[ID]
+                    if not T.brake_failure and T.engine_failure and not T.signal_failure: fault = "Engine Failure"
+                    if T.brake_failure and T.engine_failure and not T.signal_failure: fault = "Brake Failure, Engine Failure"
+                    elif not T.brake_failure and T.engine_failure and T.signal_failure: fault = "Engine Failure, Signal Pickup Failure"
+                    elif T.brake_failure and T.engine_failure and T.signal_failure: fault = "Brake Failure, Engine Failure, Signal Pickup Failure"
+
+                    self.train_info_model.setItem(i, 7, QStandardItem(fault))
             
             #Show a confirmation message to the user
             my_message(msg = "Engine failure successfully generated for Train " + str(ID) + "!", title = "Engine Failure Generated", error = False, parent = self).exec()
@@ -230,18 +276,27 @@ class MurphyUI(QFrame):
     def generate_signal_failure(self):
         try:
             #First, get the selected ID
-            ID = int(train_proxy_model.data(train_proxy_model.index(self.train_info_select_table.selectedIndexes()[0].row(), 0)))
+            ID = int(self.train_proxy_model.data(self.train_proxy_model.index(self.train_info_select_table.selectedIndexes()[0].row(), 0)))
             
             #Throw up a warning window to make sure it wasn't a misclick
             if not my_warning(msg = "Are you sure you want to generate a signal\npickup failure for Train " + str(ID) + "?", title = "Failure Generation Confirmation", parent = self).exec(): return
             
             #Next, update the actual train
-            handler.train_list[handler.get_train_from_ID(ID)].generate_signal_pickup_failure()
+            handler.train_list[ID].generate_signal_pickup_failure()
 
             #Finally, update the table
-            for i in range(train_info_model.rowCount()):
-                if int(train_info_model.item(i, 0).text()) == ID:
-                    train_info_model.setItem(i, 7, QStandardItem("Signal Pickup Failure"))
+            for i in range(self.train_info_model.rowCount()):
+                if int(self.train_info_model.item(i, 0).text()) == ID:
+                    
+                    #Figure out what the new fault string should be
+                    fault = "None"
+                    T = handler.train_list[ID]
+                    if not T.brake_failure and not T.engine_failure and T.signal_failure: fault = "Signal Pickup Failure"
+                    elif T.brake_failure and not T.engine_failure and T.signal_failure: fault = "Brake Failure, Signal Pickup Failure"
+                    elif T.brake_failure and T.engine_failure and T.signal_failure: fault = "Brake Failure, Engine Failure, Signal Pickup Failure"
+                    elif not T.brake_failure and T.engine_failure and T.signal_failure: fault = "Engine Failure, Signal Pickup Failure"
+
+                    self.train_info_model.setItem(i, 7, QStandardItem(fault))
 
             #Show a confirmation message to the user
             my_message(msg = "Signal pickup failure successfully generated for Train " + str(ID) + "!", title = "Signal Pickup Failure Generated", error = False, parent = self).exec()
@@ -249,6 +304,48 @@ class MurphyUI(QFrame):
         #If there is an index error, then there is no selection, and we should throw up an error
         except IndexError:
             my_message(msg = "You have not selected a train!\nPlease select a train and try again.", title = "No Train Selected", error = True, parent = self).exec()
+
+    def remove_train_failures(self):
+        try:
+            #First, get the selected ID
+            ID = int(self.train_proxy_model.data(self.train_proxy_model.index(self.train_info_select_table.selectedIndexes()[0].row(), 0)))
+            
+            #Throw up a warning window to make sure it wasn't a misclick
+            if not my_warning(msg = "Are you sure you want to remove all failures for Train " + str(ID) + "?", title = "Failure Removal Confirmation", parent = self).exec(): return
+            
+            #Next, update the actual train
+            handler.train_list[ID].clear_all_failures()
+
+            #Finally, update the table
+            for i in range(self.train_info_model.rowCount()):
+                if int(self.train_info_model.item(i, 0).text()) == ID:
+                    self.train_info_model.setItem(i, 7, QStandardItem("None"))
+
+            #Show a confirmation message to the user
+            my_message(msg = "All failures have been successfully removed for Train " + str(ID) + "!", title = "Failures Removed", error = False, parent = self).exec()
+
+        #If there is an index error, then there is no selection, and we should throw up an error
+        except IndexError:
+            my_message(msg = "You have not selected a train!\nPlease select a train and try again.", title = "No Train Selected", error = True, parent = self).exec()        
+
+    def remove_all_failures(self):
+        #Throw an error and return if there are no trains in existance
+        if (len(handler.train_list)==0):
+             my_message(msg = "There are no trains to clear failures from!", title = "No Trains", error = True, parent = self).exec()
+             return
+            
+        #Throw up a warning window to make sure it wasn't a misclick
+        if not my_warning(msg = "Are you sure you want to remove all failures for all trains?" , title = "All Failure Removal Confirmation", parent = self).exec(): return
+        
+        #Next, update the actual trains
+        handler.clear_all_failures()
+
+        #Finally, update the table
+        for i in range(self.train_info_model.rowCount()):
+            self.train_info_model.setItem(i, 7, QStandardItem("None"))
+
+        #Show a confirmation message to the user
+        my_message(msg = "All failures have been successfully removed for all trains!", title = "All Failures Removed", error = False, parent = self).exec()
 
     #This function launches the test UI
     def test_launch(self):
@@ -279,7 +376,19 @@ class MurphyUI(QFrame):
         self.random_brake_generation_label.setEnabled(self.radiobuttonOn.isChecked())
         self.random_brake_generation_slider.setEnabled(self.radiobuttonOn.isChecked())
         self.random_brake_generation_value.setEnabled(self.radiobuttonOn.isChecked())
-            
+
+    def update(self):
+		#Update the trains and get the data back
+        data = handler.get_UI_train_matrix()
+		
+		#Update the table
+        for i in range(train_info_model.rowCount()):
+            row_tool_tip = list_to_tooltip(data[i])
+            for j in range(train_info_model.columnCount()):
+                q = QStandardItem(data[i][j])
+                #q.setToolTip(row_tool_tip)
+                train_info_model.setItem(i, j, q)
+
 #dlg = my_message("You have not selected a train!\nPlease select a train and try again.", title = "No Train Selected", parent = murphy_window)
 #dlg.exec()
 
