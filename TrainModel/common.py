@@ -7,8 +7,9 @@ from TrainModelHandler import TrainModelHandler
 
 #Declare global models and handler
 train_proxy_model = QSortFilterProxyModel()
-train_info_model = QStandardItemModel(0, 13)
+train_info_model = QStandardItemModel(0, 15)
 handler = TrainModelHandler()
+
 
 #Tooltip Builder
 def list_to_tooltip(L):

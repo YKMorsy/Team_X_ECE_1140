@@ -22,7 +22,7 @@ class TestUICreatorModifier(QFrame):
 				
 		#Create a new grid
 		self.grid_layout = QGridLayout()
-		
+				
 		#Set up window settings
 		if modification: self.setWindowTitle("Train Modification")
 		else: self.setWindowTitle("Train Creation")
@@ -122,8 +122,7 @@ class TestUICreatorModifier(QFrame):
 		#We need to populate the entries if we are doing modification
 		if modification:
 			#Get train model object from ID
-			train_model_index = handler.get_train_from_ID(ID)
-			train_model = handler.train_list[train_model_index]
+			train_model = handler.train_list[ID]
 			
 			#Populate entries from model
 			self.train_ID_entry.setText(str(ID))
@@ -181,7 +180,7 @@ class TestUICreatorModifier(QFrame):
 		
 		try:
 			ID = int(self.train_ID_entry.text())
-			if (handler.get_train_from_ID(ID)!=-1 and not self.modification) or ID<0 or ("." in self.train_ID_entry.text()):
+			if ((ID in handler.train_list) and not self.modification) or ID<0 or ("." in self.train_ID_entry.text()):
 				self.train_ID_entry.setStyleSheet(red_entry_stylesheet)
 				if not messageThrown:
 					msg = "ERROR: Please enter a Train ID that is a unique positive integer."
@@ -385,14 +384,14 @@ class TestUICreatorModifier(QFrame):
 			float(self.train_service_entry.text()), float(self.train_emergency_entry.text()), float(self.train_power_entry.text()),
 			float(self.train_length_entry.text()), float(self.train_height_entry.text()), float(self.train_width_entry.text()))
 
-		train_info_model.insertRow(train_info_model.rowCount())
+		self.my_test_UI.train_info_model.insertRow(self.my_test_UI.train_info_model.rowCount())
 
 		row_tool_tip = list_to_tooltip(row)
 		
 		for i, r in enumerate(row):
 			q = QStandardItem(r)
 			#q.setToolTip(row_tool_tip)
-			train_info_model.setItem(train_info_model.rowCount() - 1, i, q)
+			self.my_test_UI.train_info_model.setItem(self.my_test_UI.train_info_model.rowCount() - 1, i, q)
 				
 		self.close()
 
@@ -406,7 +405,7 @@ class TestUICreatorModifier(QFrame):
 			float(self.train_service_entry.text()), float(self.train_emergency_entry.text()), float(self.train_power_entry.text()),
 			float(self.train_length_entry.text()), float(self.train_height_entry.text()), float(self.train_width_entry.text()))
 			
-		train_proxy_model.setData(train_proxy_model.index(self.my_test_UI.train_info_select_table.selectedIndexes()[0].row(), 0), self.train_ID_entry.text())
+		self.my_test_UI.train_proxy_model.setData(self.my_test_UI.train_proxy_model.index(self.my_test_UI.train_info_select_table.selectedIndexes()[0].row(), 0), self.train_ID_entry.text())
 		
 		#Next, we need to find the row in the info table that has the new train ID, and modify the hovertips for that row.
 		# for i in range(train_info_model.rowCount()):
@@ -488,9 +487,6 @@ class TestUIController(QFrame):
 		#Set ID
 		self.ID = ID
 
-		#Get the index of the train model that we control
-		self.train_model_index = handler.get_train_from_ID(ID)
-
 		#Set up window settings
 		self.setWindowTitle("Train " + str(ID) + " Control Panel")
 		self.setObjectName("TestUIController")
@@ -524,6 +520,12 @@ class TestUIController(QFrame):
 		self.interior_lights_button = QPushButton("Off")
 		self.exterior_lights_label = QLabel("Exterior Lights (Click to Toggle): ")
 		self.exterior_lights_button = QPushButton("Off")
+		self.authority_label = QLabel("Commanded Authority (String of Binaries): ")
+		self.authority_entry = QLineEdit()
+		self.authority_button = QPushButton("Set")
+		self.setpoint_speed_label = QLabel("Commanded Setpoint Speed (Integer MPH): ")
+		self.setpoint_speed_entry = QLineEdit()
+		self.setpoint_speed_button = QPushButton("Set")
 		
 		#Set widget fonts and stylesheets
 		self.major_control_label.setFont(section_font)
@@ -547,6 +549,12 @@ class TestUIController(QFrame):
 		self.interior_lights_button.setFont(small_font)
 		self.exterior_lights_label.setFont(small_font)
 		self.exterior_lights_button.setFont(small_font)
+		self.authority_label.setFont(small_font)
+		self.authority_entry.setFont(small_font)
+		self.authority_button.setFont(small_font)
+		self.setpoint_speed_label.setFont(small_font)
+		self.setpoint_speed_entry.setFont(small_font)
+		self.setpoint_speed_button.setFont(small_font)
 
 		self.major_control_label.setStyleSheet(section_label_stylesheet)
 		self.engine_power_label.setStyleSheet(normal_label_stylesheet)
@@ -566,39 +574,45 @@ class TestUIController(QFrame):
 		self.interior_lights_label.setStyleSheet(normal_label_stylesheet)
 		self.exterior_lights_label.setStyleSheet(normal_label_stylesheet)
 		self.exterior_lights_button.setStyleSheet(black_button_stylesheet)
+		self.authority_label.setStyleSheet(normal_label_stylesheet)
+		self.authority_entry.setStyleSheet(entry_stylesheet)
+		self.authority_button.setStyleSheet(gold_button_stylesheet)
+		self.setpoint_speed_label.setStyleSheet(normal_label_stylesheet)
+		self.setpoint_speed_entry.setStyleSheet(entry_stylesheet)
+		self.setpoint_speed_button.setStyleSheet(gold_button_stylesheet)
 
 		#Make sure the door and light toggles line up with the actual values
-		if handler.train_list[self.train_model_index].right_doors_opened:
+		if handler.train_list[ID].right_doors_opened:
 			self.right_doors_button.setStyleSheet(red_button_stylesheet)
 			self.right_doors_button.setText("Opened")
 		else: self.right_doors_button.setStyleSheet(green_button_stylesheet)
 
-		if handler.train_list[self.train_model_index].left_doors_opened:
+		if handler.train_list[ID].left_doors_opened:
 			self.left_doors_button.setStyleSheet(red_button_stylesheet)
 			self.left_doors_button.setText("Opened")
 		else: self.left_doors_button.setStyleSheet(green_button_stylesheet)
 
-		if handler.train_list[self.train_model_index].interior_lights:
+		if handler.train_list[ID].interior_lights:
 			self.interior_lights_button.setStyleSheet(yellow_button_stylesheet)
 			self.interior_lights_button.setText("On")
 		else: self.interior_lights_button.setStyleSheet(black_button_stylesheet)
 
-		if handler.train_list[self.train_model_index].exterior_lights:
+		if handler.train_list[ID].exterior_lights:
 			self.exterior_lights_button.setStyleSheet(yellow_button_stylesheet)
 			self.exterior_lights_button.setText("On")
 		else: self.exterior_lights_button.setStyleSheet(black_button_stylesheet)
 		
 		#Set slider ranges
 		self.engine_power_slider.setMinimum(0)
-		self.engine_power_slider.setValue(round(handler.train_list[self.train_model_index].engine_power))
-		self.engine_power_slider.setMaximum(round(handler.train_list[self.train_model_index].max_engine_power))
+		self.engine_power_slider.setValue(round(handler.train_list[ID].engine_power))
+		self.engine_power_slider.setMaximum(round(handler.train_list[ID].max_engine_power))
 
 		self.track_grade_slider.setMinimum(-90)
-		self.track_grade_slider.setValue(round(handler.train_list[self.train_model_index].current_grade))
+		self.track_grade_slider.setValue(round(handler.train_list[ID].current_grade))
 		self.track_grade_slider.setMaximum(90)
 		
 		self.temperature_slider.setMinimum(60)
-		self.temperature_slider.setValue(round(handler.train_list[self.train_model_index].interior_temperature))
+		self.temperature_slider.setValue(round(handler.train_list[ID].interior_temperature))
 		self.temperature_slider.setMaximum(80)
 		
 		#Make the controls change whenever the sliders are RELEASED, so that we don't get many, many updates when the sliders are moved.
@@ -611,14 +625,18 @@ class TestUIController(QFrame):
 		self.temperature_slider.valueChanged.connect(self.temperature_slider_change)
 		
 		#Set default entry values
-		self.engine_power_entry.setText(str(round(handler.train_list[self.train_model_index].engine_power)))
-		self.track_grade_entry.setText(str(round(handler.train_list[self.train_model_index].current_grade)))
-		self.temperature_entry.setText(str(round(handler.train_list[self.train_model_index].interior_temperature)))
-		
+		self.engine_power_entry.setText(str(round(handler.train_list[ID].engine_power)))
+		self.track_grade_entry.setText(str(round(handler.train_list[ID].current_grade)))
+		self.temperature_entry.setText(str(round(handler.train_list[ID].interior_temperature)))
+		self.authority_entry.setText(handler.train_list[ID].commanded_authority)
+		self.setpoint_speed_entry.setText(str(round(handler.train_list[ID].commanded_speed)))
+
 		#Connect entry change events as well
 		self.engine_power_entry.textChanged.connect(self.engine_power_entry_change)
 		self.track_grade_entry.textChanged.connect(self.track_grade_entry_change)
 		self.temperature_entry.textChanged.connect(self.temperature_entry_change)
+		self.authority_entry.textChanged.connect(self.authority_entry_change)
+		self.setpoint_speed_entry.textChanged.connect(self.speed_entry_change)
 				
 		#Connect the buttons
 		self.service_button.pressed.connect(self.service_brake_pressed)
@@ -630,7 +648,13 @@ class TestUIController(QFrame):
 		self.left_doors_button.clicked.connect(self.left_doors_clicked)
 		self.interior_lights_button.clicked.connect(self.interior_lights_clicked)
 		self.exterior_lights_button.clicked.connect(self.exterior_lights_clicked)
+		self.authority_button.clicked.connect(self.set_authority)
+		self.setpoint_speed_button.clicked.connect(self.set_speed)
 		
+		#Disable "Set" buttons by default
+		self.authority_button.setEnabled(False)
+		self.setpoint_speed_button.setEnabled(False)
+
 		#Add widgets to grid
 		self.grid_layout.addWidget(self.major_control_label, 0, 0, 1, 3, alignment=Qt.AlignmentFlag.AlignCenter)
 		self.grid_layout.addWidget(self.engine_power_label, 1, 0, alignment=Qt.AlignmentFlag.AlignRight)
@@ -656,6 +680,12 @@ class TestUIController(QFrame):
 		self.grid_layout.addWidget(self.interior_lights_button, 10, 1)
 		self.grid_layout.addWidget(self.exterior_lights_label, 11, 0, alignment=Qt.AlignmentFlag.AlignRight)
 		self.grid_layout.addWidget(self.exterior_lights_button, 11, 1)
+		self.grid_layout.addWidget(self.authority_label, 12, 0, alignment=Qt.AlignmentFlag.AlignRight)
+		self.grid_layout.addWidget(self.authority_entry, 12, 1)
+		self.grid_layout.addWidget(self.authority_button, 12, 2)
+		self.grid_layout.addWidget(self.setpoint_speed_label, 13, 0, alignment=Qt.AlignmentFlag.AlignRight)
+		self.grid_layout.addWidget(self.setpoint_speed_entry, 13, 1)
+		self.grid_layout.addWidget(self.setpoint_speed_button, 13, 2)
 				
 		#Set spacing of the grid
 		self.grid_layout.setVerticalSpacing(5)
@@ -672,13 +702,13 @@ class TestUIController(QFrame):
 		if (passenger_dialog.exec()): passenger_change = passenger_dialog.getChange()
 		
 		#Add/Remove the passengers to the train model
-		handler.train_list[handler.get_train_from_ID(self.ID)].passenger_count += passenger_change;
+		handler.train_list[self.ID].passenger_count += passenger_change;
 		
 		#Do the same to the table
-		for i in range(train_info_model.rowCount()):
-				if int(train_info_model.item(i, 0).text()) == self.ID:
-					old_passenger_count = int(train_info_model.item(i, 6).text())
-					train_info_model.setItem(i, 6, QStandardItem(str(old_passenger_count + passenger_change)))
+		for i in range(self.my_test_UI.train_info_model.rowCount()):
+				if int(self.my_test_UI.train_info_model.item(i, 0).text()) == self.ID:
+					old_passenger_count = int(self.my_test_UI.train_info_model.item(i, 6).text())
+					self.my_test_UI.train_info_model.setItem(i, 6, QStandardItem(str(old_passenger_count + passenger_change)))
 		
 	
 	def right_doors_clicked(self):
@@ -688,12 +718,12 @@ class TestUIController(QFrame):
 			self.right_doors_button.setStyleSheet(green_button_stylesheet)
 
 			#Close the train model's right doors
-			handler.train_list[handler.get_train_from_ID(self.ID)].right_doors_opened = False
+			handler.train_list[self.ID].right_doors_opened = False
 			
 			#Update the table with "Closed"
-			for i in range(train_info_model.rowCount()):
-				if int(train_info_model.item(i, 0).text()) == self.ID:
-					train_info_model.setItem(i, 12, QStandardItem("Closed"))
+			for i in range(self.my_test_UI.train_info_model.rowCount()):
+				if int(self.my_test_UI.train_info_model.item(i, 0).text()) == self.ID:
+					self.my_test_UI.train_info_model.setItem(i, 12, QStandardItem("Closed"))
 								
 		#Else open them
 		else:
@@ -701,12 +731,12 @@ class TestUIController(QFrame):
 			self.right_doors_button.setStyleSheet(red_button_stylesheet)
 
 			#Open the train model's left doors
-			handler.train_list[handler.get_train_from_ID(self.ID)].right_doors_opened = True
+			handler.train_list[self.ID].right_doors_opened = True
 			
 			#Update the table with "Opened"
-			for i in range(train_info_model.rowCount()):
-				if int(train_info_model.item(i, 0).text()) == self.ID:
-					train_info_model.setItem(i, 12, QStandardItem("Opened"))
+			for i in range(self.my_test_UI.train_info_model.rowCount()):
+				if int(self.my_test_UI.train_info_model.item(i, 0).text()) == self.ID:
+					self.my_test_UI.train_info_model.setItem(i, 12, QStandardItem("Opened"))
 					
 	def left_doors_clicked(self):
 		#If the doors are open, then close them
@@ -715,12 +745,12 @@ class TestUIController(QFrame):
 			self.left_doors_button.setStyleSheet(green_button_stylesheet)
 
 			#Close the train model's left doors
-			handler.train_list[handler.get_train_from_ID(self.ID)].left_doors_opened = False
+			handler.train_list[self.ID].left_doors_opened = False
 			
 			#Update the table with "Closed"
-			for i in range(train_info_model.rowCount()):
-				if int(train_info_model.item(i, 0).text()) == self.ID:
-					train_info_model.setItem(i, 11, QStandardItem("Closed"))
+			for i in range(self.my_test_UI.train_info_model.rowCount()):
+				if int(self.my_test_UI.train_info_model.item(i, 0).text()) == self.ID:
+					self.my_test_UI.train_info_model.setItem(i, 11, QStandardItem("Closed"))
 			
 		#Else open them
 		else:
@@ -728,12 +758,12 @@ class TestUIController(QFrame):
 			self.left_doors_button.setStyleSheet(red_button_stylesheet)
 
 			#Open the train model's left doors
-			handler.train_list[handler.get_train_from_ID(self.ID)].left_doors_opened = True
+			handler.train_list[self.ID].left_doors_opened = True
 			
 			#Update the table with "Opened"
-			for i in range(train_info_model.rowCount()):
-				if int(train_info_model.item(i, 0).text()) == self.ID:
-					train_info_model.setItem(i, 11, QStandardItem("Opened"))
+			for i in range(self.my_test_UI.train_info_model.rowCount()):
+				if int(self.my_test_UI.train_info_model.item(i, 0).text()) == self.ID:
+					self.my_test_UI.train_info_model.setItem(i, 11, QStandardItem("Opened"))
 					
 	def interior_lights_clicked(self):
 		#If the lights are off, then turn them on
@@ -742,12 +772,12 @@ class TestUIController(QFrame):
 			self.interior_lights_button.setStyleSheet(yellow_button_stylesheet)
 
 			#Turn on the train model's interior lights
-			handler.train_list[handler.get_train_from_ID(self.ID)].interior_lights = True
+			handler.train_list[self.ID].interior_lights = True
 			
 			#Update the table with "On"
-			for i in range(train_info_model.rowCount()):
-				if int(train_info_model.item(i, 0).text()) == self.ID:
-					train_info_model.setItem(i, 9, QStandardItem("On"))
+			for i in range(self.my_test_UI.train_info_model.rowCount()):
+				if int(self.my_test_UI.train_info_model.item(i, 0).text()) == self.ID:
+					self.my_test_UI.train_info_model.setItem(i, 9, QStandardItem("On"))
 								
 		#Else turn them off
 		else:
@@ -755,12 +785,12 @@ class TestUIController(QFrame):
 			self.interior_lights_button.setStyleSheet(black_button_stylesheet)
 
 			#Turn off the train model's interior lights
-			handler.train_list[handler.get_train_from_ID(self.ID)].interior_lights = False
+			handler.train_list[self.ID].interior_lights = False
 			
 			#Update the table with "Off"
-			for i in range(train_info_model.rowCount()):
-				if int(train_info_model.item(i, 0).text()) == self.ID:
-					train_info_model.setItem(i, 9, QStandardItem("Off"))
+			for i in range(self.my_test_UI.train_info_model.rowCount()):
+				if int(self.my_test_UI.train_info_model.item(i, 0).text()) == self.ID:
+					self.my_test_UI.train_info_model.setItem(i, 9, QStandardItem("Off"))
 					
 	def exterior_lights_clicked(self):
 		#If the lights are off, then turn them on
@@ -769,12 +799,12 @@ class TestUIController(QFrame):
 			self.exterior_lights_button.setStyleSheet(yellow_button_stylesheet)
 
 			#Turn on the train model's exterior lights
-			handler.train_list[handler.get_train_from_ID(self.ID)].exterior_lights = True
+			handler.train_list[self.ID].exterior_lights = True
 			
 			#Update the table with "On"
-			for i in range(train_info_model.rowCount()):
-				if int(train_info_model.item(i, 0).text()) == self.ID:
-					train_info_model.setItem(i, 10, QStandardItem("On"))
+			for i in range(self.my_test_UI.train_info_model.rowCount()):
+				if int(self.my_test_UI.train_info_model.item(i, 0).text()) == self.ID:
+					self.my_test_UI.train_info_model.setItem(i, 10, QStandardItem("On"))
 			
 		#Else turn them off
 		else:
@@ -782,32 +812,29 @@ class TestUIController(QFrame):
 			self.exterior_lights_button.setStyleSheet(black_button_stylesheet)
 
 			#Turn off the train model's exterior lights
-			handler.train_list[handler.get_train_from_ID(self.ID)].exterior_lights = False
+			handler.train_list[self.ID].exterior_lights = False
 			
 			#Update the table with "Off"
-			for i in range(train_info_model.rowCount()):
-				if int(train_info_model.item(i, 0).text()) == self.ID:
-					train_info_model.setItem(i, 10, QStandardItem("Off"))
+			for i in range(self.my_test_UI.train_info_model.rowCount()):
+				if int(self.my_test_UI.train_info_model.item(i, 0).text()) == self.ID:
+					self.my_test_UI.train_info_model.setItem(i, 10, QStandardItem("Off"))
 			
 	def service_brake_pressed(self):
 		#If the brake is pressed, then the button should say "Activated"
 		self.service_button.setText("Activated")
-
-		#Create a temp var to hold the index
-		index = handler.get_train_from_ID(self.ID)
 		
-		handler.train_list[index].service_brake = True
+		handler.train_list[self.ID].service_brake = True
 		
 		#We should set the engine power to 0 when the brake is pressed
 		self.engine_power_slider_change(0)
 		
 		#If the emergency brake is on, we should "update" the table with "Emergency". Otherwise, we should update it with "Service"
 		brake = "Service"
-		if handler.train_list[index].emergency_brake: brake = "Emergency"
+		if handler.train_list[self.ID].emergency_brake: brake = "Emergency"
 		
-		for i in range(train_info_model.rowCount()):
-			if int(train_info_model.item(i, 0).text()) == self.ID:
-				train_info_model.setItem(i, 4, QStandardItem(brake))
+		for i in range(self.my_test_UI.train_info_model.rowCount()):
+			if int(self.my_test_UI.train_info_model.item(i, 0).text()) == self.ID:
+				self.my_test_UI.train_info_model.setItem(i, 4, QStandardItem(brake))
 
 
 	def service_brake_released(self):
@@ -815,19 +842,16 @@ class TestUIController(QFrame):
 		self.service_button.setText("Hold to Activate")
 
 		#Reset the associated train's service brake, and update the table's value
-		
-		#Create a temp var to hold the index
-		index = handler.get_train_from_ID(self.ID)
-		
-		handler.train_list[index].service_brake = False
+				
+		handler.train_list[self.ID].service_brake = False
 		
 		#If the emergency brake is on, we should "update" the table with "Emergency". Otherwise, we should update it with "No"
 		brake = "No"
-		if handler.train_list[index].emergency_brake: brake = "Emergency"
+		if handler.train_list[self.ID].emergency_brake: brake = "Emergency"
 		
-		for i in range(train_info_model.rowCount()):
-			if int(train_info_model.item(i, 0).text()) == self.ID:
-				train_info_model.setItem(i, 4, QStandardItem(brake))
+		for i in range(self.my_test_UI.train_info_model.rowCount()):
+			if int(self.my_test_UI.train_info_model.item(i, 0).text()) == self.ID:
+				self.my_test_UI.train_info_model.setItem(i, 4, QStandardItem(brake))
 		
 	def emergency_brake_pressed(self):
 		#If the brake is pressed, then the button should say "Activated", the train brake should be turn on, and the table should be updated
@@ -837,54 +861,50 @@ class TestUIController(QFrame):
 		self.engine_power_slider_change(0)
 
 		#Set the associated train's emergency brake, and update the table's value
-		handler.train_list[handler.get_train_from_ID(self.ID)].emergency_brake = True
+		handler.train_list[self.ID].emergency_brake = True
 		
-		for i in range(train_info_model.rowCount()):
-			if int(train_info_model.item(i, 0).text()) == self.ID:
-				train_info_model.setItem(i, 4, QStandardItem("Emergency"))
+		for i in range(self.my_test_UI.train_info_model.rowCount()):
+			if int(self.my_test_UI.train_info_model.item(i, 0).text()) == self.ID:
+				self.my_test_UI.train_info_model.setItem(i, 4, QStandardItem("Emergency"))
 
 	def emergency_brake_released(self):
 		#If the brake is released, then the button should say "Hold to Activate", the train brake should be turn off, and the table should be updated
 		self.emergency_button.setText("Hold to Activate")
 
-		#Reset the associated train's emergency brake, and update the table's value
-		
-		#Create a temp var to hold the index
-		index = handler.get_train_from_ID(self.ID)
-		
-		handler.train_list[index].emergency_brake = False
+		#Reset the associated train's emergency brake, and update the table's value		
+		handler.train_list[self.ID].emergency_brake = False
 		
 		#If the service brake is on, we should update the table with "Service". Otherwise, we should update it with "No"
 		brake = "No"
-		if handler.train_list[index].service_brake: brake = "Service"
+		if handler.train_list[self.ID].service_brake: brake = "Service"
 		
-		for i in range(train_info_model.rowCount()):
-			if int(train_info_model.item(i, 0).text()) == self.ID:
-				train_info_model.setItem(i, 4, QStandardItem(brake))
+		for i in range(self.my_test_UI.train_info_model.rowCount()):
+			if int(self.my_test_UI.train_info_model.item(i, 0).text()) == self.ID:
+				self.my_test_UI.train_info_model.setItem(i, 4, QStandardItem(brake))
 	
 	def engine_power_change(self, value):		
 		#Set the associated train's engine power, and update the table's value
-		handler.train_list[handler.get_train_from_ID(self.ID)].set_engine_power(value + 0.0)
+		handler.train_list[self.ID].set_engine_power(value + 0.0)
 		
-		for i in range(train_info_model.rowCount()):
-			if int(train_info_model.item(i, 0).text()) == self.ID:
-				train_info_model.setItem(i, 3, QStandardItem(str(value)))
+		for i in range(self.my_test_UI.train_info_model.rowCount()):
+			if int(self.my_test_UI.train_info_model.item(i, 0).text()) == self.ID:
+				self.my_test_UI.train_info_model.setItem(i, 3, QStandardItem(str(value)))
 
 	def track_grade_change(self, value):		
 		#Set the associated train's engine power, and update the table's value
-		handler.train_list[handler.get_train_from_ID(self.ID)].current_grade = value + 0.0
+		handler.train_list[self.ID].current_grade = value + 0.0
 		
-		for i in range(train_info_model.rowCount()):
-			if int(train_info_model.item(i, 0).text()) == self.ID:
-				train_info_model.setItem(i, 5, QStandardItem(str(value)))
+		for i in range(self.my_test_UI.train_info_model.rowCount()):
+			if int(self.my_test_UI.train_info_model.item(i, 0).text()) == self.ID:
+				self.my_test_UI.train_info_model.setItem(i, 5, QStandardItem(str(value)))
 
 	def temperature_change(self, value):		
 		#Set the associated train's engine power, and update the table's value
-		handler.train_list[handler.get_train_from_ID(self.ID)].interior_temperature = value + 0.0
+		handler.train_list[self.ID].interior_temperature = value + 0.0
 		
-		for i in range(train_info_model.rowCount()):
-			if int(train_info_model.item(i, 0).text()) == self.ID:
-				train_info_model.setItem(i, 8, QStandardItem(str(value)))
+		for i in range(self.my_test_UI.train_info_model.rowCount()):
+			if int(self.my_test_UI.train_info_model.item(i, 0).text()) == self.ID:
+				self.my_test_UI.train_info_model.setItem(i, 8, QStandardItem(str(value)))
 	
 	def engine_power_slider_change(self, value):
 		#Set the engine power entry
@@ -909,10 +929,10 @@ class TestUIController(QFrame):
 		#Try to update the slider when the entry changes. If the entry isn't in the right format, just return
 		try:
 			#If the entry is above the max, set the slider and entry to the max, and call the actual setter
-			if (int(self.engine_power_entry.text())>round(handler.train_list[self.train_model_index].max_engine_power)):
-				self.engine_power_slider.setValue(round(handler.train_list[self.train_model_index].max_engine_power))
-				self.engine_power_entry.setText(str(round(handler.train_list[self.train_model_index].max_engine_power)))
-				self.engine_power_change(round(handler.train_list[self.train_model_index].max_engine_power))
+			if (int(self.engine_power_entry.text())>round(handler.train_list[self.ID].max_engine_power)):
+				self.engine_power_slider.setValue(round(handler.train_list[self.ID].max_engine_power))
+				self.engine_power_entry.setText(str(round(handler.train_list[self.ID].max_engine_power)))
+				self.engine_power_change(round(handler.train_list[self.ID].max_engine_power))
 				return
 			
 			#Same goes for the minimum
@@ -961,12 +981,59 @@ class TestUIController(QFrame):
 			self.temperature_slider.setValue(int(self.temperature_entry.text()))
 			self.temperature_change(int(self.temperature_entry.text()))
 		except ValueError:
-			return			
+			return
+
+	def set_authority(self):
+		#Set the authority and disable the button
+		handler.train_list[self.ID].commanded_authority = self.authority_entry.text()
+		self.authority_button.setEnabled(False)
+
+		#Reflect these changes in the table
+		for i in range(self.my_test_UI.train_info_model.rowCount()):
+			if int(self.my_test_UI.train_info_model.item(i, 0).text()) == self.ID:
+				self.my_test_UI.train_info_model.setItem(i, 13, QStandardItem(self.authority_entry.text()))
+
+	def authority_entry_change(self):
+		#If the authority text is different from the actual authority, enable the button, otherwise, disable it
+		self.authority_button.setEnabled(self.authority_entry.text()!=handler.train_list[self.ID].commanded_authority)
+
+		#Check to see if there are any characters in the string that aren't a zero or a one. If so, then disable the button and return
+		for c in self.authority_entry.text():
+			if (c!='0' and c!='1'):
+				self.authority_button.setEnabled(False)
+				return
+
+	def set_speed(self):
+		#Set the speed and disable the button
+		handler.train_list[self.ID].commanded_speed = int(self.setpoint_speed_entry.text())
+		self.setpoint_speed_button.setEnabled(False)
+
+		#Reflect these changes in the table
+		for i in range(self.my_test_UI.train_info_model.rowCount()):
+			if int(self.my_test_UI.train_info_model.item(i, 0).text()) == self.ID:
+				self.my_test_UI.train_info_model.setItem(i, 14, QStandardItem(self.setpoint_speed_entry.text()))
+
+
+	def speed_entry_change(self):
+		try:
+			#If the speed text is different from the actual speed, enable the button, otherwise, disable it
+			self.setpoint_speed_button.setEnabled(int(self.setpoint_speed_entry.text())!=int(handler.train_list[self.ID].commanded_speed))
+
+			#If the integer speed is lower than 0, then disable the button
+			if (int(self.setpoint_speed_entry.text()) < 0): self.setpoint_speed_button.setEnabled(False)
+
+			#If there is a period in the entry, then it is a decimal, and the button should be disabled
+			if '.' in self.setpoint_speed_entry.text(): self.setpoint_speed_button.setEnabled(False)
+		except ValueError:
+			#If it can't be converted to an int, just disable the button
+			self.setpoint_speed_button.setEnabled(False)
+
+
 
 class ExpandedTableUI(QFrame):
-	def __init__(self, parent = None):
+	def __init__(self, train_proxy_mod):
 		#Initialize parent class
-		super().__init__(parent)
+		super().__init__()
 
 		#Set up window settings
 		self.setWindowTitle("Expanded Table")
@@ -979,7 +1046,7 @@ class ExpandedTableUI(QFrame):
 
 		#Initialize and set up table settings
 		self.train_info_select_table = QTableView()
-		self.train_info_select_table.setModel(train_proxy_model)
+		self.train_info_select_table.setModel(train_proxy_mod)
 		self.train_info_select_table.verticalHeader().hide()
 		self.train_info_select_table.setSortingEnabled(True)
 		self.train_info_select_table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.ResizeToContents)
@@ -1055,6 +1122,8 @@ class TestUI(QFrame):
 		self.simulate_to_button = QPushButton("Go")
 		self.train_selection_label = QLabel("Train Selection")
 		self.train_info_select_table = QTableView()
+		self.train_proxy_model = train_proxy_model
+		self.train_info_model = train_info_model
 		self.expand_table_button = QPushButton("Expand Table...")
 		self.train_options_label = QLabel("Train Options")
 		self.create_train_button = QPushButton("Create a New Train")
@@ -1064,7 +1133,7 @@ class TestUI(QFrame):
 		self.control_panel_button = QPushButton("Open Control Panel for Selected Train")
 
 		#Set up table settings
-		self.train_info_select_table.setModel(train_proxy_model)
+		self.train_info_select_table.setModel(self.train_proxy_model)
 		self.train_info_select_table.verticalHeader().hide()
 		self.train_info_select_table.setSortingEnabled(True)
 		self.train_info_select_table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.ResizeToContents)
@@ -1208,7 +1277,7 @@ class TestUI(QFrame):
 	
 	#This function launches an expanded table
 	def launch_expanded_table(self):
-		temp = ExpandedTableUI()
+		temp = ExpandedTableUI(self.train_proxy_model)
 		temp.show()
 		for i, c in enumerate(self.creators):
 			if not c.isVisible():
@@ -1229,7 +1298,7 @@ class TestUI(QFrame):
 	#This function deletes a train
 	def delete_selected_train(self):
 		try:
-			ID = int(train_proxy_model.data(train_proxy_model.index(self.train_info_select_table.selectedIndexes()[0].row(), 0)))
+			ID = int(self.train_proxy_model.data(self.train_proxy_model.index(self.train_info_select_table.selectedIndexes()[0].row(), 0)))
 			
 			if not my_warning(msg = "Are you sure you want to permanently delete Train " + str(ID) + "?", title = "Train Deletion Confirmation", parent = self).exec(): return			
 
@@ -1237,7 +1306,7 @@ class TestUI(QFrame):
 			handler.delete_train(ID)
 					
 			#This statemenet actually deletes the row in the table corresponding to the train		
-			train_proxy_model.removeRow(self.train_info_select_table.selectedIndexes()[0].row())
+			self.train_proxy_model.removeRow(self.train_info_select_table.selectedIndexes()[0].row())
 			
 			my_message(msg = "Train " + str(ID) + " has been deleted successfully!", title = "Train Successfully Deleted", error = False, parent = self).exec()
 		except IndexError:
@@ -1255,7 +1324,7 @@ class TestUI(QFrame):
 		handler.delete_all_trains()
 				
 		#This statemenet actually deletes all rows in the UI table	
-		train_info_model.removeRows(0, train_info_model.rowCount())
+		self.train_info_model.removeRows(0, self.train_info_model.rowCount())
 
 		my_message(msg = "All trains have been deleted successfully!", title = "All Trains Successfully Deleted", error = False, parent = self).exec()
 
@@ -1263,7 +1332,7 @@ class TestUI(QFrame):
 	def launch_train_modifier(self):
 		try:
 			#First, check to see if there is a controller with that ID already
-			ID = int(train_proxy_model.data(train_proxy_model.index(self.train_info_select_table.selectedIndexes()[0].row(), 0)))
+			ID = int(self.train_proxy_model.data(self.train_proxy_model.index(self.train_info_select_table.selectedIndexes()[0].row(), 0)))
 			for c in self.creators:
 				if isinstance(c, TestUIController):
 					if c.ID == ID and c.isVisible():
@@ -1283,7 +1352,7 @@ class TestUI(QFrame):
 	#This function launches a train controller
 	def launch_train_controller(self):
 		try:
-			temp = TestUIController(self, ID = int(train_proxy_model.data(train_proxy_model.index(self.train_info_select_table.selectedIndexes()[0].row(), 0))))
+			temp = TestUIController(self, ID = int(self.train_proxy_model.data(self.train_proxy_model.index(self.train_info_select_table.selectedIndexes()[0].row(), 0))))
 			temp.show()
 			for i, c in enumerate(self.creators):
 				if not c.isVisible():
@@ -1407,9 +1476,9 @@ class TestUI(QFrame):
 		data = handler.reset_time()
 		
 		#Update the table
-		for i in range(train_info_model.rowCount()):
-			for j in range(train_info_model.columnCount()):
-				train_info_model.setItem(i, j, QStandardItem(data[i][j]))		
+		for i in range(self.train_info_model.rowCount()):
+			for j in range(self.train_info_model.columnCount()):
+				self.train_info_model.setItem(i, j, QStandardItem(data[i][j]))		
 
 		my_message(msg = "The time has been reset", title = "Time Reset Successful", parent = self).exec()			
 	
@@ -1443,9 +1512,9 @@ class TestUI(QFrame):
 		data = handler.reset_time()
 		
 		#Update the table
-		for i in range(train_info_model.rowCount()):
-			for j in range(train_info_model.columnCount()):
-				train_info_model.setItem(i, j, QStandardItem(data[i][j]))
+		for i in range(self.train_info_model.rowCount()):
+			for j in range(self.train_info_model.columnCount()):
+				self.train_info_model.setItem(i, j, QStandardItem(data[i][j]))
 
 		#We delete all trains below
 		
@@ -1453,7 +1522,7 @@ class TestUI(QFrame):
 		handler.delete_all_trains()
 				
 		#This statemenet actually deletes all rows in the UI table	
-		train_info_model.removeRows(0, train_info_model.rowCount())
+		self.train_info_model.removeRows(0, self.train_info_model.rowCount())
 
 		my_message(msg = "All trains have been deleted, and the time has been reset", title = "Clear & Reset Successful", parent = self).exec()			
 	
@@ -1484,9 +1553,9 @@ class TestUI(QFrame):
 		data = handler.update(change)
 		
 		#Update the table
-		for i in range(train_info_model.rowCount()):
-			for j in range(train_info_model.columnCount()):
-				train_info_model.setItem(i, j, QStandardItem(data[i][j]))		
+		for i in range(self.train_info_model.rowCount()):
+			for j in range(self.train_info_model.columnCount()):
+				self.train_info_model.setItem(i, j, QStandardItem(data[i][j]))		
 		
 		#Set the current time and disable the go button
 		self.current_time = round(float(self.simulate_to_entry.text())*1000)/1000.0
