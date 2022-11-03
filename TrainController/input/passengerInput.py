@@ -3,4 +3,4 @@ from dataclasses import dataclass
 
 @dataclass
 class PassengerInput:
-    emergencyBrake: bool = False
+    emergency_brake: bool = False
