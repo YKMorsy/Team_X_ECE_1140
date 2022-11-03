@@ -1,181 +1,236 @@
 from dataclasses import dataclass
-import os
-from input import *
 from input.trainDriverInput import TrainDriverInput
 from input.trainModelInput import TrainModelInput
 from input.passengerInput import PassengerInput
 from input.engineerInput import EngineerInput
 from output.trainDriverOutput import TrainDriverOutput
 from output.trainModelOutput import TrainModelOutput
-from resources.findSpeedLimit import *
-from ui.testUIFiles.testUI import testUI
-from ui.driverUIFiles.trainDriverUI import driverUI
+from ui.testUIFiles.testUI import test_ui
+from ui.driverUIFiles.trainDriverUI import driver_ui
 from multiprocessing import Process
 from multiprocessing import Lock
-from ui.support.readAndWriteFiles import readDriverInputFile, writeDriverInputFile, writeDriverOutputFile, writeTrainModelInputFile, writeTrainModelOutputFile, readTrainModelInputFile
-from ui.support.readAndWriteFiles import readEngineerInputFile
-from ui.support.readAndWriteFiles import writeEngineerInputFile
+from ui.support.readAndWriteFiles import *
+from resources.findSpeedLimit import *
 
 class TrainController:
-    def __init__(self, trainNumber, trainLine):
-        self.lockDriverInput = Lock()
-        self.lockDriverOutput = Lock()
-        self.lockModelInput= Lock()
-        self.lockModelOutput = Lock()
-        self.lockEngineerInput = Lock()
+    def __init__(self, train_number, train_line):
+        self.__lock_driver_input = Lock()
+        self.__lock_driver_output = Lock()
+        self.__lock_model_input = Lock()
+        self.__lock_model_output = Lock()
+        self.__lock_engineer_input = Lock()
 
-        self.trainNumber = trainNumber
-        self.trainLine = trainLine
-        self.testUIStart = False
-        self.driverUIStart = False
-        self.maxPower = 120000
+        self.__train_number = train_number
+        self.__train_line = train_line
+        self.__test_ui_start = False
+        self.__driver_ui_start = False
+        self.__max_power = 120000
 
-        self.commandSetPoint = 0.0
-        self.power = 0.0
-        self.serviceBrakes = False
-        self.emergencyBrakes = False
-        self.leftSideDoors = False
-        self.rightSideDoors = False
-        self.announceStop = False
-        self.insideLights = False
-        self.outsideLights = False
-        self.activateAnnouncment = False
+        self.__command_set_point = 0.0
+        self.__power = 0.0
+        self.__service_brakes = False
+        self.__emergency_brakes = False
+        self.__left_side_doors = False
+        self.__right_side_doors = False
+        self.__announce_stop = False
+        self.__inside_lights = False
+        self.__outside_lights = False
+        self.__activate_announcment = False
+        self.__old_current_set_point = 0.0
 
-        self.authority = False
-        self.speedLimit = 0.0
-        self.uValue = 0.0
-        self.eValue = 0.0
-        self.timeStep = 1.0
+        self.__authority = False
+        self.__speed_limit = 0.0
+        self.__u_value = 0.0
+        self.__e_value = 0.0
+        self.__time_step = 1.0
 
-        self.lastStation = "YARD"
-        self.nextStation = ""
-        self.direction = 0
-        self.distance = 0.0
+        self.__last_station = "YARD"
+        self.__next_station = ""
+        self.__direction = 0
+        self.__distance = 0.0
+        self.__begin_slow_down = False
+        self.__distance_to_station = 1
 
-        self.trainDriverInput = TrainDriverInput()
-        self.trainModelInput = TrainModelInput()
-        self.passengerInput = PassengerInput()
-        self.engineerInput = EngineerInput()
-        self.trainDriverOutput = TrainDriverOutput()
-        self.trainModelOutput = TrainModelOutput()
+        self.__train_driver_input = TrainDriverInput()
+        self.__train_model_input = TrainModelInput()
+        self.__passenger_input = PassengerInput()
+        self.__engineer_input = EngineerInput()
+        self.__train_driver_output = TrainDriverOutput()
+        self.__train_model_output = TrainModelOutput()
 
-        self.inputModelTestUIFileName = "./ui/testUIFiles/utilities/modelInputDB_" + str(self.trainNumber) + ".txt"
-        self.outputModelTestUIFileName = "./ui/testUIFiles/utilities/modelOutputDB_" + str(self.trainNumber) + ".txt"
-        self.inputDriverDriverUIFileName = "./ui/driverUIFiles/utilities/driverInputDB_" + str(self.trainNumber) + ".txt"
-        self.outputDriverDriverUIFileName = "./ui/driverUIFiles/utilities/driverOutputDB_" + str(self.trainNumber) + ".txt"
-        self.inputEngineerUIFileName = "./ui/driverUIFiles/utilities/engineerInputDB_" + str(trainNumber) + ".txt"
+        self.__input_model_test_ui_file_name = "./ui/testUIFiles/utilities/modelInputDB_" + str(self.__train_number) + ".txt"
+        self.__output_model_test_ui_file_name = "./ui/testUIFiles/utilities/modelOutputDB_" + str(self.__train_number) + ".txt"
+        self.__input_driver_driver_ui_file_name = "./ui/driverUIFiles/utilities/driverInputDB_" + str(self.__train_number) + ".txt"
+        self.__output_driver_driver_ui_file_name = "./ui/driverUIFiles/utilities/driverOutputDB_" + str(self.__train_number) + ".txt"
+        self.__input_engineer_ui_file_name = "./ui/driverUIFiles/utilities/engineerInputDB_" + str(self.__train_number) + ".txt"
 
-        writeDriverInputFile(self.inputDriverDriverUIFileName, self.lockDriverInput, self.trainDriverInput)
-        writeDriverOutputFile(self.outputDriverDriverUIFileName, self.lockDriverOutput, self.trainDriverOutput)
-        writeTrainModelInputFile(self.inputModelTestUIFileName, self.lockModelInput, self.trainModelInput)
-        writeTrainModelOutputFile(self.outputModelTestUIFileName, self.lockModelOutput, self.trainModelOutput)
-        writeEngineerInputFile(self.inputEngineerUIFileName, self.lockEngineerInput, self.engineerInput.Kp, self.engineerInput.Ki)
+        write_driver_input_file(self.__input_driver_driver_ui_file_name, self.__lock_driver_input, self.__train_driver_input)
+        write_driver_output_file(self.__output_driver_driver_ui_file_name, self.__lock_driver_output, self.__train_driver_output)
+        write_train_model_input_file(self.__input_model_test_ui_file_name, self.__lock_model_input, self.__train_model_input)
+        write_train_model_output_file(self.__output_model_test_ui_file_name, self.__lock_model_output, self.__train_model_output)
+        write_engineer_input_file(self.__input_engineer_ui_file_name, self.__lock_engineer_input, self.__engineer_input.kp, self.__engineer_input.ki)
 
-    def startTestUI(self):
-        self.testUIStart = True
-        testUIProcess = Process(target=testUI, args=(self, self.lockModelOutput, self.lockModelInput))
-        testUIProcess.start()
+    def start_test_ui(self):
+        self.__test_ui_start = True
+        test_ui_process = Process(target=test_ui, args=(self, self.__lock_model_output, self.__lock_model_input))
+        test_ui_process.start()
     
-    def startDriverUI(self):
-        self.driverUIStart = True
-        driverUIProcess = Process(target=driverUI, args=(self, self.lockDriverOutput, self.lockDriverInput, self.lockEngineerInput))
-        driverUIProcess.start()
+    def start_driver_ui(self):
+        self.__driver_ui_start = True
+        driver_ui_process = Process(target=driver_ui, args=(self, self.__lock_driver_output, self.__lock_driver_input, self.__lock_engineer_input))
+        driver_ui_process.start()
     
-    def __driverOutputMapper(self):
-        self.trainDriverOutput.currentSetPoint = self.trainModelInput.currentSetPoint
-        self.trainDriverOutput.speedLimit = self.speedLimit
-        self.trainDriverOutput.interiorTemperature = self.trainDriverInput.interiorTemperatureControl
-        if(self.trainDriverInput.manualMode):
-            self.trainDriverOutput.commandSetPoint = self.trainDriverInput.commandSetPoint
+    def get_train_number(self):
+        return self.__train_number
+    
+    def get_train_line(self):
+        return self.__train_line
+    
+    def get_driver_input(self):
+        return self.__train_driver_input
+    
+    def get_driver_output(self):
+        return self.__train_driver_output
+    
+    def get_model_input(self):
+        return self.__train_model_input
+    
+    def get_model_output(self):
+        return self.__train_model_output
+    
+    def __driver_output_mapper(self):
+        self.__train_driver_output.current_set_point = self.__train_model_input.current_set_point
+        self.__train_driver_output.speed_limit = self.__speed_limit
+        self.__train_driver_output.interior_temperature = self.__train_driver_input.interior_temperature_control
+        if(self.__train_driver_input.manual_mode):
+            self.__train_driver_output.command_set_point = self.__train_driver_input.command_set_point
         else:
-            self.trainDriverOutput.commandSetPoint = self.trainModelInput.commandSetPoint    
-        self.trainDriverOutput.brakeFailure = self.trainModelInput.brakeFailure
-        self.trainDriverOutput.engineFailure = self.trainModelInput.engineFailure
-        self.trainDriverOutput.wheelFailure = False
-        self.trainDriverOutput.signalPickUpFailure = self.trainModelInput.signalPickupFailure
-        self.trainDriverOutput.authority = self.trainModelInput.authority and self.authority
-        self.trainDriverOutput.nextStop = self.nextStation
+            self.__train_driver_output.command_set_point = self.__command_set_point
+        self.__train_driver_output.brake_failure = self.__train_model_input.brake_failure
+        self.__train_driver_output.engine_failure = self.__train_model_input.engine_failure
+        self.__train_driver_output.wheel_failure = False
+        self.__train_driver_output.signal_pickup_failure = self.__train_model_input.signal_pickup_failure
+        self.__train_driver_output.authority = self.__train_model_input.authority and self.__authority
+        self.__train_driver_output.next_stop = self.__next_station
 
-    def __modelOutputMapper(self):
-        self.trainModelOutput.serviceBrake = self.trainDriverInput.serviceBrake or self.serviceBrakes
-        self.trainModelOutput.emergencyBrake = self.trainDriverInput.emergencyBrake or self.emergencyBrakes
-        self.trainModelOutput.enginePower = self.power
-        self.trainModelOutput.leftSideDoors = self.trainDriverInput.leftSideDoors or self.leftSideDoors                                
-        self.trainModelOutput.rightSideDoors = self.trainDriverInput.rightSideDoors or self.rightSideDoors
-        self.trainModelOutput.announceStop = self.announceStop
-        self.trainModelOutput.insideLights = self.insideLights or self.trainDriverInput.insideLights
-        self.trainModelOutput.outsideLights = self.outsideLights or self.trainDriverInput.outsideLights
-        self.trainModelOutput.activateAnnouncement = self.trainDriverInput.activateAnnouncement or self.activateAnnouncment
+    def __model_output_mapper(self):
+        self.__train_model_output.service_brake = self.__train_driver_input.service_brake or self.__service_brakes
+        self.__train_model_output.emergency_brake = self.__train_driver_input.emergency_brake or self.__emergency_brakes
+        self.__train_model_output.engine_power = self.__power
+        self.__train_model_output.left_side_doors = self.__train_driver_input.left_side_doors or self.__left_side_doors                                
+        self.__train_model_output.right_side_doors = self.__train_driver_input.right_side_doors or self.__right_side_doors
+        self.__train_model_output.announce_stop = self.__announce_stop
+        self.__train_model_output.inside_lights = self.__inside_lights or self.__train_driver_input.inside_lights
+        self.__train_model_output.outside_lights = self.__outside_lights or self.__train_driver_input.outside_lights
+        self.__train_model_output.activate_announcement = self.__train_driver_input.activate_announcement or self.__activate_announcment
 
-    def __updateInternalValues(self):
-        self.distance += self.trainModelInput.currentSetPoint * self.timeStep
-        if self.lastStation != self.trainModelInput.stationName:
-            self.beaconCall(self.trainModelInput.stationName)
-        self.__getSpeedLimit()
+    def __update_internal_values(self):
+        self.__distance += .5 * (self.__train_model_input.current_set_point + self.__old_current_set_point) * self.__time_step
+        if self.__last_station != self.__train_model_input.station_name:
+            self.beaconCall(self.__train_model_input.station_name)
+        self.__get_speed_limit()
 
-        if self.trainDriverInput.manualMode:
-            self.commandSetPoint = self.trainDriverInput.commandSetPoint
-        else:
-            self.commandSetPoint = self.trainModelInput.commandSetPoint    
-        if self.commandSetPoint > self.speedLimit:
-            self.commandSetPoint = self.speedLimit
+        self.__authority = self.__train_model_input.authority and not(self.__train_model_input.brake_failure or self.__train_model_input.signal_pickup_failure or self.__train_model_input.engine_failure)
         
-        if self.authority and not self.serviceBrakes and not self.emergencyBrakes:
-            self.__calculatePower()
-
-        if self.power > self.maxPower:
-            self.power = self.maxPower
-        
-        if self.trainModelInput.currentSetPoint > self.speedLimit * 0.277778:
+        if not self.__authority and not(self.__train_model_input.brake_failure or self.__train_model_input.signal_pickup_failure or self.__train_model_input.engine_failure):
             self.power = 0.0
-            self.serviceBrakes = True
-            self.uValue = 0.0
-        else:
-            self.serviceBrakes = self.trainDriverInput.serviceBrake
-        
-        self.authority = self.trainModelInput.authority and not(self.trainModelInput.brakeFailure or self.trainModelInput.signalPickupFailure or self.trainModelInput.engineFailure)
-        
-        if not self.authority:
+            self.__service_brakes = True
+            self.__u_value = 0.0
+        elif not self.__authority:
             self.power = 0.0
-            self.emergencyBrakes = True
-            self.uValue = 0.0
+            self.__emergency_brakes = True
+            self.__u_value = 0.0
         else:
-            self.emergencyBrakes = self.trainDriverInput.emergencyBrake or self.passengerInput.emergencyBrake
+            self.__begin_slow_down = False
+            self.__emergency_brakes = self.__train_driver_input.emergency_brake or self.__passenger_input.emergency_brake
+            self.__service_brakes = self.__train_driver_input.service_brake
 
-        if self.serviceBrakes or self.emergencyBrakes:
-            self.power = 0.0
-            self.uValue = 0.0
+        if self.__train_driver_input.manual_mode and self.__train_model_input.authority:
+            self.__command_set_point = self.__train_driver_input.command_set_point
+        elif self.__train_model_input.authority:
+            self.__command_set_point = self.__train_model_input.command_set_point    
+        
+        if self.__command_set_point > self.__speed_limit:
+            self.__command_set_point = self.__speed_limit
+        
+        if not self.__service_brakes and not self.__emergency_brakes:
+            self.__calculate_power()
+
+        if self.__power > self.__max_power:
+            self.__power = self.__max_power
+        
+        if self.__train_model_input.current_set_point > self.__speed_limit:
+            self.__power = 0.0
+            self.__service_brakes = True
+            self.__u_value = 0.0
+        elif self.__authority:
+            self.__service_brakes = self.__train_driver_input.service_brake
+
+        if self.__service_brakes or self.__emergency_brakes:
+            self.__power = 0.0
+            self.__u_value = 0.0
             
-    def __calculatePower(self):
-        if self.power < self.maxPower:
-            self.uValue = self.uValue + (self.timeStep / 2 * (self.commandSetPoint - self.trainModelInput.currentSetPoint + self.eValue))
-            if(self.uValue  < 0 or self.commandSetPoint <= self.trainModelInput.currentSetPoint):
-                self.uValue = 0
-        self.power = self.engineerInput.Kp * (self.commandSetPoint - self.trainModelInput.currentSetPoint) + self.engineerInput.Ki * self.uValue
-        if self.power < 0:
-            self.power = 0
+    def __calculate_power(self):
+        if self.__power < self.__max_power:
+            self.__u_value = self.__u_value + (self.__time_step / 2 * (self.__command_set_point - self.__train_model_input.current_set_point + self.__e_value))
+            if(self.__u_value  < 0 or self.__command_set_point <= self.__train_model_input.current_set_point):
+                self.__u_value = 0
+        self.__power = self.__engineer_input.kp * (self.__command_set_point - self.__train_model_input.current_set_point) + self.__engineer_input.ki * self.__u_value
+        if self.__power < 0:
+            self.__power = 0
 
-    def __getSpeedLimit(self):
-        if self.trainLine == 0:
-            self.speedLimit, self.direction, self.nextStation, self.outsideLights, self.insideLights = getSpeedLimitRed(self.lastStation, self.direction, self.distance)
+    def __get_speed_limit(self):
+        self.__speed_limit = self.__train_model_input.command_set_point
+        if self.__train_line == 1:
+            self.__direction, self.__next_station, self.__outside_lights, self.__inside_lights, self.__distance_to_station = get_speed_limit_green(self.__last_station, self.__direction, self.__distance)
         else:
-            self.speedLimit, self.direction, self.nextStation, self.outsideLights, self.insideLights = getSpeedLimitGreen(self.lastStation, self.direction, self.distance)
+            self.__direction, self.__next_station, self.__outside_lights, self.__inside_lights, self.__distance_to_station = get_speed_limit_red(self.__last_station, self.__direction, self.__distance)
 
     def beaconCall(self, station):
-        self.lastStation = station
-        self.distance = 0
+        self.__last_station = station
+        self.__distance = 0
     
     def update(self):
-        self.eValue = self.commandSetPoint - self.trainModelInput.currentSetPoint
+        self.__e_value = self.__command_set_point - self.__train_model_input.current_set_point
 
-        if(self.testUIStart):
-            writeTrainModelOutputFile(self.outputModelTestUIFileName, self.lockModelOutput, self.trainModelOutput)
-            readTrainModelInputFile(self.inputModelTestUIFileName, self.lockModelInput, self.trainModelInput)
-        if(self.driverUIStart):
-            writeDriverOutputFile(self.outputDriverDriverUIFileName, self.lockDriverOutput, self.trainDriverOutput)
-            readDriverInputFile(self.inputDriverDriverUIFileName, self.lockDriverInput, self.trainDriverInput)
-            self.engineerInput.Kp, self.engineerInput.Ki = readEngineerInputFile(self.inputEngineerUIFileName, self.lockEngineerInput)
+        if(self.__test_ui_start):
+            self.__old_current_set_point = self.__train_driver_output.current_set_point
+            write_train_model_output_file(self.__output_model_test_ui_file_name, self.__lock_model_output, self.__train_model_output)
+            read_train_model_input_file(self.__input_model_test_ui_file_name, self.__lock_model_input, self.__train_model_input)
+        if(self.__driver_ui_start):
+            write_driver_output_file(self.__output_driver_driver_ui_file_name, self.__lock_driver_output, self.__train_driver_output)
+            read_driver_input_file(self.__input_driver_driver_ui_file_name, self.__lock_driver_input, self.__train_driver_input)
+            self.__engineer_input.kp, self.__engineer_input.ki = read_engineer_input_file(self.__input_engineer_ui_file_name, self.__lock_engineer_input)
         
-        self.__updateInternalValues()
-        self.__driverOutputMapper()
-        self.__modelOutputMapper()
+        self.__update_internal_values()
+        self.__driver_output_mapper()
+        self.__model_output_mapper()
+    
+    def get_train_model_output(self):
+        return self.__train_model_output.service_brake, self.__train_model_output.engine_power, self.__train_model_output.emergency_brake, self.__train_model_output.left_side_doors, self.__train_model_output.right_side_doors, self.__train_model_output.announce_stop, self.__train_model_output.inside_lights, self.__train_model_output.outside_lights, self.__train_model_output.activate_announcement
+    
+    def set_train_model_input(self, command_set_point, authority, current_set_point, brake_failure, signal_pickup_failure, engine_failure, station_name):
+        self.__old_current_set_point = self.__train_driver_output.current_set_point
+        self.__train_model_input.command_set_point = command_set_point
+        self.__train_model_input.authority = authority
+        self.__train_model_input.current_set_point = current_set_point
+        self.__train_model_input.brake_failure = brake_failure
+        self.__train_model_input.signal_pickup_failure = signal_pickup_failure
+        self.__train_model_input.engine_failure = engine_failure
+        self.__train_model_input.station_name = station_name
+    
+    def __authority_to_zero(self):
+        if not self.__begin_slow_down:
+            self.__begin_slow_down = True
+            deceleration = self.__train_model_input.current_set_point ** 2 / (2 * self.__distance_to_station) * self.__time_step
+            self.__command_set_point_list = []
+            current_speed = self.__train_model_input.current_set_point - deceleration
+            while(current_speed > 0):
+                self.__command_set_point_list.append(current_speed)
+                current_speed -= deceleration
+            self.__command_set_point_list.append(0)
+        if len(self.__command_set_point_list) == 0:
+            self.__command_set_point = 0.0
+        else:
+            self.__command_set_point = self.__command_set_point_list[0]
+            self.__command_set_point_list.remove(self.__command_set_point_list[0])

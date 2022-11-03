@@ -3,12 +3,12 @@ from dataclasses import dataclass
 
 @dataclass
 class TrainModelOutput:
-    serviceBrake: bool = False
-    enginePower: float = 0.0
-    emergencyBrake: bool = False
-    leftSideDoors: bool = False
-    rightSideDoors: bool = False
-    announceStop: bool = False
-    insideLights: bool = False
-    outsideLights: bool = False
-    activateAnnouncement: bool = False
+    service_brake: bool = False
+    engine_power: float = 0.0
+    emergency_brake: bool = False
+    left_side_doors: bool = False
+    right_side_doors: bool = False
+    announce_stop: bool = False
+    inside_lights: bool = False
+    outside_lights: bool = False
+    activate_announcement: bool = False

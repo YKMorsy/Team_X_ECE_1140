@@ -3,13 +3,13 @@ from dataclasses import dataclass
 
 @dataclass
 class TrainDriverOutput:
-    currentSetPoint: float = 0.0
-    speedLimit: float = 0.0
-    interiorTemperature: int = 70
-    commandSetPoint: float = 0.0
-    brakeFailure: bool = False
-    engineFailure: bool = False
-    wheelFailure: bool = False
-    signalPickUpFailure: bool = False
+    current_set_point: float = 0.0
+    speed_limit: float = 0.0
+    interior_temperature: int = 70
+    command_set_point: float = 0.0
+    brake_failure: bool = False
+    engine_failure: bool = False
+    wheel_failure: bool = False
+    signal_pickup_failure: bool = False
     authority: bool = False
-    nextStop: str = ""
+    next_stop: str = ""

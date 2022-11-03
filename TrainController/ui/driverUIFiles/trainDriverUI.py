@@ -6,56 +6,56 @@ from qtwidgets import Toggle
 from QLed import QLed
 
 from multiprocessing import Lock
-from ui.support.readAndWriteFiles import  writeDriverInputFile
-from ui.support.readAndWriteFiles import readDriverOutputFile
-from ui.support.readAndWriteFiles import readEngineerInputFile
-from ui.support.readAndWriteFiles import writeEngineerInputFile
+from ui.support.readAndWriteFiles import  write_driver_input_file
+from ui.support.readAndWriteFiles import read_driver_output_file
+from ui.support.readAndWriteFiles import read_engineer_input_file
+from ui.support.readAndWriteFiles import write_engineer_input_file
 
 class EngineerWindow(QWidget):
-    def __init__(self, lockEngineerFile, trainNumber):
+    def __init__(self, lock_engineer_file, train_number):
         super().__init__()
         self.setWindowTitle("Engineer Input Box")
 
-        self.lockEngineerFile = lockEngineerFile
+        self.__lock_engineer_file = lock_engineer_file
 
-        self.outputFileName = "./ui/driverUIFiles/utilities/engineerInputDB_" + str(trainNumber) + ".txt"
-        self.kp, self.ki = readEngineerInputFile(self.outputFileName, self.lockEngineerFile)
+        self.__output_file_name = "./ui/driverUIFiles/utilities/engineerInputDB_" + str(train_number) + ".txt"
+        self.__kp, self.__ki = read_engineer_input_file(self.__output_file_name, self.__lock_engineer_file)
 
         layout = QHBoxLayout()
         layout.addWidget(QLabel("Kp Value: "))
-        kpEnterBox = QLineEdit(str(self.kp))
-        kpEnterBox.textChanged[str].connect(self.__updateKpValue)
-        layout.addWidget(kpEnterBox)
+        kp_enter_box = QLineEdit(str(self.__kp))
+        kp_enter_box.textChanged[str].connect(self.__update_kp_value)
+        layout.addWidget(kp_enter_box)
         layout.addWidget(QLabel("Ki Value: "))
-        kiEnterBox = QLineEdit(str(self.ki))
-        kiEnterBox.textChanged[str].connect(self.__updateKivalue)
-        layout.addWidget(kiEnterBox)
+        ki_enter_box = QLineEdit(str(self.__ki))
+        ki_enter_box.textChanged[str].connect(self.__update_ki_value)
+        layout.addWidget(ki_enter_box)
 
         self.setLayout(layout)
     
-    def __updateKpValue(self, text):
+    def __update_kp_value(self, text):
         try:
-            self.kp = float(text)
+            self.__kp = float(text)
         except ValueError:
-            self.kp = self.kp
+            self.__kp = self.__kp
         
-        writeEngineerInputFile(self.outputFileName, self.lockEngineerFile, self.kp, self.ki)
+        write_engineer_input_file(self.__output_file_name, self.__lock_engineer_file, self.__kp, self.__ki)
     
-    def __updateKivalue(self, text):
+    def __update_ki_value(self, text):
         try:
-            self.ki = float(text)
+            self.__ki = float(text)
         except ValueError:
-            self.ki = self.ki
-        writeEngineerInputFile(self.outputFileName, self.lockEngineerFile, self.kp, self.ki)
+            self.__ki = self.__ki
+        write_engineer_input_file(self.__output_file_name, self.__lock_engineer_file, self.__kp, self.__ki)
 
 
 class LoginForm(QWidget):
-    def __init__(self, lockEngineerFile, trainNumber):
+    def __init__(self, lock_engineer_file, train_number):
         super().__init__()
         self.setWindowTitle('Login Form')
         self.resize(500, 120)
-        self.lockEngineerFile = lockEngineerFile
-        self.trainNumber = trainNumber
+        self.__lock_engineer_file = lock_engineer_file
+        self.__train_number = train_number
 
         layout = QGridLayout()
 
@@ -81,317 +81,307 @@ class LoginForm(QWidget):
     def check_password(self):
         if self.lineEdit_username.text() == "admin" and self.lineEdit_password.text() ==  "password":
             self.close()
-            self.editKpAndKi = EngineerWindow(self.lockEngineerFile, self.trainNumber)
-            self.editKpAndKi.show()
+            self.__edit_kp_and_ki = EngineerWindow(self.__lock_engineer_file, self.__train_number)
+            self.__edit_kp_and_ki.show()
 
 class MainWindow(QWidget):
-    def __init__(self, train, lockOutputFile, lockInputFile, lockEngineerFile):
+    def __init__(self, train, lock_output_file, lock_input_file, lock_engineer_file):
         super().__init__()
 
-        self.train = train
-        self.lockOutputFile = lockOutputFile
-        self.lockInputFile = lockInputFile
-        self.lockEngineerFile = lockEngineerFile
-        self.trainNumber = train.trainNumber
-        self.driverOutput = train.trainDriverOutput
-        self.driverInput = train.trainDriverInput
-        self.trainLine = train.trainLine
+        self.__train = train
+        self.__lock_output_file = lock_output_file
+        self.__lock_input_file = lock_input_file
+        self.__lock_engineer_file = lock_engineer_file
+        self.__train_number = train.get_train_number()
+        self.__driver_output = train.get_driver_output()
+        self.__driver_input = train.get_driver_input()
+        self.__train_line = train.get_train_line()
 
-        self.inputFileName = "./ui/driverUIFiles/utilities/driverInputDB_" + str(self.trainNumber) + ".txt"
-        self.outputFileName = "./ui/driverUIFiles/utilities/driverOutputDB_" + str(self.trainNumber) + ".txt"
+        self.__input_file_name = "./ui/driverUIFiles/utilities/driverInputDB_" + str(self.__train_number) + ".txt"
+        self.__output_file_name = "./ui/driverUIFiles/utilities/driverOutputDB_" + str(self.__train_number) + ".txt"
 
-        self.setWindowTitle("Train Controller: " + str(self.trainNumber))
+        self.setWindowTitle("Train Controller: " + str(self.__train_number))
 
-        self.__layoutInit()
+        self.__layout_init()
 
-        self.__createHeader()
-        self.__createDriverOuputWidgets()
-        self.__createSpeedInfoLayout()
-        self.__createSpeedButtonLayout()
-        self.__createServiceBrakeButton()
-        self.__createSystemMonitor()
-        self.__createFaultIndicator()
-        self.__createMiddleTopRight()
-        self.__createMap()
-        self.__createTemperatureControl()
-        self.__createToggleLabels()
-        self.__createToggleButtons()
-        self.__createEmergencyBrakeButton()
+        self.__create_header()
+        self.__create_driver_ouput_widgets()
+        self.__create_speed_info_layout()
+        self.__create_speed_button_layout()
+        self.__create_service_brake_button()
+        self.__create_system_monitor()
+        self.__create_fault_indicator()
+        self.__create_middle_top_right()
+        self.__create_temperature_control()
+        self.__create_toggle_labels()
+        self.__create_toggle_buttons()
+        self.__create_emergency_brake_button()
 
-        self.__assembleLayouts()
-        self.setLayout(self.mainLayout)
+        self.__assemble_layouts()
+        self.setLayout(self.__main_layout)
     
-    def __layoutInit(self):
-        self.mainLayout = QVBoxLayout()
+    def __layout_init(self):
+        self.__main_layout = QVBoxLayout()
 
-        self.headerLayout = QHBoxLayout()
-        self.bodyLayout = QHBoxLayout()
+        self.__header_layout = QHBoxLayout()
+        self.__body_layout = QHBoxLayout()
 
-        self.leftLayout = QVBoxLayout()
-        self.middleLayout = QVBoxLayout()
-        self.rightLayout = QVBoxLayout()
+        self.__left_layout = QVBoxLayout()
+        self.__middle_layout = QVBoxLayout()
+        self.__right_layout = QVBoxLayout()
 
-        self.speedInfoLayout = QVBoxLayout()
-        self.speedChangeLayout = QHBoxLayout()
-        self.speedButtonsLayout = QVBoxLayout()
+        self.__speed_info_layout = QVBoxLayout()
+        self.__speed_change_layout = QHBoxLayout()
+        self.__speed_buttons_layout = QVBoxLayout()
 
-        self.middleTopLayout = QHBoxLayout()
-        self.faultLayout = QHBoxLayout()
-        self.faultLabelLayout = QVBoxLayout()
-        self.faultIndicatorLayout = QVBoxLayout()
-        self.middleTopRightLayout = QVBoxLayout()
-        self.manualModeToggleLayout = QHBoxLayout()
+        self.__middle_top_layout = QHBoxLayout()
+        self.__fault_layout = QHBoxLayout()
+        self.__fault_label_layout = QVBoxLayout()
+        self.__fault_indicator_layout = QVBoxLayout()
+        self.__middle_top_right_layout = QVBoxLayout()
+        self.__manual_mode_toggle_layout = QHBoxLayout()
 
-        self.nonVitalControlsLayout = QVBoxLayout()
-        self.temperatureControlLayout = QHBoxLayout()
-        self.togglesLayout = QHBoxLayout()
-        self.toggleLabelsLayout = QVBoxLayout()
-        self.togglesButtonsLayout = QVBoxLayout()
+        self.__non_vital_controls_layout = QVBoxLayout()
+        self.__temperature_control_layout = QHBoxLayout()
+        self.__toggles_layout = QHBoxLayout()
+        self.__toggle_labels_layout = QVBoxLayout()
+        self.__toggles_buttons_layout = QVBoxLayout()
     
-    def __assembleLayouts(self):
-        self.leftLayout.addLayout(self.speedInfoLayout)
-        self.leftLayout.addLayout(self.speedChangeLayout)
-        self.leftLayout.addWidget(self.serviceBrakeButton)
+    def __assemble_layouts(self):
+        self.__left_layout.addLayout(self.__speed_info_layout)
+        self.__left_layout.addLayout(self.__speed_change_layout)
+        self.__left_layout.addWidget(self.__service_brake_button)
 
-        self.faultLayout.addLayout(self.faultLabelLayout, 8)
-        self.faultLayout.addLayout(self.faultIndicatorLayout, 2)
-        self.middleTopLayout.addLayout(self.faultLayout)
-        self.middleTopLayout.addLayout(self.middleTopRightLayout)
-        self.middleLayout.addLayout(self.middleTopLayout)
-        self.middleLayout.addWidget(self.map)
+        self.__fault_layout.addLayout(self.__fault_label_layout, 8)
+        self.__fault_layout.addLayout(self.__fault_indicator_layout, 2)
+        self.__middle_top_layout.addLayout(self.__fault_layout)
+        self.__middle_top_layout.addLayout(self.__middle_top_right_layout)
+        self.__middle_layout.addLayout(self.__middle_top_layout)
 
-        self.nonVitalControlsLayout.addWidget(self.interiorTemperatureOutput)
-        self.nonVitalControlsLayout.addLayout(self.temperatureControlLayout)
-        self.togglesLayout.addLayout(self.toggleLabelsLayout)
-        self.togglesLayout.addLayout(self.togglesButtonsLayout)
-        self.nonVitalControlsLayout.addLayout(self.togglesLayout)
-        self.nonVitalControlsLayout.addWidget(self.activateAnnouncmentButton)
-        self.rightLayout.addLayout(self.nonVitalControlsLayout)
-        self.rightLayout.addWidget(self.emergencyBrakeButton)
+        self.__non_vital_controls_layout.addWidget(self.__interior_temperature_output)
+        self.__non_vital_controls_layout.addLayout(self.__temperature_control_layout)
+        self.__toggles_layout.addLayout(self.__toggle_labels_layout)
+        self.__toggles_layout.addLayout(self.__toggles_buttons_layout)
+        self.__non_vital_controls_layout.addLayout(self.__toggles_layout)
+        self.__non_vital_controls_layout.addWidget(self.__activate_announcment_button)
+        self.__right_layout.addLayout(self.__non_vital_controls_layout)
+        self.__right_layout.addWidget(self.__emergency_brake_button)
 
-        self.bodyLayout.addLayout(self.leftLayout)
-        self.bodyLayout.addLayout(self.middleLayout)
-        self.bodyLayout.addLayout(self.rightLayout)
+        self.__body_layout.addLayout(self.__left_layout)
+        self.__body_layout.addLayout(self.__middle_layout)
+        self.__body_layout.addLayout(self.__right_layout)
 
-        self.mainLayout.addLayout(self.headerLayout, 1)
-        self.mainLayout.addLayout(self.bodyLayout, 9)
+        self.__main_layout.addLayout(self.__header_layout, 1)
+        self.__main_layout.addLayout(self.__body_layout, 9)
 
-    def __createHeader(self):
-        self.engineerLogin = QPushButton("Engineer Login")
-        self.engineerLogin.clicked.connect(self.__loginWindow)
+    def __create_header(self):
+        self.__engineer_login = QPushButton("Engineer Login")
+        self.__engineer_login.clicked.connect(self.__login_window)
         
-        self.dateAndTime = QLabel("10/8/2022\n5:00 PM")
-        self.dateAndTime.setAlignment(Qt.AlignCenter)
+        self.__date_and_time = QLabel("10/8/2022\n5:00 PM")
+        self.__date_and_time.setAlignment(Qt.AlignCenter)
 
-        self.trainInformation = QLabel("Flexity Tram 2 Train " + str(self.trainNumber))
-        self.trainInformation.setAlignment(Qt.AlignRight)
+        self.__train_information = QLabel("Flexity Tram 2 Train " + str(self.__train_number))
+        self.__train_information.setAlignment(Qt.AlignRight)
 
-        self.headerLayout.addWidget(self.engineerLogin)
-        self.headerLayout.addWidget(self.dateAndTime)
-        self.headerLayout.addWidget(self.trainInformation)
+        self.__header_layout.addWidget(self.__engineer_login)
+        self.__header_layout.addWidget(self.__date_and_time)
+        self.__header_layout.addWidget(self.__train_information)
     
-    def __createSpeedInfoLayout(self):
-        self.speedInfoLayout.addWidget(self.currentSetPointOutput)
-        self.speedInfoLayout.addWidget(self.speedLimitOutput)
-        self.speedInfoLayout.addWidget(self.commandSetPointOutput)
+    def __create_speed_info_layout(self):
+        self.__speed_info_layout.addWidget(self.__current_set_point_output)
+        self.__speed_info_layout.addWidget(self.__speed_limit_output)
+        self.__speed_info_layout.addWidget(self.__command_set_point_output)
     
-    def __createSpeedButtonLayout(self):
-        self.speedBar = QProgressBar()
-        self.speedIncrement = QPushButton("Up")
-        self.speedIncrement.pressed.connect(self.__increaseSpeedButton)
-        self.speedDecrement = QPushButton("Down")
-        self.speedDecrement.pressed.connect(self.__decreaseSpeedButton)
+    def __create_speed_button_layout(self):
+        self.__speed_bar = QProgressBar()
+        self.__speed_increment = QPushButton("Up")
+        self.__speed_increment.pressed.connect(self.__increase_speed_button)
+        self.__speed_decrement = QPushButton("Down")
+        self.__speed_decrement.pressed.connect(self.__decrease_speed_button)
 
-        self.speedButtonsLayout.addWidget(self.speedIncrement)
-        self.speedButtonsLayout.addWidget(self.speedDecrement)
+        self.__speed_buttons_layout.addWidget(self.__speed_increment)
+        self.__speed_buttons_layout.addWidget(self.__speed_decrement)
 
-        self.speedChangeLayout.addWidget(self.speedBar)
-        self.speedChangeLayout.addLayout(self.speedButtonsLayout)
+        self.__speed_change_layout.addWidget(self.__speed_bar)
+        self.__speed_change_layout.addLayout(self.__speed_buttons_layout)
     
-    def __createServiceBrakeButton(self):
-        self.serviceBrakeButton = QPushButton("Service Brake")
-        self.serviceBrakeButton.pressed.connect(self.__serviceBrakeButtonActionOn)
-        self.serviceBrakeButton.released.connect(self.__serviceBrakeButtonActionOff)
+    def __create_service_brake_button(self):
+        self.__service_brake_button = QPushButton("Service Brake")
+        self.__service_brake_button.pressed.connect(self.__service_brake_button_action_on)
+        self.__service_brake_button.released.connect(self.__service_brake_button_action_off)
     
-    def __createSystemMonitor(self):
-        self.brakeFailureLabel = QLabel("Brakes")
-        self.engineFailureLabel = QLabel("Engine")
-        self.wheelFailureLabel = QLabel("Wheels")
-        self.signalFailureLabel = QLabel("Signal Pickup Failure")
+    def __create_system_monitor(self):
+        self.__brake_failure_label = QLabel("Brakes")
+        self.__engine_failure_label = QLabel("Engine")
+        self.__signal_failure_label = QLabel("Signal Pickup Failure")
 
-        self.faultLabelLayout.addWidget(self.brakeFailureLabel)
-        self.faultLabelLayout.addWidget(self.engineFailureLabel)
-        self.faultLabelLayout.addWidget(self.wheelFailureLabel)
-        self.faultLabelLayout.addWidget(self.signalFailureLabel)
+        self.__fault_label_layout.addWidget(self.__brake_failure_label)
+        self.__fault_label_layout.addWidget(self.__engine_failure_label)
+        self.__fault_label_layout.addWidget(self.__signal_failure_label)
 
-    def __createFaultIndicator(self):
-        self.brakeFailureIndicator = QLed(offColour= QLed.Green, onColour = QLed.Red, shape=QLed.Circle)
-        self.brakeFailureIndicator.value = self.driverOutput.brakeFailure
-        self.engineFailureIndicator = QLed(offColour= QLed.Green,onColour = QLed.Red, shape=QLed.Circle)
-        self.engineFailureIndicator.value = self.driverOutput.engineFailure
-        self.wheelFailureIndicator = QLed(offColour= QLed.Green,onColour = QLed.Red, shape=QLed.Circle)
-        self.wheelFailureIndicator.value = self.driverOutput.wheelFailure
-        self.signalFailureIndicator = QLed(offColour= QLed.Green,onColour = QLed.Red, shape=QLed.Circle)
-        self.signalFailureIndicator.value = self.driverOutput.signalPickUpFailure
+    def __create_fault_indicator(self):
+        self.__brake_failure_indicator = QLed(offColour= QLed.Green, onColour = QLed.Red, shape=QLed.Circle)
+        self.__brake_failure_indicator.value = self.__driver_output.brake_failure
+        self.__engine_fault_indicator = QLed(offColour= QLed.Green,onColour = QLed.Red, shape=QLed.Circle)
+        self.__engine_fault_indicator.value = self.__driver_output.engine_failure
+        self.__signal_failure_indicator = QLed(offColour= QLed.Green,onColour = QLed.Red, shape=QLed.Circle)
+        self.__signal_failure_indicator.value = self.__driver_output.signal_pickup_failure
 
-        self.faultIndicatorLayout.addWidget(self.brakeFailureIndicator)
-        self.faultIndicatorLayout.addWidget(self.engineFailureIndicator)
-        self.faultIndicatorLayout.addWidget(self.wheelFailureIndicator)
-        self.faultIndicatorLayout.addWidget(self.signalFailureIndicator)
+        self.__fault_indicator_layout.addWidget(self.__brake_failure_indicator)
+        self.__fault_indicator_layout.addWidget(self.__engine_fault_indicator)
+        self.__fault_indicator_layout.addWidget(self.__signal_failure_indicator)
     
-    def __createMiddleTopRight(self):
-        self.manualModeToggle = Toggle(checked_color="#00FF00")
-        self.manualModeToggle.toggled.connect(self.__manualModeToggle)
-        self.trainLineLabel = QLabel()
-        if self.trainLine == 1:
-            self.trainLineLabel.setText("Green Line")
+    def __create_middle_top_right(self):
+        self.__manual_mode_toggle = Toggle(checked_color="#00FF00")
+        self.__manual_mode_toggle.toggled.connect(self.__manual_mode_toggle_check)
+        self.__train_line_label = QLabel()
+        if self.__train_line == 1:
+            self.__train_line_label.setText("Green Line")
         else:
-            self.trainLineLabel.setText("Red Line")
+            self.__train_line_label.setText("Red Line")
 
-        self.manualModeToggleLayout.addWidget(QLabel("Manual Mode"), 8)
-        self.manualModeToggleLayout.addWidget(self.manualModeToggle)
-        self.middleTopRightLayout.addWidget(self.authorityOutput)
-        self.middleTopRightLayout.addLayout(self.manualModeToggleLayout)
-        self.middleTopRightLayout.addWidget(self.trainLineLabel)
-        self.middleTopRightLayout.addWidget(self.nextStop)
+        self.__manual_mode_toggle_layout.addWidget(QLabel("Manual Mode"), 8)
+        self.__manual_mode_toggle_layout.addWidget(self.__manual_mode_toggle)
+        self.__middle_top_right_layout.addWidget(self.__authority_output)
+        self.__middle_top_right_layout.addLayout(self.__manual_mode_toggle_layout)
+        self.__middle_top_right_layout.addWidget(self.__train_line_label)
+        self.__middle_top_right_layout.addWidget(self.__next_stop)
 
+    def __create_temperature_control(self):
+        self.__increment_temperature = QPushButton("Up")
+        self.__increment_temperature.pressed.connect(self.__increment_temperature_button)
+        self.__decrement_temperature = QPushButton("Down")
+        self.__decrement_temperature.pressed.connect(self.__decrement_temperature_button)
+        self.__temperature_control_layout.addWidget(self.__increment_temperature)
+        self.__temperature_control_layout.addWidget(self.__decrement_temperature)
     
-    def __createMap(self):
-        self.map = QLabel("Map")
+    def __create_toggle_labels(self):
+        self.__toggle_labels_layout.addWidget(QLabel("Left Side Doors"))
+        self.__toggle_labels_layout.addWidget(QLabel("Right Side Doors"))
+        self.__toggle_labels_layout.addWidget(QLabel("Interior Lights"))
+        self.__toggle_labels_layout.addWidget(QLabel("Exterior Lights"))
+    
+    def __create_toggle_buttons(self):
+        self.__toggle_left_side_doors_button = Toggle(checked_color="#00FF00")
+        self.__toggle_left_side_doors_button.toggled.connect(self.__left_side_doors_toggle)
+        self.__toggle_right_side_doors_button = Toggle(checked_color="#00FF00")
+        self.__toggle_right_side_doors_button.toggled.connect(self.__right_side_doors_toggle)
+        self.__toggle_inside_lights_button = Toggle(checked_color="#00FF00")
+        self.__toggle_inside_lights_button.toggled.connect(self.__inside_lights_toggle)
+        self.__toggle_outside_lights_button = Toggle(checked_color="#00FF00")
+        self.__toggle_outside_lights_button.toggled.connect(self.__outside_lights_toggle)
 
-    def __createTemperatureControl(self):
-        self.incrementTemperature = QPushButton("Up")
-        self.incrementTemperature.pressed.connect(self.__incrementTemperature)
-        self.decrementTemperature = QPushButton("Down")
-        self.decrementTemperature.pressed.connect(self.__decrementTemperature)
-        self.temperatureControlLayout.addWidget(self.incrementTemperature)
-        self.temperatureControlLayout.addWidget(self.decrementTemperature)
-    
-    def __createToggleLabels(self):
-        self.toggleLabelsLayout.addWidget(QLabel("Left Side Doors"))
-        self.toggleLabelsLayout.addWidget(QLabel("Right Side Doors"))
-        self.toggleLabelsLayout.addWidget(QLabel("Interior Lights"))
-        self.toggleLabelsLayout.addWidget(QLabel("Exterior Lights"))
-    
-    def __createToggleButtons(self):
-        self.toggleLeftSideDoorsButton = Toggle(checked_color="#00FF00")
-        self.toggleLeftSideDoorsButton.toggled.connect(self.__leftSideDoorsToggle)
-        self.toggleRightSideDoorsButton = Toggle(checked_color="#00FF00")
-        self.toggleRightSideDoorsButton.toggled.connect(self.__rightSideDoorsToggle)
-        self.toggleInsideLightsButton = Toggle(checked_color="#00FF00")
-        self.toggleInsideLightsButton.toggled.connect(self.__insideLightsToggle)
-        self.toggleOutsideLightsButton = Toggle(checked_color="#00FF00")
-        self.toggleOutsideLightsButton.toggled.connect(self.__outsideLightsToggle)
+        self.__activate_announcment_button = QPushButton("Activate Announcement")
+        self.__activate_announcment_button.pressed.connect(self.__activate_announcement_press)
+        self.__activate_announcment_button.released.connect(self.__activate_announcement_release)
 
-        self.activateAnnouncmentButton = QPushButton("Activate Announcement")
-        self.activateAnnouncmentButton.pressed.connect(self.__activateAnnouncmentPress)
-        self.activateAnnouncmentButton.released.connect(self.__activateAnnouncementRelease)
-
-        self.togglesButtonsLayout.addWidget(self.toggleLeftSideDoorsButton)
-        self.togglesButtonsLayout.addWidget(self.toggleRightSideDoorsButton)
-        self.togglesButtonsLayout.addWidget(self.toggleInsideLightsButton)
-        self.togglesButtonsLayout.addWidget(self.toggleOutsideLightsButton)
+        self.__toggles_buttons_layout.addWidget(self.__toggle_left_side_doors_button)
+        self.__toggles_buttons_layout.addWidget(self.__toggle_right_side_doors_button)
+        self.__toggles_buttons_layout.addWidget(self.__toggle_inside_lights_button)
+        self.__toggles_buttons_layout.addWidget(self.__toggle_outside_lights_button)
     
-    def __createEmergencyBrakeButton(self):
-        self.emergencyBrakeButton = QPushButton("Emergency Brake")
-        self.emergencyBrakeButton.pressed.connect(self.__emergencyBrakeButtonActionOn)
-        self.emergencyBrakeButton.released.connect(self.__emergencyBrakeButtonActionOff)
+    def __create_emergency_brake_button(self):
+        self.__emergency_brake_button = QPushButton("Emergency Brake")
+        self.__emergency_brake_button.pressed.connect(self.__emergency_brake_button_action_on)
+        self.__emergency_brake_button.released.connect(self.__emergency_brake_button_action_off)
     
-    def __createDriverOuputWidgets(self):
-        self.currentSetPointOutput = QLabel()
-        self.speedLimitOutput = QLabel()
-        self.interiorTemperatureOutput = QLabel()
-        self.commandSetPointOutput = QLabel()
-        self.authorityOutput = QLabel()
-        self.authorityOutput.setAlignment(Qt.AlignCenter)
-        self.nextStop = QLabel()
+    def __create_driver_ouput_widgets(self):
+        self.__current_set_point_output = QLabel()
+        self.__speed_limit_output = QLabel()
+        self.__interior_temperature_output = QLabel()
+        self.__command_set_point_output = QLabel()
+        self.__authority_output = QLabel()
+        self.__authority_output.setAlignment(Qt.AlignCenter)
+        self.__next_stop = QLabel()
     
-    def __updateOutputWidgets(self):
-        self.currentSetPointOutput.setText("Current Speed: " + str(int(self.driverOutput.currentSetPoint * 2.237)) + " mph")
-        self.speedLimitOutput.setText("Speed Limit: " + str(int(self.driverOutput.speedLimit * 0.621371)) + " mph")
-        self.interiorTemperatureOutput.setText("A/C Temperature: " + str(self.driverOutput.interiorTemperature) + "F")
-        self.commandSetPointOutput.setText("Target Speed: " + str(int(self.driverOutput.commandSetPoint * 2.237)) + " mph")
-        if self.driverOutput.authority:
-            self.authorityOutput.setText("Go")
+    def __update_output_widgets(self):
+        self.__current_set_point_output.setText("Current Speed: " + str(int(self.__driver_output.current_set_point * 2.237)) + " mph")
+        self.__speed_limit_output.setText("Speed Limit: " + str(int(self.__driver_output.speed_limit * 2.23694)) + " mph")
+        self.__interior_temperature_output.setText("A/C Temperature: " + str(self.__driver_output.interior_temperature) + "F")
+        self.__command_set_point_output.setText("Target Speed: " + str(int(self.__driver_output.command_set_point * 2.237)) + " mph")
+        if self.__driver_output.authority:
+            self.__authority_output.setText("Go")
         else:
-            self.authorityOutput.setText("Stop")
+            self.__authority_output.setText("Stop")
 
-        self.brakeFailureIndicator.value = self.driverOutput.brakeFailure
-        self.engineFailureIndicator.value = self.driverOutput.engineFailure
-        self.wheelFailureIndicator.value = self.driverOutput.wheelFailure
-        self.signalFailureIndicator.value = self.driverOutput.signalPickUpFailure
-        if self.driverOutput.speedLimit == 0:
-            self.speedBar.setValue(0)
+        self.__brake_failure_indicator.value = self.__driver_output.brake_failure
+        self.__engine_fault_indicator.value = self.__driver_output.engine_failure
+        self.__signal_failure_indicator.value = self.__driver_output.signal_pickup_failure
+        if self.__driver_output.speed_limit == 0:
+            self.__speed_bar.setValue(0)
         else:
-            self.speedBar.setValue(int(self.driverOutput.currentSetPoint / self.driverOutput.speedLimit * 100))
-        self.nextStop.setText("Next Stop: " + self.driverOutput.nextStop)
+            self.__speed_bar.setValue(int(self.__driver_output.current_set_point / self.__driver_output.speed_limit * 100))
+        self.__next_stop.setText("Next Stop: " + self.__driver_output.next_stop)
     
     def update(self):
-        readDriverOutputFile(self.outputFileName, self.lockOutputFile, self.driverOutput)
-        self.__updateOutputWidgets()
-        if not self.driverInput.manualMode:
-            self.driverInput.commandSetPoint = self.driverOutput.commandSetPoint
-        writeDriverInputFile(self.inputFileName, self.lockInputFile, self.driverInput)
+        read_driver_output_file(self.__output_file_name, self.__lock_output_file, self.__driver_output)
+        self.__update_output_widgets()
+        if not self.__driver_input.manual_mode:
+            self.__driver_input.command_set_point = self.__driver_output.speed_limit
+        write_driver_input_file(self.__input_file_name, self.__lock_input_file, self.__driver_input)
     
     
-    def __serviceBrakeButtonActionOn(self):
-        self.driverInput.serviceBrake = True
+    def __service_brake_button_action_on(self):
+        self.__driver_input.service_brake = True
     
-    def __serviceBrakeButtonActionOff(self):
-        self.driverInput.serviceBrake = False
+    def __service_brake_button_action_off(self):
+        self.__driver_input.service_brake = False
     
-    def __emergencyBrakeButtonActionOn(self):
-        self.driverInput.emergencyBrake = True
+    def __emergency_brake_button_action_on(self):
+        self.__driver_input.emergency_brake = True
 
-    def __emergencyBrakeButtonActionOff(self):
-        self.driverInput.emergencyBrake = False
+    def __emergency_brake_button_action_off(self):
+        self.__driver_input.emergency_brake = False
 
-    def __manualModeToggle(self):
-        self.driverInput.manualMode = self.manualModeToggle.isChecked()
+    def __manual_mode_toggle_check(self):
+        self.__driver_input.manual_mode = self.__manual_mode_toggle.isChecked()
     
-    def __leftSideDoorsToggle(self):
-        self.driverInput.leftSideDoors = self.toggleLeftSideDoorsButton.isChecked()
+    def __left_side_doors_toggle(self):
+        self.__driver_input.left_side_doors = self.__toggle_left_side_doors_button.isChecked()
     
-    def __rightSideDoorsToggle(self):
-        self.driverInput.rightSideDoors = self.toggleRightSideDoorsButton.isChecked()
+    def __right_side_doors_toggle(self):
+        self.__driver_input.right_side_doors = self.__toggle_right_side_doors_button.isChecked()
     
-    def __insideLightsToggle(self):
-        self.driverInput.insideLights = self.toggleInsideLightsButton.isChecked()
+    def __inside_lights_toggle(self):
+        self.__driver_input.inside_lights = self.__toggle_inside_lights_button.isChecked()
     
-    def __outsideLightsToggle(self):
-        self.driverInput.outsideLights = self.toggleOutsideLightsButton.isChecked()
+    def __outside_lights_toggle(self):
+        self.__driver_input.outside_lights = self.__toggle_outside_lights_button.isChecked()
     
-    def __increaseSpeedButton(self):
-        if self.driverInput.manualMode:
-            self.driverInput.commandSetPoint += 0.44704
+    def __increase_speed_button(self):
+        if self.__driver_input.manual_mode:
+            if self.__driver_input.command_set_point < self.__driver_output.speed_limit:
+                self.__driver_input.command_set_point += 0.44704
     
-    def __decreaseSpeedButton(self):
-        if self.driverInput.manualMode:
-            self.driverInput.commandSetPoint -= 0.44704
+    def __decrease_speed_button(self):
+        if self.__driver_input.manual_mode:
+            if self.__driver_input.command_set_point > 0:
+                self.__driver_input.command_set_point -= 0.44704
     
-    def __activateAnnouncmentPress(self):
-        self.driverInput.activateAnnouncement = True
+    def __activate_announcement_press(self):
+        self.__driver_input.activate_announcement = True
     
-    def __activateAnnouncementRelease(self):
-        self.driverInput.activateAnnouncement = False
+    def __activate_announcement_release(self):
+        self.__driver_input.activate_announcement = False
     
-    def __incrementTemperature(self):
-        if self.driverOutput.interiorTemperature < 78:
-            self.driverInput.interiorTemperatureControl += 1
+    def __increment_temperature_button(self):
+        if self.__driver_output.interior_temperature < 78:
+            self.__driver_input.interior_temperature_control += 1
     
-    def __decrementTemperature(self):
-        if self.driverOutput.interiorTemperature > 65:
-            self.driverInput.interiorTemperatureControl -= 1
+    def __decrement_temperature_button(self):
+        if self.__driver_output.interior_temperature > 65:
+            self.__driver_input.interior_temperature_control -= 1
     
-    def __loginWindow(self):
-        self.newLogin = LoginForm(self.lockEngineerFile, self.trainNumber)
-        self.newLogin.show()
+    def __login_window(self):
+        self.__new_login = LoginForm(self.__lock_engineer_file, self.__train_number)
+        self.__new_login.show()
         
     
 
-def driverUI(train, lockOutputFile, lockInputFile, lockEngineerInput):
+def driver_ui(train, lock_output_file, lock_input_file, lock_engineer_input):
     app = QApplication([])
-    window = MainWindow(train, lockOutputFile, lockInputFile, lockEngineerInput)
+    window = MainWindow(train, lock_output_file, lock_input_file, lock_engineer_input)
     fps = 15
     timer = QTimer()
     timer.timeout.connect(window.update)
