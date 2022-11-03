@@ -1,9 +1,10 @@
-from PLC_Parser import PLC_Parser
+from track_controller.PLC_Parser import PLC_Parser
 
 class WaysideController ():
     def __init__(self):
         self.wayside_id = 0
         self.PLC_info = PLC_Parser()
+        self.PLC_info2 = PLC_Parser()
         self.authority = []
         self.occupancy = []
         self.switch_positions = []
@@ -12,23 +13,32 @@ class WaysideController ():
         self.statuses = []
         self.suggested_speed = [] #0b00010100 #20 in binary
         self.commanded_speed = []#0b00010100 #20 in binary
+        self.speed_limit = []#0b00010100 #20 in binary
 
     def ParsePLC(self):
-        changes = self.PLC_info.parse_PLC(self.switch_positions, self.occupancy, self.authority,self.suggested_speed, self.statuses)
+        changes = self.PLC_info.parse_PLC(self.switch_positions, self.occupancy, self.authority,self.suggested_speed, self.statuses, self.speed_limit)
+        changes2 = self.PLC_info2.parse_PLC(self.switch_positions, self.occupancy, self.authority,self.suggested_speed, self.statuses, self.speed_limit)
+        if(changes != changes2):
+            print("  ")
+        if changes == False:
+            print("There is an issue with the plc, no changes made")
+            return False
         for change in changes:
             (typeS, bl, val) = change
             if typeS == "S":
                 self.make_changes(change, self.switch_positions)
             elif typeS == "A":
-                self.make_changes(change, self.authority)
+                #self.make_changes(change, self.authority)
+                return False
             elif typeS == "R":
                 self.make_changes(change, self.railway_crossings)
             elif typeS == "L":
                 self.make_light_changes(change, self.light_colors)
             elif typeS == "F":
-                self.make_changes(change, self.statuses)
-            elif typeS == "CS":
-                self.make_changes(change, self.commanded_speed)
+                #self.make_changes(change, self.statuses)
+                return False
+            elif typeS == "C":
+                self.make_speed_change(change, self.commanded_speed)
 
     def make_changes(self, change, table):
         t= len(table)
@@ -36,7 +46,16 @@ class WaysideController ():
         for row in range(t):
             (block, state) = table[row]
             if str(block) == bl:
-                table[row] = (bl, val)
+                boolVal = val == "True"
+                table[row] = (int(bl), boolVal)
+    
+    def make_speed_change(self, change, table):
+        t= len(table)
+        (typeS, bl, val) = change
+        for row in range(t):
+            (block, state) = table[row]
+            if str(block) == bl:
+                table[row] = (int(bl), int(val))
 
     def make_light_changes(self, change, table):
         t= len(table)
@@ -53,7 +72,7 @@ class WaysideController ():
         for row in range(t):
             (block, state1, state2) = table[row]
             if str(block) == bl:
-                table[row] = (bl, val1, val2)
+                table[row] = (int(bl), bool(val1), bool(val2))
 
     def RunTrackLogic ():
         print('Logic wow')
@@ -77,8 +96,16 @@ class WaysideController ():
         self.suggested_speed = ss
     def set_commanded_speed(self, cs):
         self.commanded_speed = cs
+    def set_speed_limit(self, sl):
+        self.speed_limit = sl
     def set_PLC (self, plc):
+        testPLC = PLC_Parser()
+        testPLC.change_PLC_file(plc)
+        if(False == testPLC.parse_PLC(self.switch_positions, self.occupancy, self.authority,self.suggested_speed, self.statuses, self.speed_limit)):
+            return False
         self.PLC_info.change_PLC_file(plc)
+        self.PLC_info2.change_PLC_file(plc)
+        return True
 
     #----getters----
     def get_wayside_id(self):
@@ -101,3 +128,5 @@ class WaysideController ():
         return self.PLC_info.get_PLC_file()
     def get_commanded_speed (self):
         return self.commanded_speed
+    def get_speed_limit (self):
+        return self.speed_limit

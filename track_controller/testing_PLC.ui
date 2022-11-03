@@ -173,8 +173,8 @@
    <widget class="QPushButton" name="UploadNewPLCButton">
     <property name="geometry">
      <rect>
-      <x>560</x>
-      <y>460</y>
+      <x>900</x>
+      <y>490</y>
       <width>371</width>
       <height>51</height>
      </rect>
@@ -186,9 +186,9 @@
    <widget class="QLabel" name="CurrentPLCLabel">
     <property name="geometry">
      <rect>
-      <x>940</x>
-      <y>470</y>
-      <width>831</width>
+      <x>580</x>
+      <y>640</y>
+      <width>1031</width>
       <height>41</height>
      </rect>
     </property>
@@ -199,8 +199,8 @@
    <widget class="QPushButton" name="run_PLC_button">
     <property name="geometry">
      <rect>
-      <x>1780</x>
-      <y>460</y>
+      <x>900</x>
+      <y>770</y>
       <width>371</width>
       <height>51</height>
      </rect>
@@ -286,6 +286,45 @@
       <string>Status</string>
      </property>
     </column>
+   </widget>
+   <widget class="QTableWidget" name="speed_limit_table">
+    <property name="geometry">
+     <rect>
+      <x>1620</x>
+      <y>460</y>
+      <width>551</width>
+      <height>400</height>
+     </rect>
+    </property>
+    <property name="rowCount">
+     <number>0</number>
+    </property>
+    <property name="columnCount">
+     <number>2</number>
+    </property>
+    <column>
+     <property name="text">
+      <string>Block Number</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Speed Limit</string>
+     </property>
+    </column>
+   </widget>
+   <widget class="QLabel" name="ErrorBoxLabel">
+    <property name="geometry">
+     <rect>
+      <x>580</x>
+      <y>580</y>
+      <width>1021</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string> </string>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">

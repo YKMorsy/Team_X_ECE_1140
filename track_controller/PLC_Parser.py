@@ -13,7 +13,7 @@ class PLC_Parser ():
 				return state
 		return False
 
-	def parse_PLC (self, switchPos, Occupancy, Authority, sugSpeed, status):
+	def parse_PLC (self, switchPos, Occupancy, Authority, sugSpeed, status, speedLim):
 		logic_queue = queue.LifoQueue()
 		if(self.PLC_file == ""):
 			return False;
@@ -35,7 +35,7 @@ class PLC_Parser ():
 				arg = arg.strip('\n')
 				if (arg == "IF"):
 					condition =  None
-					logic_queue.put("if")
+					#logic_queue.put("if")
 				elif (arg == "ELSE"):
 					condition =  not(condition)
 				elif (arg == "("):
@@ -47,7 +47,7 @@ class PLC_Parser ():
 					logic_queue.put("{")
 				elif (arg == "}"):
 					logic_queue.get()
-					logic_queue.get()
+					#logic_queue.get()
 				elif (arg == "="):
 					logic_queue.put("=")
 				elif (arg == "&"):
@@ -103,9 +103,9 @@ class PLC_Parser ():
 							else:
 								val = self.get_table_value(Authority, var[1])
 								condition = self.set_condition(val, var[1], condition, logic_queue)
-						elif (var[0] == "CS"):
+						elif (var[0] == "C"):
 							if ( state == "{" or state == " "):
-								set_var.append("CS")
+								set_var.append("C")
 								set_var.append(var[1])
 							else:
 								print("no")
@@ -115,10 +115,15 @@ class PLC_Parser ():
 							elif(var[0] == '1'):
 								theBool = "True"
 
-							if(set_var[0] == "CS"):
+							if(set_var[0] == "C"):
 								if var[0] == "D":
 									sug = self.get_table_value(sugSpeed, var[1])
-									tup= (set_var[0], set_var[1], sug)
+									lim = self.get_table_value(speedLim, var[1])
+									if (int(sug)>int(lim)): 
+										setVa = lim
+									else:
+										setVa = sug
+									tup = (set_var[0], set_var[1], setVa)
 								else:
 									tup= (set_var[0], set_var[1], int(var[0]))
 							else:
@@ -127,19 +132,22 @@ class PLC_Parser ():
 							set_var.clear()
 							changes.append(tup)
 							logic_queue.get()
+						else:
+							return False
 					except  Exception as e:
 						print(e)
+						return False
 		return changes
 
 	def set_condition(self, val, block, condition, logic_queue):
 		state = self.get_state(logic_queue)
 		if ( state == "(" ):
-			condition = val == "True"
+			condition = val == "True" or val == True
 		elif ( state == "|" ):
-			condition = condition or (val == "True")
+			condition = condition or (val == "True" or val == True)
 			logic_queue.get()
 		elif ( state == "&" ):
-			condition = condition and (val == "True")
+			condition = condition and (val == "True" or val == True)
 			logic_queue.get()
 		elif ( state == "!" ):
 			if (val == "True"):
