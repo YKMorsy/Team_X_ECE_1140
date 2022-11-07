@@ -16,11 +16,11 @@ class PLC_Parser ():
 	def parse_PLC (self, switchPos, Occupancy, Authority, sugSpeed, status, speedLim):
 		logic_queue = queue.LifoQueue()
 		if(self.PLC_file == ""):
-			return False;
+			return "PLC_file is null";
 		try: 
 			plcFile = open(self.PLC_file, 'r')
 		except:
-			return False
+			return "Issue Opening the PLC File"
 
 		Lines = plcFile.readlines()
 		plcFile.close()
@@ -68,7 +68,7 @@ class PLC_Parser ():
 								set_var.append("R")
 								set_var.append(var[1])
 							else:
-								print("no")
+								return "You can't make desicions off of the Railway Crossings"
 						elif (var[0] == "S"):
 							if ( state == "{" or state == " "):
 								set_var.append("S")
@@ -79,8 +79,7 @@ class PLC_Parser ():
 						elif (var[0] == "O"):
 							state = self.get_state(logic_queue)
 							if ( state == "{" or state == " "):
-								set_var.append("O")
-								set_var.append(var[1])
+								return "You can't set Occupancy"
 							else:
 								val = self.get_table_value(Occupancy, var[1])
 								condition = self.set_condition(val, var[1], condition, logic_queue)
@@ -89,17 +88,17 @@ class PLC_Parser ():
 								set_var.append("L")
 								set_var.append(var[1])
 							else:
-								print("no")
+								return "You can't make desicions off of the Lights"
 						elif (var[0] == "F"):
 							if ( state == "{" or state == " "):
-								print("no")
+								return "You can't set the failures"
 							else:
 								val = self.get_table_value(status, var[1])
 								condition = self.set_condition(val, var[1], condition, logic_queue)
 						elif (var[0] == "A"):
 							state = self.get_state(logic_queue)
 							if ( state == "{" or state == " "):
-								print("no")
+								return "You can't set the Authority"
 							else:
 								val = self.get_table_value(Authority, var[1])
 								condition = self.set_condition(val, var[1], condition, logic_queue)
@@ -108,7 +107,7 @@ class PLC_Parser ():
 								set_var.append("C")
 								set_var.append(var[1])
 							else:
-								print("no")
+								return "You can't make desicions off of the Commanded Speed"
 						elif(state == "="):
 							if(var[0] == '0'):
 								theBool = "False"
@@ -133,10 +132,10 @@ class PLC_Parser ():
 							changes.append(tup)
 							logic_queue.get()
 						else:
-							return False
+							return "Found Unknown character '"+ str(arg) +"' in line '"+str(line)+" '"
 					except  Exception as e:
 						print(e)
-						return False
+						return str(e)
 		return changes
 
 	def set_condition(self, val, block, condition, logic_queue):

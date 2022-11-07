@@ -28,7 +28,7 @@ class track_control_controller():
         self.track_controller_list[1].set_speed_limit([(1,0b000100000), (2, 0b00000100), (3, 0b00100000),(4, 0b00000101), (5, 0b100000001)])
         self.track_controller_list[1].set_PLC("track_controller/testPLCfile.txt")
 
-        self.track_controller_list[0].set_wayside_id(232)
+        self.track_controller_list[0].set_wayside_id("RedLine A")
         self.track_controller_list[1].set_wayside_id(572)
 
     def get_track_control_instance(self, wid):
@@ -44,8 +44,9 @@ class track_control_controller():
 
     def Run_All_Track_Controllers_PLC(self):
         for wayside in self.track_controller_list:
-            wayside.ParsePLC()
-            print("run")
+            if(not(wayside.get_maintenance_mode())):
+                wayside.ParsePLC()
+                print("run")
     def get_all_track_controllers(self):
         return self.track_controller_list
      

@@ -19,6 +19,7 @@ class sign_in_window (QtWidgets.QMainWindow, Ui_sign_in_window):
         self.SignInButton.clicked.connect(self.open_main_window)
         self.Password_TextBox.installEventFilter(self)
         self.UserName_TextBox.installEventFilter(self)
+
         self.all_tracks = track_control_controller()
         track_ids = self.all_tracks.get_names_of_controllers()
         string_track_ids = [str(x) for x in track_ids]

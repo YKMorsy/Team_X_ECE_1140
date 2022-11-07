@@ -25,13 +25,18 @@ class track_control_display (QtWidgets.QMainWindow, Ui_MainWindow):
         self.TestPLCButton.clicked.connect(self.open_test)
         self.UploadPLCButton.clicked.connect(self.openFileNameDialog)
         self.maint_make_change.clicked.connect(self.make_changes)
-        self.maintenance_check_box.stateChanged.connect(self.update_tables)
+        self.maintenance_check_box.setChecked(self.track_data.get_maintenance_mode())
+        self.maintenance_check_box.stateChanged.connect(self.maintence_box_checked)
 
         self.maint_SwitchPosTable.itemChanged.connect(self.item_changed)
         self.maint_LightColorTable.itemChanged.connect(self.light_item_changed)
         self.maint_RailwayCrossingTable.itemChanged.connect(self.item_changed)
         self.maint_StatusTable.itemChanged.connect(self.item_changed)
 
+        self.update_tables()
+
+    def maintence_box_checked(self):
+        self.track_data.set_maintenance_mode(self.maintenance_check_box.isChecked())
         self.update_tables()
 
     def item_changed(self, item):
@@ -63,8 +68,9 @@ class track_control_display (QtWidgets.QMainWindow, Ui_MainWindow):
         options |= QFileDialog.DontUseNativeDialog
         fileName, _ = QFileDialog.getOpenFileName(self,"QFileDialog.getOpenFileName()", "","All Files (*);;Python Files (*.py)", options=options)
         if fileName:
-            if(self.track_data.set_PLC(fileName) == False):
-                self.ErrorBoxLabel.setText("Cannot run selected file, there is an error")
+            issue = self.track_data.set_PLC(fileName)
+            if(isinstance(issue, str)):
+                self.ErrorBoxLabel.setText("Cannot run selected file: " + issue)
             else:
                 self.ErrorBoxLabel.setText("")
                 self.CurrentlyRunningLabel.setText("Currently Running: "+ fileName)

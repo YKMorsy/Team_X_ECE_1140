@@ -175,9 +175,9 @@ p, li { white-space: pre-wrap; }
       <property name="geometry">
        <rect>
         <x>316</x>
-        <y>30</y>
+        <y>10</y>
         <width>461</width>
-        <height>41</height>
+        <height>81</height>
        </rect>
       </property>
       <property name="text">

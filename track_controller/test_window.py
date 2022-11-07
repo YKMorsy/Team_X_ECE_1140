@@ -36,8 +36,9 @@ class test_window (QtWidgets.QMainWindow, Ui_TestingWindow):
         options |= QFileDialog.DontUseNativeDialog
         fileName, _ = QFileDialog.getOpenFileName(self,"QFileDialog.getOpenFileName()", "","All Files (*);;Python Files (*.py)", options=options)
         if fileName:
-            if(self.track_control_data.set_PLC(fileName) == False):
-                self.ErrorBoxLabel.setText("Cannot run selected file, there is an error")
+            issue = self.track_control_data.set_PLC(fileName)
+            if(isinstance(issue, str)):
+                self.ErrorBoxLabel.setText("Cannot run selected file: " + issue)
             else:
                 self.ErrorBoxLabel.setText(" ")
                 self.track_control_data.set_PLC(fileName)

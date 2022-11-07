@@ -14,14 +14,15 @@ class WaysideController ():
         self.suggested_speed = [] #0b00010100 #20 in binary
         self.commanded_speed = []#0b00010100 #20 in binary
         self.speed_limit = []#0b00010100 #20 in binary
+        self.maintencMode = False
 
     def ParsePLC(self):
         changes = self.PLC_info.parse_PLC(self.switch_positions, self.occupancy, self.authority,self.suggested_speed, self.statuses, self.speed_limit)
         changes2 = self.PLC_info2.parse_PLC(self.switch_positions, self.occupancy, self.authority,self.suggested_speed, self.statuses, self.speed_limit)
         if(changes != changes2):
             print("  ")
-        if changes == False:
-            print("There is an issue with the plc, no changes made")
+        if isinstance(changes, str):
+            print("Error " + changes)
             return False
         for change in changes:
             (typeS, bl, val) = change
@@ -98,11 +99,14 @@ class WaysideController ():
         self.commanded_speed = cs
     def set_speed_limit(self, sl):
         self.speed_limit = sl
+    def set_maintenance_mode(self,m):
+        self.maintencMode = m
     def set_PLC (self, plc):
         testPLC = PLC_Parser()
         testPLC.change_PLC_file(plc)
-        if(False == testPLC.parse_PLC(self.switch_positions, self.occupancy, self.authority,self.suggested_speed, self.statuses, self.speed_limit)):
-            return False
+        issue = testPLC.parse_PLC(self.switch_positions, self.occupancy, self.authority,self.suggested_speed, self.statuses, self.speed_limit)
+        if(isinstance(issue, str)):
+            return issue
         self.PLC_info.change_PLC_file(plc)
         self.PLC_info2.change_PLC_file(plc)
         return True
@@ -130,3 +134,5 @@ class WaysideController ():
         return self.commanded_speed
     def get_speed_limit (self):
         return self.speed_limit
+    def get_maintenance_mode (self):
+        return self.maintencMode
