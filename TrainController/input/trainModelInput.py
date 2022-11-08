@@ -3,10 +3,10 @@ from dataclasses import dataclass
 
 @dataclass
 class TrainModelInput:
-    commandSetPoint: float = 0.0
+    command_set_point: float = 0.0
     authority: bool = False
-    currentSetPoint: float = 0.0
-    brakeFailure: bool = False
-    signalPickupFailure: bool = False
-    engineFailure: bool = False
-    stationName: str = "YARD"
+    current_set_point: float = 0.0
+    brake_failure: bool = False
+    signal_pickup_failure: bool = False
+    engine_failure: bool = False
+    station_name: str = "YARD"

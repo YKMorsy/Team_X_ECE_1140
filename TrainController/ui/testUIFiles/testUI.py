@@ -5,232 +5,231 @@ from PyQt5.QtCore import *
 from qtwidgets import Toggle
 
 from multiprocessing import Lock
-from ui.support.readAndWriteFiles import  writeTrainModelInputFile
-from ui.support.readAndWriteFiles import readTrainModelOutputFile
+from ui.support.readAndWriteFiles import  write_train_model_input_file
+from ui.support.readAndWriteFiles import read_train_model_output_file
 
 class MainWindow(QWidget):
         
-        def __init__(self, train, lockOutputFile, lockInputFile):
+        def __init__(self, train, lock_output_file, lock_input_file):
             super().__init__()
 
             self.train = train
-            self.lockOutputFile = lockOutputFile
-            self.lockInputFile = lockInputFile
-            self.trainNumber = train.trainNumber
-            self.trainLine = train.trainLine
-            self.modelOutput = train.trainModelOutput
-            self.modelInput = train.trainModelInput
-            self.powerSpeedSelect = False
+            self.__lock_output_file = lock_output_file
+            self.__lock_input_file = lock_input_file
+            self.__train_number = train.get_train_number()
+            self.__train_line = train.get_train_line()
+            self.__model_output = train.get_model_output()
+            self.__model_input = train.get_model_input()
 
-            self.inputFileName = "./ui/testUIFiles/utilities/modelInputDB_" + str(self.trainNumber) + ".txt"
-            self.outputFileName = "./ui/testUIFiles/utilities/modelOutputDB_" + str(self.trainNumber) + ".txt"
+            self.__input_file_name = "./ui/testUIFiles/utilities/modelInputDB_" + str(self.__train_number) + ".txt"
+            self.__output_file_name = "./ui/testUIFiles/utilities/modelOutputDB_" + str(self.__train_number) + ".txt"
 
-            self.setWindowTitle("Test UI Window " + str(self.trainNumber))
-            self.createOutputWidgets()
-            self.updateOutputWidgets()
-            self.createInputWidgets()
-            self.updateInputWidgetsOut()
-            self.__layoutInit()
+            self.setWindowTitle("Test UI Window " + str(self.__train_number))
+            self.__create_output_widgets()
+            self.__update_output_widgets()
+            self.__create_input_widgets()
+            self.__update_input_widgets_out()
+            self.__layout_init()
 
-            self.__createHeader()
-            self.__powerSpeedEnter()
-            self.__outputList()
+            self.__create_header()
+            self.__power_speed_enter()
+            self.__output_list()
 
-            self.__toggleSection()
-            self.__stationSelect()
+            self.__toggle_section()
+            self.__station_select_create()
         
-            self.__assembleLayouts()
+            self.__assemble_layouts()
 
-            self.setLayout(self.outerLayout)
+            self.setLayout(self.__outer_layout)
         
-        def __layoutInit(self):
-            self.outerLayout = QHBoxLayout()
+        def __layout_init(self):
+            self.__outer_layout = QHBoxLayout()
 
-            self.leftLayout = QVBoxLayout()
-            self.rightLayout = QVBoxLayout()
+            self.__left_layout = QVBoxLayout()
+            self.__right_layout = QVBoxLayout()
 
-            self.topLeftLayout = QHBoxLayout()
-            self.topRightLayout = QHBoxLayout()
+            self.__top_left_layout = QHBoxLayout()
+            self.__top_right_layout = QHBoxLayout()
 
-            self.currentSetPointLayout = QHBoxLayout()
-            self.authorityToggleLayout = QHBoxLayout()
+            self.__current_set_point_layout = QHBoxLayout()
+            self.__authority_toggle_layout = QHBoxLayout()
 
-            self.powerSpeedEnterLayout = QHBoxLayout()
-            self.powerSpeedEnterLabelLayout = QVBoxLayout()
-            self.powerSpeedEnterTextLayout = QVBoxLayout()
+            self.__power_speed_enter_layout = QHBoxLayout()
+            self.__power_speed_enter_label_layout = QVBoxLayout()
+            self.__power_speed_enter_text_layout = QVBoxLayout()
 
-            self.outputFieldLayout = QHBoxLayout()
-            self.outputFieldLeftLayout = QVBoxLayout()
-            self.outputFieldRightLayout = QVBoxLayout()
+            self.__output_field_layout = QHBoxLayout()
+            self.__output_field_left_layout = QVBoxLayout()
+            self.__output_field_right_layout = QVBoxLayout()
 
-            self.toggleLayout = QHBoxLayout()
-            self.toggleLeftLayout = QHBoxLayout()
-            self.toggleLeftLabelLayout = QVBoxLayout()
-            self.toggleLeftButtonLayout = QVBoxLayout()
+            self.__toggle_layout = QHBoxLayout()
+            self.__toggle_left_layout = QHBoxLayout()
+            self.__toggle_left_label_layout = QVBoxLayout()
+            self.__toggle_left_button_layout = QVBoxLayout()
 
-        def __assembleLayouts(self):
-            self.powerSpeedEnterLayout.addLayout(self.powerSpeedEnterLabelLayout, 8)
-            self.powerSpeedEnterLayout.addLayout(self.powerSpeedEnterTextLayout, 2)
-            self.toggleLeftLayout.addLayout(self.toggleLeftLabelLayout, 9)
-            self.toggleLeftLayout.addLayout(self.toggleLeftButtonLayout, 1)
-            self.toggleLayout.addLayout(self.toggleLeftLayout)
+        def __assemble_layouts(self):
+            self.__power_speed_enter_layout.addLayout(self.__power_speed_enter_label_layout, 8)
+            self.__power_speed_enter_layout.addLayout(self.__power_speed_enter_text_layout, 2)
+            self.__toggle_left_layout.addLayout(self.__toggle_left_label_layout, 9)
+            self.__toggle_left_layout.addLayout(self.__toggle_left_button_layout, 1)
+            self.__toggle_layout.addLayout(self.__toggle_left_layout)
 
-            self.leftLayout.addLayout(self.topLeftLayout, 1)
-            self.leftLayout.addWidget(self.currentSetPoint, 1)
-            self.leftLayout.addLayout(self.currentSetPointLayout,1)
-            self.authorityToggleLayout.addWidget(self.authority, 8)
-            self.authorityToggleLayout.addWidget(self.authorityToggle)
-            self.leftLayout.addLayout(self.authorityToggleLayout, 1)
-            self.leftLayout.addWidget(self.commandSetPoint, 1)
-            self.leftLayout.addLayout(self.powerSpeedEnterLayout, 1)
-            self.leftLayout.addLayout(self.toggleLayout, 3)
-            self.leftLayout.addWidget(self.stationSelect)
+            self.__left_layout.addLayout(self.__top_left_layout, 1)
+            self.__left_layout.addWidget(self.__current_set_point, 1)
+            self.__left_layout.addLayout(self.__current_set_point_layout,1)
+            self.__authority_toggle_layout.addWidget(self.__authority, 8)
+            self.__authority_toggle_layout.addWidget(self.__authority_toggle)
+            self.__left_layout.addLayout(self.__authority_toggle_layout, 1)
+            self.__left_layout.addWidget(self.__command_set_point, 1)
+            self.__left_layout.addLayout(self.__power_speed_enter_layout, 1)
+            self.__left_layout.addLayout(self.__toggle_layout, 3)
+            self.__left_layout.addWidget(self.__station_select)
 
-            self.outputFieldLayout.addLayout(self.outputFieldLeftLayout)
-            self.outputFieldLayout.addLayout(self.outputFieldRightLayout)
+            self.__output_field_layout.addLayout(self.__output_field_left_layout)
+            self.__output_field_layout.addLayout(self.__output_field_right_layout)
 
-            self.rightLayout.addLayout(self.topRightLayout, 1)
-            self.rightLayout.addLayout(self.outputFieldLayout, 5)
+            self.__right_layout.addLayout(self.__top_right_layout, 1)
+            self.__right_layout.addLayout(self.__output_field_layout, 5)
 
-            self.outerLayout.addLayout(self.leftLayout, 4)
-            self.outerLayout.addLayout(self.rightLayout, 6)
+            self.__outer_layout.addLayout(self.__left_layout, 4)
+            self.__outer_layout.addLayout(self.__right_layout, 6)
 
-        def __createHeader(self):
-            inputFieldName = QLabel("Input Field")
-            inputFieldName.setAlignment(Qt.AlignCenter)
-            self.topLeftLayout.addWidget(inputFieldName)
-            outputFieldName = QLabel("Output Field")
-            outputFieldName.setAlignment(Qt.AlignCenter)
-            self.topRightLayout.addWidget(outputFieldName)
+        def __create_header(self):
+            __input_field_name = QLabel("Input Field")
+            __input_field_name.setAlignment(Qt.AlignCenter)
+            self.__top_left_layout.addWidget(__input_field_name)
+            __output_field_name = QLabel("Output Field")
+            __output_field_name.setAlignment(Qt.AlignCenter)
+            self.__top_right_layout.addWidget(__output_field_name)
         
-        def __powerSpeedEnter(self):
-            self.currentSetPointLayout.addWidget(QLabel("Enter Current Set Point: "), 8)
-            self.setPointEnterBox = QLineEdit(str(self.modelInput.currentSetPoint))
-            self.setPointEnterBox.textChanged[str].connect(self.setPointTextUpdate)
-            self.currentSetPointLayout.addWidget(self.setPointEnterBox)
+        def __power_speed_enter(self):
+            self.__current_set_point_layout.addWidget(QLabel("Enter Current Set Point: "), 8)
+            self.__set_point_enter_box = QLineEdit(str(self.__model_input.current_set_point))
+            self.__set_point_enter_box.textChanged[str].connect(self.__set_point_text_update)
+            self.__current_set_point_layout.addWidget(self.__set_point_enter_box)
 
-            speedEnterLabel = QLabel("Enter Desired Speed: ")
-            self.powerSpeedEnterLabelLayout.addWidget(speedEnterLabel)
+            speed_enter_label = QLabel("Enter Desired Speed: ")
+            self.__power_speed_enter_label_layout.addWidget(speed_enter_label)
 
-            self.speedEnterBox = QLineEdit(str(self.modelInput.commandSetPoint))
-            self.speedEnterBox.textChanged[str].connect(self.speedTextUpdate)
-            self.powerSpeedEnterTextLayout.addWidget(self.speedEnterBox)
+            self.__speed_enter_box = QLineEdit(str(self.__model_input.command_set_point))
+            self.__speed_enter_box.textChanged[str].connect(self.__speed_text_update)
+            self.__power_speed_enter_text_layout.addWidget(self.__speed_enter_box)
         
-        def __outputList(self):
-            self.outputFieldLeftLayout.addWidget(self.serviceBrake)
-            self.outputFieldLeftLayout.addWidget(self.emergencyBrake)
-            self.outputFieldLeftLayout.addWidget(self.leftSideDoors)
-            self.outputFieldLeftLayout.addWidget(self.rightSideDoors)
+        def __output_list(self):
+            self.__output_field_left_layout.addWidget(self.__service_brake)
+            self.__output_field_left_layout.addWidget(self.__emergency_brake)
+            self.__output_field_left_layout.addWidget(self.__left_side_doors)
+            self.__output_field_left_layout.addWidget(self.__right_side_doors)
 
-            self.outputFieldRightLayout.addWidget(self.enginePower)
-            self.outputFieldRightLayout.addWidget(self.insideLights)
-            self.outputFieldRightLayout.addWidget(self.outsideLights)
-            self.outputFieldRightLayout.addWidget(self.activateAnnouncement)
+            self.__output_field_right_layout.addWidget(self.__engine_power)
+            self.__output_field_right_layout.addWidget(self.__inside_lights)
+            self.__output_field_right_layout.addWidget(self.__outside_lights)
+            self.__output_field_right_layout.addWidget(self.__activate_announcment)
         
-        def __toggleSection(self):
-            brakesLabel = QLabel("Brake Failure")
-            engineLabel = QLabel("Engine Failure")
-            signalPickupFailureLabel = QLabel("Signal Pick Up Failure")
-            self.toggleLeftLabelLayout.addWidget(brakesLabel)
-            self.toggleLeftLabelLayout.addWidget(engineLabel)
-            self.toggleLeftLabelLayout.addWidget(signalPickupFailureLabel)
+        def __toggle_section(self):
+            brakes_label = QLabel("Brake Failure")
+            engine_label = QLabel("Engine Failure")
+            signal_pickup_failure_label = QLabel("Signal Pick Up Failure")
+            self.__toggle_left_label_layout.addWidget(brakes_label)
+            self.__toggle_left_label_layout.addWidget(engine_label)
+            self.__toggle_left_label_layout.addWidget(signal_pickup_failure_label)
 
-            self.brakeToggle = Toggle(checked_color="#00FF00")
-            self.brakeToggle.toggled.connect(self.__brakeFailureToggle)
-            self.engineToggle = Toggle(checked_color="#00FF00")
-            self.engineToggle.toggled.connect(self.__engineFailureToggle)
-            self.signalToggle = Toggle(checked_color="#00FF00")
-            self.signalToggle.toggled.connect(self.__signalFailureToggle)
-            self.toggleLeftButtonLayout.addWidget(self.brakeToggle)
-            self.toggleLeftButtonLayout.addWidget(self.engineToggle)
-            self.toggleLeftButtonLayout.addWidget(self.signalToggle)
+            self.__brake_toggle = Toggle(checked_color="#00FF00")
+            self.__brake_toggle.toggled.connect(self.__brake_failure_toggle)
+            self.__engine_toggle = Toggle(checked_color="#00FF00")
+            self.__engine_toggle.toggled.connect(self.__engine_failure_toggle)
+            self.__signal_toggle = Toggle(checked_color="#00FF00")
+            self.__signal_toggle.toggled.connect(self.__signal_failure_toggle)
+            self.__toggle_left_button_layout.addWidget(self.__brake_toggle)
+            self.__toggle_left_button_layout.addWidget(self.__engine_toggle)
+            self.__toggle_left_button_layout.addWidget(self.__signal_toggle)
         
-        def __stationSelect(self):
-            if self.trainLine == 0:
-                self.stationSelect.addItems(["YARD", "SHADYSIDE", "HERRON AVE", "SWISSVALE", "PENN STATION", "STEEL PLAZA", "FIRST AVE", "STATION SQUARE", "SOUTH HILLS JUNCTION"])
+        def __station_select_create(self):
+            if self.__train_line == 0:
+                self.__station_select.addItems(["YARD", "SHADYSIDE", "HERRON AVE", "SWISSVALE", "PENN STATION", "STEEL PLAZA", "FIRST AVE", "STATION SQUARE", "SOUTH HILLS JUNCTION"])
             else:
-                self.stationSelect.addItems(["YARD", "GLENBURY", "DORMONT", "MT LEBANON", "POPLAR", "CASTLE SHANNON", "OVERBROOK", "INGLEWOOD", "CENTRAL", "WHITED", "SOUTH BANK", "STATION", "EDGEBROOK", "PIONEER"])
-            self.stationSelect.currentTextChanged.connect(self.__updateStationData)
+                self.__station_select.addItems(["YARD", "GLENBURY", "DORMONT", "MT LEBANON", "POPLAR", "CASTLE SHANNON", "OVERBROOK", "INGLEWOOD", "CENTRAL", "WHITED", "SOUTH BANK", "STATION", "EDGEBROOK", "PIONEER"])
+            self.__station_select.currentTextChanged.connect(self.__update_station_data)
         
         def update(self):
-            readTrainModelOutputFile(self.outputFileName, self.lockOutputFile, self.modelOutput)
-            self.updateOutputWidgets()
-            writeTrainModelInputFile(self.inputFileName, self.lockInputFile, self.modelInput)
-            self.updateInputWidgetsOut()
+            read_train_model_output_file(self.__output_file_name, self.__lock_output_file, self.__model_output)
+            self.__update_output_widgets()
+            write_train_model_input_file(self.__input_file_name, self.__lock_input_file, self.__model_input)
+            self.__update_input_widgets_out()
         
-        def createOutputWidgets(self):
-            self.serviceBrake = QLabel()
-            self.enginePower = QLabel()
-            self.emergencyBrake = QLabel()
-            self.leftSideDoors = QLabel()
-            self.rightSideDoors = QLabel()
-            self.announceStop = QLabel()
-            self.insideLights = QLabel()
-            self.outsideLights = QLabel()
-            self.activateAnnouncement = QLabel()
+        def __create_output_widgets(self):
+            self.__service_brake = QLabel()
+            self.__engine_power = QLabel()
+            self.__emergency_brake = QLabel()
+            self.__left_side_doors = QLabel()
+            self.__right_side_doors = QLabel()
+            self.__announce_stop = QLabel()
+            self.__inside_lights = QLabel()
+            self.__outside_lights = QLabel()
+            self.__activate_announcment = QLabel()
 
-        def updateOutputWidgets(self):
-            self.serviceBrake.setText("Service Brake: " + str(self.modelOutput.serviceBrake))
-            self.enginePower.setText("Engine Power: " + str(int(self.modelOutput.enginePower)) + " W")
-            self.emergencyBrake.setText("Emergency Brake: " + str(self.modelOutput.emergencyBrake))
-            self.leftSideDoors.setText("Left Side Doors: " + str(self.modelOutput.leftSideDoors))
-            self.rightSideDoors.setText("Right Side Doors: " + str(self.modelOutput.rightSideDoors))
-            self.announceStop.setText("Announce Stop: " + str(self.modelOutput.announceStop))
-            self.insideLights.setText("Inside Lights: " + str(self.modelOutput.insideLights))
-            self.outsideLights.setText("Outside Lights: " + str(self.modelOutput.outsideLights))
-            self.activateAnnouncement.setText("Activate Announcement: " + str(self.modelOutput.activateAnnouncement))
+        def __update_output_widgets(self):
+            self.__service_brake.setText("Service Brake: " + str(self.__model_output.service_brake))
+            self.__engine_power.setText("Engine Power: " + str(int(self.__model_output.engine_power)) + " W")
+            self.__emergency_brake.setText("Emergency Brake: " + str(self.__model_output.emergency_brake))
+            self.__left_side_doors.setText("Left Side Doors: " + str(self.__model_output.left_side_doors))
+            self.__right_side_doors.setText("Right Side Doors: " + str(self.__model_output.right_side_doors))
+            self.__announce_stop.setText("Announce Stop: " + str(self.__model_output.announce_stop))
+            self.__inside_lights.setText("Inside Lights: " + str(self.__model_output.inside_lights))
+            self.__outside_lights.setText("Outside Lights: " + str(self.__model_output.outside_lights))
+            self.__activate_announcment.setText("Activate Announcement: " + str(self.__model_output.activate_announcement))
         
-        def createInputWidgets(self):
-            self.commandSetPoint = QLabel()
-            self.authority = QLabel()
-            self.currentSetPoint = QLabel()
-            self.brakeFailure = QLabel()
-            self.signalPickupFailure = QLabel()
-            self.engineFailure = QLabel()
-            self.authorityToggle = Toggle(checked_color="#00FF00")
-            self.authorityToggle.toggled.connect(self.__authorityToggle)
-            self.stationLabel = QLabel()
-            self.stationSelect = QComboBox()
+        def __create_input_widgets(self):
+            self.__command_set_point = QLabel()
+            self.__authority = QLabel()
+            self.__current_set_point = QLabel()
+            self.__brake_failure = QLabel()
+            self.__signal_pickup_failure = QLabel()
+            self.__engine_failure = QLabel()
+            self.__authority_toggle = Toggle(checked_color="#00FF00")
+            self.__authority_toggle.toggled.connect(self.__authority_toggle_action)
+            self.__station_label = QLabel()
+            self.__station_select = QComboBox()
         
-        def updateInputWidgetsOut(self):
-            self.commandSetPoint.setText("Command Set Point: " + str(int(self.modelInput.commandSetPoint)) + " m/s")
-            self.authority.setText("Authority: " + str(self.modelInput.authority))
-            self.currentSetPoint.setText("Current Set Point: " + str(int(self.modelInput.currentSetPoint)) + " m/s")
-            self.brakeFailure.setText("Brake Failure: " + str(self.modelInput.brakeFailure))
-            self.signalPickupFailure.setText("Signal Pickup Failure: " + str(self.modelInput.signalPickupFailure))
-            self.engineFailure.setText("Engine Failure: " + str(self.modelInput.engineFailure))
-            self.stationLabel.setText("Last Passed Station: " + str(self.modelInput.stationName))
+        def __update_input_widgets_out(self):
+            self.__command_set_point.setText("Command Set Point: " + str(int(self.__model_input.command_set_point)) + " m/s")
+            self.__authority.setText("Authority: " + str(self.__model_input.authority))
+            self.__current_set_point.setText("Current Set Point: " + str(int(self.__model_input.current_set_point)) + " m/s")
+            self.__brake_failure.setText("Brake Failure: " + str(self.__model_input.brake_failure))
+            self.__signal_pickup_failure.setText("Signal Pickup Failure: " + str(self.__model_input.signal_pickup_failure))
+            self.__engine_failure.setText("Engine Failure: " + str(self.__model_input.engine_failure))
+            self.__station_label.setText("Last Passed Station: " + str(self.__model_input.station_name))
         
-        def speedTextUpdate(self, text):
+        def __speed_text_update(self, text):
             try:
-                self.modelInput.commandSetPoint = float(text)
+                self.__model_input.command_set_point = float(text)
             except ValueError:
-                self.modelInput.commandSetPoint = self.modelInput.commandSetPoint
+                self.__model_input.command_set_point = self.__model_input.command_set_point
         
-        def setPointTextUpdate(self, text):
+        def __set_point_text_update(self, text):
             try:
-                self.modelInput.currentSetPoint = float(text)
+                self.__model_input.current_set_point = float(text)
             except ValueError:
-                self.modelInput.currentSetPoint = self.modelInput.currentSetPoint
+                self.__model_input.current_set_point = self.__model_input.current_set_point
     
-        def __authorityToggle(self):
-            self.modelInput.authority = self.authorityToggle.isChecked()
+        def __authority_toggle_action(self):
+            self.__model_input.authority = self.__authority_toggle.isChecked()
         
-        def __brakeFailureToggle(self):
-            self.modelInput.brakeFailure = self.brakeToggle.isChecked()
+        def __brake_failure_toggle(self):
+            self.__model_input.brake_failure = self.__brake_toggle.isChecked()
         
-        def __engineFailureToggle(self):
-            self.modelInput.engineFailure = self.engineToggle.isChecked()
+        def __engine_failure_toggle(self):
+            self.__model_input.engine_failure = self.__engine_toggle.isChecked()
         
-        def __signalFailureToggle(self):
-            self.modelInput.signalPickupFailure = self.signalToggle.isChecked()
+        def __signal_failure_toggle(self):
+            self.__model_input.signal_pickup_failure = self.__signal_toggle.isChecked()
         
-        def __updateStationData(self, s):
-            self.modelInput.stationName = s
+        def __update_station_data(self, s):
+            self.__model_input.station_name = s
 
-def testUI(train, lockOutputFile, lockInputFile):
+def test_ui(train, lock_output_file, lock_input_file):
     app = QApplication([])
-    window = MainWindow(train, lockOutputFile, lockInputFile)
+    window = MainWindow(train, lock_output_file, lock_input_file)
     fps = 15
     timer = QTimer()
     timer.timeout.connect(window.update)
