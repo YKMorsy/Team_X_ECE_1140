@@ -21,9 +21,11 @@ class Block:
         # Station info
         self.block_station = block_station
 
-    # Method to set switch position
+    # Function to set switch position
     def setSwitchPos(self, pos_bool):
         if pos_bool == True:
             self.cur_switch_pos = max(self.block_switch_1, self.block_switch_2)
         else:
             self.cur_switch_pos = min(self.block_switch_1, self.block_switch_2)
+
+

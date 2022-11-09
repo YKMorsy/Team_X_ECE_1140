@@ -31,17 +31,21 @@ class Line:
             block_switches_1[i], block_switches_2[i], block_stations[i], block_railway_crossing[i]))
 
     # Function to update throughput
-    def set_throughput(self, throughput):
+    def setThroughput(self, throughput):
         self.throughput = throughput
 
     # Function to update switch position
-    def set_switch_position(self, block_number, pos_bool):
-        self.block_list[block_number-1].setSwitchPos(pos_bool)
+    def setSwitchPosition(self, block_number, pos_bool):
+        self.block_list[block_number].setSwitchPos(pos_bool)
 
     # Function to upate occupancy
-    def set_block_occupancy(self, block_number, occupancy):
-        self.block_list[block_number-1].occupancy = occupancy
+    def setBlockOccupancy(self, block_number, occupancy):
+        self.block_list[block_number].occupancy = occupancy
 
     # Function to update block status
-    def set_block_status(self, block_number, status):
-        self.block_list[block_number-1].status = status
+    def setBlockStatus(self, block_number, status):
+        self.block_list[block_number].status = status
+
+    # Function to update railway crossing
+    def setRailWayCrossing(self, block_number, status):
+        self.block_list[block_number].block_railway = status
