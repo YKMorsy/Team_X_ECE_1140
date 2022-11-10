@@ -14,6 +14,9 @@ class Train:
         # Intialize route using arrival stations
         self.route = line.getRoute()
 
+    def updateStations(self, station_list):
+        self.station_list = station_list
+
     def setPosition(self, line_color, block_number, occupancy):
         if (block_number == self.route[1] and self.line.line_color == line_color and occupancy == True):
             self.route.pop(0)
@@ -47,7 +50,7 @@ class Train:
                 suggested_speed = 0*suggested_speed
 
                 # Wait then increase speed and remove station from list
-                
+
             elif (current_status == True):
                 suggested_speed = suggested_speed
 
