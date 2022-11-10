@@ -11,8 +11,10 @@ class Train:
         self.line = line
 
         # Intialize route using arrival stations
-        self.route = []
-    
-    def generateRoute(self, line):
-        
+        self.route = line.getRoute()
+
+    def setPosition(self, line_color, block_number, occupancy):
+        pass
+
+    def setUpcomingAuthority():
         pass
