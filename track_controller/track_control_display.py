@@ -64,6 +64,10 @@ class track_control_display (QtWidgets.QMainWindow, Ui_MainWindow):
             self.testWind.show()
 
     def openFileNameDialog(self):
+        if(not(self.track_data.get_maintenance_mode())):
+            self.ErrorBoxLabel.setText("Cannot upload new file while not in maintence mode")
+            return
+
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         fileName, _ = QFileDialog.getOpenFileName(self,"QFileDialog.getOpenFileName()", "","All Files (*);;Python Files (*.py)", options=options)

@@ -27,6 +27,7 @@ class PLC_Parser ():
 		changes = []
 		logic_queue = queue.LifoQueue()
 		condition = None
+		expression = queue.LifoQueue()
 		set_var =[]
 		# Strips the newline character
 		for line in Lines:
@@ -35,27 +36,34 @@ class PLC_Parser ():
 				arg = arg.strip('\n')
 				if (arg == "IF"):
 					condition =  None
-					#logic_queue.put("if")
+					expression = queue.LifoQueue()
+					logic_queue.put("if")
 				elif (arg == "ELSE"):
 					condition =  not(condition)
+					logic_queue.put("else")
 				elif (arg == "("):
-					logic_queue.put("(")
-					condition =  None
+					expression.put("(")
 				elif (arg == ")"):
-					logic_queue.get()
+					expression.put(")")
+					
 				elif (arg == "{"):
+					if(logic_queue.get() == "if"):
+						condition = self.determine_condition(expression)
 					logic_queue.put("{")
 				elif (arg == "}"):
 					logic_queue.get()
-					#logic_queue.get()
 				elif (arg == "="):
 					logic_queue.put("=")
+					print(" ")
 				elif (arg == "&"):
-					logic_queue.put("&")
+					print(" ")
+					expression.put("&")
 				elif (arg == "|"):
-					logic_queue.put("|")
+					print(" ")
+					expression.put("|")
 				elif (arg == "!"):
-					logic_queue.put("!")
+					print(" ")
+					expression.put("!")
 				else:
 					if(condition == False and (self.get_state(logic_queue) == "{" or self.get_state(logic_queue) == "=")):
 						continue
@@ -75,14 +83,14 @@ class PLC_Parser ():
 								set_var.append(var[1])
 							else:
 								val = self.get_table_value(switchPos, var[1])
-								condition = self.set_condition(val, var[1], condition, logic_queue)
+								expression.put(val == "True" or val == True)
 						elif (var[0] == "O"):
 							state = self.get_state(logic_queue)
 							if ( state == "{" or state == " "):
 								return "You can't set Occupancy"
 							else:
 								val = self.get_table_value(Occupancy, var[1])
-								condition = self.set_condition(val, var[1], condition, logic_queue)
+								expression.put(val == "True" or val == True)
 						elif (var[0] == "L"):
 							if ( state == "{" or state == " "):
 								set_var.append("L")
@@ -94,14 +102,14 @@ class PLC_Parser ():
 								return "You can't set the failures"
 							else:
 								val = self.get_table_value(status, var[1])
-								condition = self.set_condition(val, var[1], condition, logic_queue)
+								expression.put(val == "True" or val == True)
 						elif (var[0] == "A"):
 							state = self.get_state(logic_queue)
 							if ( state == "{" or state == " "):
 								return "You can't set the Authority"
 							else:
 								val = self.get_table_value(Authority, var[1])
-								condition = self.set_condition(val, var[1], condition, logic_queue)
+								expression.put(val == "True" or val == True)
 						elif (var[0] == "C"):
 							if ( state == "{" or state == " "):
 								set_var.append("C")
@@ -138,23 +146,47 @@ class PLC_Parser ():
 						return str(e)
 		return changes
 
-	def set_condition(self, val, block, condition, logic_queue):
-		state = self.get_state(logic_queue)
-		if ( state == "(" ):
-			condition = val == "True" or val == True
-		elif ( state == "|" ):
-			condition = condition or (val == "True" or val == True)
-			logic_queue.get()
-		elif ( state == "&" ):
-			condition = condition and (val == "True" or val == True)
-			logic_queue.get()
-		elif ( state == "!" ):
-			if (val == "True"):
-				val ="False"
+	def determine_condition(self, expression):
+		condition = None
+		newQueue = queue.LifoQueue()
+		while expression.qsize()>0:
+			state = expression.get()
+			if ( state == ")" ):
+				while expression.qsize()>0:
+					expp = expression.get()
+					if(expp=='('):
+						break
+					if(expp==')'):
+						expression.put(expp)
+						expp = self.determine_condition(expression)
+					newQueue.put(expp)
+				expression.put(self.determine_condition(newQueue))
+			elif ( state == "(" ):
+				continue
+			elif ( state == "|" ):
+				operate = expression.get()
+				if(operate == ')'):
+					expression.put(operate)
+					operate = self.determine_condition(expression)
+				elif(operate == '!'):
+					operate = not(expression.get())
+				condition = condition or operate
+			elif ( state == "&" ):
+				operate = expression.get()
+				if(operate == ')'):
+					expression.put(operate)
+					operate = self.determine_condition(expression)
+				elif(operate == '!'):
+					operate = not(expression.get())
+				condition = condition and operate
+			elif ( state == "!" ):
+				expression.put(not(expression.get()))
+				condition = self.determine_condition(expression)
+			elif (isinstance(state, bool)):
+				condition = state
 			else:
-				val = "True"
-			logic_queue.get()
-			condition = self.set_condition(val, block, condition, logic_queue)
+				print("Issue in conditional")
+				
 		return condition
 
 	def get_state(self, qu):

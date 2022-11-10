@@ -11,6 +11,7 @@ class WaysideController ():
         self.railway_crossings = []
         self.light_colors = []
         self.statuses = []
+        self.temp_statuses = []
         self.suggested_speed = [] #0b00010100 #20 in binary
         self.commanded_speed = []#0b00010100 #20 in binary
         self.speed_limit = []#0b00010100 #20 in binary
@@ -18,7 +19,7 @@ class WaysideController ():
 
     def ParsePLC(self):
         changes = self.PLC_info.parse_PLC(self.switch_positions, self.occupancy, self.authority,self.suggested_speed, self.statuses, self.speed_limit)
-        changes2 = self.PLC_info2.parse_PLC(self.switch_positions, self.occupancy, self.authority,self.suggested_speed, self.statuses, self.speed_limit)
+        changes2 = 2#changes2 = self.PLC_info2.parse_PLC(self.switch_positions, self.occupancy, self.authority,self.suggested_speed, self.statuses, self.speed_limit)
         if(changes != changes2):
             print("  ")
         if isinstance(changes, str):
@@ -93,6 +94,7 @@ class WaysideController ():
         self.light_colors = lc
     def set_statuses(self, st):
         self.statuses = st
+        self.temp_statuses = st.copy()
     def set_suggested_speed(self, ss):
         self.suggested_speed = ss
     def set_commanded_speed(self, cs):
@@ -101,6 +103,13 @@ class WaysideController ():
         self.speed_limit = sl
     def set_maintenance_mode(self,m):
         self.maintencMode = m
+        if(m):
+            self.temp_statuses = self.statuses.copy()
+            for i in range(len(self.statuses)):
+                (bl, s) = self.statuses[i]
+                self.statuses[i] = (bl, False)
+        else:
+            self.statuses = self.temp_statuses.copy()
     def set_PLC (self, plc):
         testPLC = PLC_Parser()
         testPLC.change_PLC_file(plc)
