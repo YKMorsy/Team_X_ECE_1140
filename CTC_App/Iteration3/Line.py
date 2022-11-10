@@ -6,6 +6,7 @@ class Line:
     def __init__(self, file_path):
 
         # Initialize values
+        self.block_authorities = []
         self.block_list = []
         self.throughput = 0
         self.line_color = ''
@@ -40,6 +41,7 @@ class Line:
             # Append block objects to block list
             self.block_list.append(Block(block_numbers[i], block_lengths[i], block_speed_limits[i], 
             block_switches_1[i], block_switches_2[i], block_stations[i], block_railway_crossing[i]))
+            self.block_authorities.append(1)
             
             # Append section+block to section_block dictionary
             if block_section[i] in self.__section_block_dict:
@@ -95,5 +97,5 @@ class Line:
     def setRailWayCrossing(self, block_number, status):
         self.block_list[block_number].block_railway = status
 
-line_test = Line("Iteration3/Track_Layout_Green.xlsx")
-print(line_test.getRoute())
+# line_test = Line("Iteration3/Track_Layout_Green.xlsx")
+# print(line_test.getRoute())
