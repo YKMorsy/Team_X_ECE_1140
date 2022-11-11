@@ -3,13 +3,14 @@ from Line import Line
 
 class Train:
 
-    def __init__(self, train_id, station_list, line):
+    def __init__(self, train_id, station_list, line, depart_time):
 
         # Initialize variables
         self.train_id = train_id
         self.station_list = station_list
         self.line = line
         self.current_position = 0
+        self.depart_time = depart_time
 
         # Intialize route using arrival stations
         self.route = line.getRoute()
@@ -37,7 +38,8 @@ class Train:
             next_block_2_status = next_block_2.status
 
             next_station = self.station_list[0]
-
+            
+            upcoming_block = next_block_number_1
             upcoming_block_authority = True
 
             # Check if next 2 blocks have destinations stations
@@ -54,10 +56,10 @@ class Train:
             elif (current_status == True):
                 suggested_speed = suggested_speed
 
-            # Check if next 2 blocks have fault
-            # If blocks have fault, decrement speed and set authority to 0
-            if (next_block_2_status == False):
-                suggested_speed = 0.5*suggested_speed
-            elif (next_block_1_status == False):
-                suggested_speed = 0*suggested_speed
-                upcoming_block_authority = False
+            # # Check if next 2 blocks have fault
+            # # If blocks have fault, decrement speed and set authority to 0
+            # if (next_block_2_status == False):
+            #     suggested_speed = 0.5*suggested_speed
+            # elif (next_block_1_status == False):
+            #     suggested_speed = 0*suggested_speed
+            #     upcoming_block_authority = False
