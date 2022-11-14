@@ -10,6 +10,7 @@ class Line:
         self.block_list = []
         self.throughput = 0
         self.line_color = ''
+        self.line_station_list = []
         self.__default_route = []
         self.__section_block_dict = {}
 
@@ -35,6 +36,9 @@ class Line:
         block_switches_1 = df_track_layout.loc[:,"Switch 1"]
         block_switches_2 = df_track_layout.loc[:,"Switch 2"]
         block_stations = df_track_layout.loc[:,"Station"]
+        self.line_station_list = block_stations.tolist()
+        self.line_station_list = [i for i in self.line_station_list if i != -1]
+
         block_railway_crossing = df_track_layout.loc[:,"Railway Crossing"]
 
         for i in range(0, len(block_numbers)):

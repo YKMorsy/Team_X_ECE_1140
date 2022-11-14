@@ -10,7 +10,7 @@ class Dispatcher:
         train_id = len(self.trains) + 1
         self.trains.append(Train(train_id, station_list, line, depart_time))
 
-    def scheduleMultiple(self):
+    def scheduleMultiple(self, filepath):
         pass
 
     # Function to check if train object needs to be created

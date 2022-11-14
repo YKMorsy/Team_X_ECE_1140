@@ -52,6 +52,10 @@ class Train:
                 suggested_speed = 0*suggested_speed
 
                 # Wait then increase speed and remove station from list
+                ####### WAIT 
+                suggested_speed = current_block.block_speed_limit
+                self.station_list.pop(0)
+
 
             elif (current_status == True):
                 suggested_speed = suggested_speed
