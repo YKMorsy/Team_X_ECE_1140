@@ -50,6 +50,11 @@ class TrainController:
         self.__distance = 0.0
         self.__begin_slow_down = False
         self.__distance_to_station = 1
+        self.__door_side = 0
+        self.__stopping_at_station = False
+        self.__waiting_time = 30
+        self.__past_time = 0
+        self.__begin_wait = False
 
         self.__train_driver_input = TrainDriverInput()
         self.__train_model_input = TrainModelInput()
@@ -128,6 +133,12 @@ class TrainController:
         self.__distance += .5 * (self.__train_model_input.current_set_point + self.__old_current_set_point) * self.__time_step
         if self.__last_station != self.__train_model_input.station_name:
             self.beaconCall(self.__train_model_input.station_name)
+            if self.__train_model_input.command_set_point < 2:
+                self.__stopping_at_station = True
+                self.__begin_slow_down = False
+            else:
+                self.__stopping_at_station = False
+
         self.__get_speed_limit()
 
         self.__authority = self.__train_model_input.authority and not(self.__train_model_input.brake_failure or self.__train_model_input.signal_pickup_failure or self.__train_model_input.engine_failure)
@@ -141,17 +152,38 @@ class TrainController:
             self.__emergency_brakes = True
             self.__u_value = 0.0
         else:
-            self.__begin_slow_down = False
             self.__emergency_brakes = self.__train_driver_input.emergency_brake or self.__passenger_input.emergency_brake
             self.__service_brakes = self.__train_driver_input.service_brake
 
-        if self.__train_driver_input.manual_mode and self.__train_model_input.authority:
-            self.__command_set_point = self.__train_driver_input.command_set_point
-        elif self.__train_model_input.authority:
-            self.__command_set_point = self.__train_model_input.command_set_point    
+        if not self.__stopping_at_station:
+            if self.__train_driver_input.manual_mode and self.__train_model_input.authority:
+                self.__command_set_point = self.__train_driver_input.command_set_point
+            elif self.__train_model_input.authority:
+                self.__command_set_point = self.__train_model_input.command_set_point
+            else:
+                self.__command_set_point = 0
+            
+            if self.__command_set_point > self.__speed_limit:
+                self.__command_set_point = self.__speed_limit
+        else:
+            if self.__train_model_input.current_set_point != 0:
+                self.__approaching_station()
+            else:
+                self.__begin_wait = True
+                if self.__door_side:
+                    self.__right_side_doors = True
+                else:
+                    self.__left_side_doors = True
         
-        if self.__command_set_point > self.__speed_limit:
-            self.__command_set_point = self.__speed_limit
+        if self.__begin_wait:
+            self.__past_time += self.__time_step
+        
+        if self.__past_time >= self.__waiting_time:
+            self.__right_side_doors = False
+            self.__left_side_doors = False
+            self.__past_time = 0
+            self.__stopping_at_station = False
+            self.__begin_wait = False
         
         if not self.__service_brakes and not self.__emergency_brakes:
             self.__calculate_power()
@@ -182,7 +214,7 @@ class TrainController:
     def __get_speed_limit(self):
         self.__speed_limit = self.__train_model_input.command_set_point
         if self.__train_line == 1:
-            self.__direction, self.__next_station, self.__outside_lights, self.__inside_lights, self.__distance_to_station = get_speed_limit_green(self.__last_station, self.__direction, self.__distance)
+            self.__direction, self.__next_station, self.__outside_lights, self.__inside_lights, self.__distance_to_station, self.__door_side = get_speed_limit_green(self.__last_station, self.__direction, self.__distance)
         else:
             self.__direction, self.__next_station, self.__outside_lights, self.__inside_lights, self.__distance_to_station = get_speed_limit_red(self.__last_station, self.__direction, self.__distance)
 
@@ -219,10 +251,10 @@ class TrainController:
         self.__train_model_input.engine_failure = engine_failure
         self.__train_model_input.station_name = station_name
     
-    def __authority_to_zero(self):
+    def __approaching_station(self):
         if not self.__begin_slow_down:
             self.__begin_slow_down = True
-            deceleration = self.__train_model_input.current_set_point ** 2 / (2 * self.__distance_to_station) * self.__time_step
+            deceleration = self.__train_model_input.current_set_point ** 2 / (2 * 32.2) * self.__time_step
             self.__command_set_point_list = []
             current_speed = self.__train_model_input.current_set_point - deceleration
             while(current_speed > 0):
