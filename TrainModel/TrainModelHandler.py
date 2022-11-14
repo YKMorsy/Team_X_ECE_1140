@@ -1,4 +1,4 @@
-from TrainModel import TrainModel
+from TrainModel.TrainModel import TrainModel
 
 class TrainModelHandler:
 	def __init__(self):

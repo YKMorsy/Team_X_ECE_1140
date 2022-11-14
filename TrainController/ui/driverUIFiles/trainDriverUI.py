@@ -6,10 +6,10 @@ from qtwidgets import Toggle
 from QLed import QLed
 
 from multiprocessing import Lock
-from ui.support.readAndWriteFiles import  write_driver_input_file
-from ui.support.readAndWriteFiles import read_driver_output_file
-from ui.support.readAndWriteFiles import read_engineer_input_file
-from ui.support.readAndWriteFiles import write_engineer_input_file
+from TrainController.ui.support.readAndWriteFiles import  write_driver_input_file
+from TrainController.ui.support.readAndWriteFiles import read_driver_output_file
+from TrainController.ui.support.readAndWriteFiles import read_engineer_input_file
+from TrainController.ui.support.readAndWriteFiles import write_engineer_input_file
 
 class EngineerWindow(QWidget):
     def __init__(self, lock_engineer_file, train_number):
@@ -18,7 +18,7 @@ class EngineerWindow(QWidget):
 
         self.__lock_engineer_file = lock_engineer_file
 
-        self.__output_file_name = "./ui/driverUIFiles/utilities/engineerInputDB_" + str(train_number) + ".txt"
+        self.__output_file_name = "./TrainController/ui/driverUIFiles/utilities/engineerInputDB_" + str(train_number) + ".txt"
         self.__kp, self.__ki = read_engineer_input_file(self.__output_file_name, self.__lock_engineer_file)
 
         layout = QHBoxLayout()
@@ -97,8 +97,8 @@ class MainWindow(QWidget):
         self.__driver_input = train.get_driver_input()
         self.__train_line = train.get_train_line()
 
-        self.__input_file_name = "./ui/driverUIFiles/utilities/driverInputDB_" + str(self.__train_number) + ".txt"
-        self.__output_file_name = "./ui/driverUIFiles/utilities/driverOutputDB_" + str(self.__train_number) + ".txt"
+        self.__input_file_name = "./TrainController/ui/driverUIFiles/utilities/driverInputDB_" + str(self.__train_number) + ".txt"
+        self.__output_file_name = "./TrainController/ui/driverUIFiles/utilities/driverOutputDB_" + str(self.__train_number) + ".txt"
 
         self.setWindowTitle("Train Controller: " + str(self.__train_number))
 

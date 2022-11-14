@@ -1,16 +1,16 @@
 from dataclasses import dataclass
-from input.trainDriverInput import TrainDriverInput
-from input.trainModelInput import TrainModelInput
-from input.passengerInput import PassengerInput
-from input.engineerInput import EngineerInput
-from output.trainDriverOutput import TrainDriverOutput
-from output.trainModelOutput import TrainModelOutput
-from ui.testUIFiles.testUI import test_ui
-from ui.driverUIFiles.trainDriverUI import driver_ui
+from TrainController.input.trainDriverInput import TrainDriverInput
+from TrainController.input.trainModelInput import TrainModelInput
+from TrainController.input.passengerInput import PassengerInput
+from TrainController.input.engineerInput import EngineerInput
+from TrainController.output.trainDriverOutput import TrainDriverOutput
+from TrainController.output.trainModelOutput import TrainModelOutput
+from TrainController.ui.testUIFiles.testUI import test_ui
+from TrainController.ui.driverUIFiles.trainDriverUI import driver_ui
 from multiprocessing import Process
 from multiprocessing import Lock
-from ui.support.readAndWriteFiles import *
-from resources.findSpeedLimit import *
+from TrainController.ui.support.readAndWriteFiles import *
+from TrainController.resources.findSpeedLimit import *
 
 class TrainController:
     def __init__(self, train_number, train_line):
@@ -63,11 +63,11 @@ class TrainController:
         self.__train_driver_output = TrainDriverOutput()
         self.__train_model_output = TrainModelOutput()
 
-        self.__input_model_test_ui_file_name = "./ui/testUIFiles/utilities/modelInputDB_" + str(self.__train_number) + ".txt"
-        self.__output_model_test_ui_file_name = "./ui/testUIFiles/utilities/modelOutputDB_" + str(self.__train_number) + ".txt"
-        self.__input_driver_driver_ui_file_name = "./ui/driverUIFiles/utilities/driverInputDB_" + str(self.__train_number) + ".txt"
-        self.__output_driver_driver_ui_file_name = "./ui/driverUIFiles/utilities/driverOutputDB_" + str(self.__train_number) + ".txt"
-        self.__input_engineer_ui_file_name = "./ui/driverUIFiles/utilities/engineerInputDB_" + str(self.__train_number) + ".txt"
+        self.__input_model_test_ui_file_name = "./TrainController/ui/testUIFiles/utilities/modelInputDB_" + str(self.__train_number) + ".txt"
+        self.__output_model_test_ui_file_name = "./TrainController/ui/testUIFiles/utilities/modelOutputDB_" + str(self.__train_number) + ".txt"
+        self.__input_driver_driver_ui_file_name = "./TrainController/ui/driverUIFiles/utilities/driverInputDB_" + str(self.__train_number) + ".txt"
+        self.__output_driver_driver_ui_file_name = "./TrainController/ui/driverUIFiles/utilities/driverOutputDB_" + str(self.__train_number) + ".txt"
+        self.__input_engineer_ui_file_name = "./TrainController/ui/driverUIFiles/utilities/engineerInputDB_" + str(self.__train_number) + ".txt"
 
         write_driver_input_file(self.__input_driver_driver_ui_file_name, self.__lock_driver_input, self.__train_driver_input)
         write_driver_output_file(self.__output_driver_driver_ui_file_name, self.__lock_driver_output, self.__train_driver_output)

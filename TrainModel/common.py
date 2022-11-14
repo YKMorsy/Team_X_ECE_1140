@@ -2,8 +2,8 @@ from PyQt6.QtWidgets import QDialog, QGridLayout
 from PyQt6.QtWidgets import QLabel, QPushButton
 from PyQt6.QtCore import Qt, QSortFilterProxyModel
 from PyQt6.QtGui import QFont, QStandardItemModel
-from FontStyles import *
-from TrainModelHandler import TrainModelHandler
+from TrainModel.FontStyles import *
+from TrainModel.TrainModelHandler import TrainModelHandler
 
 #Declare global models and handler
 train_proxy_model = QSortFilterProxyModel()

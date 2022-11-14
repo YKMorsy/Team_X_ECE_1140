@@ -5,8 +5,8 @@ from PyQt5.QtCore import *
 from qtwidgets import Toggle
 
 from multiprocessing import Lock
-from ui.support.readAndWriteFiles import  write_train_model_input_file
-from ui.support.readAndWriteFiles import read_train_model_output_file
+from TrainController.ui.support.readAndWriteFiles import  write_train_model_input_file
+from TrainController.ui.support.readAndWriteFiles import read_train_model_output_file
 
 class MainWindow(QWidget):
         
@@ -21,8 +21,8 @@ class MainWindow(QWidget):
             self.__model_output = train.get_model_output()
             self.__model_input = train.get_model_input()
 
-            self.__input_file_name = "./ui/testUIFiles/utilities/modelInputDB_" + str(self.__train_number) + ".txt"
-            self.__output_file_name = "./ui/testUIFiles/utilities/modelOutputDB_" + str(self.__train_number) + ".txt"
+            self.__input_file_name = "./TrainController/ui/testUIFiles/utilities/modelInputDB_" + str(self.__train_number) + ".txt"
+            self.__output_file_name = "./TrainController/ui/testUIFiles/utilities/modelOutputDB_" + str(self.__train_number) + ".txt"
 
             self.setWindowTitle("Test UI Window " + str(self.__train_number))
             self.__create_output_widgets()
