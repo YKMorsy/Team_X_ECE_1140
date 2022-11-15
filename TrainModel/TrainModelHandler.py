@@ -1,4 +1,4 @@
-from TrainModel import TrainModel
+from TrainModel.TrainModel import TrainModel
 
 from PyQt6.QtGui import QStandardItem
 

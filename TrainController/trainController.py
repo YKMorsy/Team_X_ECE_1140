@@ -55,8 +55,7 @@ class TrainController:
         self.__waiting_time = 30
         self.__past_time = 0
         self.__begin_wait = False
-        self.__old_power = 0.0
-        self.__exceeded_speed_limit = False
+        self.__acceleration = 0.0
 
         self.__train_driver_input = TrainDriverInput()
         self.__train_model_input = TrainModelInput()
@@ -125,7 +124,7 @@ class TrainController:
     def __model_output_mapper(self):
         self.__train_model_output.service_brake = self.__train_driver_input.service_brake or self.__service_brakes
         self.__train_model_output.emergency_brake = self.__train_driver_input.emergency_brake or self.__emergency_brakes
-        self.__train_model_output.engine_power = self.__power
+        self.__train_model_output.engine_power = self.__power * 2500
         self.__train_model_output.left_side_doors = self.__train_driver_input.left_side_doors or self.__left_side_doors                                
         self.__train_model_output.right_side_doors = self.__train_driver_input.right_side_doors or self.__right_side_doors
         self.__train_model_output.announce_stop = self.__announce_stop
@@ -151,11 +150,9 @@ class TrainController:
         if not self.__authority and not(self.__train_model_input.brake_failure or self.__train_model_input.signal_pickup_failure or self.__train_model_input.engine_failure):
             self.power = 0.0
             self.__service_brakes = True
-            self.__u_value = 0.0
         elif not self.__authority:
             self.power = 0.0
             self.__emergency_brakes = True
-            self.__u_value = 0.0
         else:
             self.__emergency_brakes = self.__train_driver_input.emergency_brake or self.__passenger_input.emergency_brake
             self.__service_brakes = self.__train_driver_input.service_brake
@@ -193,36 +190,24 @@ class TrainController:
         if not self.__service_brakes and not self.__emergency_brakes:
             self.__calculate_power()
         
-
         if self.__power > self.__max_power:
             self.__power = self.__max_power
             
-        if self.__train_model_input.current_set_point > self.__speed_limit:
+        if (self.__train_model_input.current_set_point + self.__acceleration * self.__time_step) > self.__speed_limit:
             self.__power = 0.0
             self.__service_brakes = True
-            self.__u_value = 0.0
-            self.__old_power = self.__power
-            self.__exceeded_speed_limit = True
         elif self.__authority:
             self.__service_brakes = self.__train_driver_input.service_brake
-            if self.__exceeded_speed_limit:
-                self.__power = self.__old_power
-                self.__exceeded_speed_limit = False
 
         if self.__service_brakes or self.__emergency_brakes:
             self.__power = 0.0
-            self.__u_value = 0.0
             
     def __calculate_power(self):
         if self.__power < self.__max_power:
             self.__u_value = self.__u_value + (self.__time_step / 2 * (self.__command_set_point - self.__train_model_input.current_set_point + self.__e_value))
-            if(self.__u_value  < 0 or self.__command_set_point <= self.__train_model_input.current_set_point):
-                self.__u_value = 0
         self.__power = self.__engineer_input.kp * (self.__command_set_point - self.__train_model_input.current_set_point) + self.__engineer_input.ki * self.__u_value
         if self.__power < 0:
             self.__power = 0
-        self.__power *= 1000
-        self.__power += 50000
 
     def __get_speed_limit(self):
         self.__speed_limit = self.__train_model_input.command_set_point
@@ -258,6 +243,7 @@ class TrainController:
         self.__old_current_set_point = self.__train_driver_output.current_set_point
         self.__train_model_input.command_set_point = command_set_point
         self.__train_model_input.authority = authority
+        self.__acceleration = (current_set_point - self.__train_model_input.current_set_point) / self.__time_step
         self.__train_model_input.current_set_point = current_set_point
         self.__train_model_input.brake_failure = brake_failure
         self.__train_model_input.signal_pickup_failure = signal_pickup_failure
