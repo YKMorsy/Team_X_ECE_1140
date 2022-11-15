@@ -10,8 +10,11 @@ class Block:
         # Defined attributes
         self.block_number = block_number
         self.blocK_length = block_length
-        self.block_speed_limit = block_speed_limit
+        self.block_speed_limit = block_speed_limit*3.6
         self.block_railway = block_railway
+
+        self.block_authority = False
+        self.block_suggested_speed = self.block_speed_limit
 
         # Switch info - Used also to link blocks even if they do not have switches
         self.cur_switch_pos = block_switch_1

@@ -22,3 +22,19 @@ class Dispatcher:
             if(train.depart_time) == cur_time:
                 # Create train
                 pass
+
+    # Called by CTC (wayside to CTC)
+
+    def setOccupancy(self, occ_dict):
+        for key in occ_dict:
+            if occ_dict[key] == True:
+
+                if key >= 1000 and key < 2000:
+                    line_color = "Green"
+                    cur_key = key - 1000
+                elif key >= 2000:
+                    line_color = "Red"
+                    cur_key = key - 2000
+
+                for train in self.trains:
+                    train.setPosition(self, line_color, cur_key, True)

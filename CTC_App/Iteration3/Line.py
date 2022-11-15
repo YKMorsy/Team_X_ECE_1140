@@ -6,7 +6,6 @@ class Line:
     def __init__(self, file_path):
 
         # Initialize values
-        self.block_authorities = []
         self.block_list = []
         self.throughput = 0
         self.line_color = ''
@@ -45,7 +44,6 @@ class Line:
             # Append block objects to block list
             self.block_list.append(Block(block_numbers[i], block_lengths[i], block_speed_limits[i], 
             block_switches_1[i], block_switches_2[i], block_stations[i], block_railway_crossing[i]))
-            self.block_authorities.append(1)
             
             # Append section+block to section_block dictionary
             if block_section[i] in self.__section_block_dict:
@@ -81,26 +79,7 @@ class Line:
     def getRoute(self):
         return self.__default_route
 
-    # Function to update throughput
-    def setThroughput(self, throughput):
-        self.throughput = throughput
-
-    # Function to update switch position
-    def setSwitchPosition(self, block_number, pos_bool):
-        self.block_list[block_number].setSwitchPos(pos_bool)
-
-    # Function to upate occupancy
-    def setBlockOccupancy(self, block_number, occupancy):
-        self.block_list[block_number].occupancy = occupancy
-
-    # Function to update block status
-    def setBlockStatus(self, block_number, status):
-        self.block_list[block_number].status = status
-
-    # Function to update railway crossing
-    def setRailWayCrossing(self, block_number, status):
-        self.block_list[block_number].block_railway = status
-
+    # Called by UI:
     # Function to return list of closed blocks
     def getClosedBlocks(self):
         closed_blocks = []
@@ -130,5 +109,77 @@ class Line:
         
         return cross_state
 
+
+
+    # Called by CTC (wayside to CTC)
+    
+    # Function to update throughput (Track Model to CTC)
+    def setThroughput(self, throughput):
+        self.throughput = throughput
+
+    # Function to update switch position
+    def setSwitchPosition(self, switch_dict):
+        for key in switch_dict:
+            if self.line_color == "Green":
+                cur_key = key - 1000
+                self.block_list[cur_key].setSwitchPos(switch_dict[cur_key])
+            elif self.line_color == "Red":
+                cur_key = key - 2000
+                self.block_list[cur_key].setSwitchPos(switch_dict[cur_key])
+
+    # # Function to upate occupancy
+    # def setBlockOccupancy(self, block_number, occupancy):
+    #     self.block_list[block_number].occupancy = occupancy
+
+    # Function to update block status
+    def setBlockStatus(self, status_dict):
+        for key in status_dict:
+            if self.line_color == "Green":
+                cur_key = key - 1000
+                self.block_list[cur_key].status = status_dict[cur_key]
+            elif self.line_color == "Red":
+                cur_key = key - 2000
+                self.block_list[cur_key].status(status_dict[cur_key])
+
+    # Function to update railway crossing
+    def setRailWayCrossing(self, crossing_dict):
+        for key in crossing_dict:
+            if self.line_color == "Green":
+                cur_key = key - 1000
+                self.block_list[cur_key].block_railway = crossing_dict[cur_key]
+            elif self.line_color == "Red":
+                cur_key = key - 2000
+                self.block_list[cur_key].block_railway = crossing_dict[cur_key]
+
+
+
+
+    # Called by wayside (CTC to Wayside):
+
+    def getBlockAuthority(self):
+        authority_dict = {}
+
+        for block in self.block_list:
+            if self.line_color == "Green":
+                cur_block = block + 1000
+            if self.line_color == "Red":
+                cur_block = block + 2000
+            authority_dict[cur_block] = block.block_authority
+
+        return authority_dict
+
+    def getBlockSuggestedSpeed(self):
+        speed_dict = {}
+
+        for block in self.block_list:
+            if self.line_color == "Green":
+                cur_block = block + 1000
+            if self.line_color == "Red":
+                cur_block = block + 2000
+            speed_dict[cur_block] = block.block_suggested_speed
+
+        return speed_dict
+
+
 # line_test = Line("Iteration3/Track_Layout_Green.xlsx")
-# print(line_test.getRoute())
+# print(line_test.getBlockSuggestedSpeed())

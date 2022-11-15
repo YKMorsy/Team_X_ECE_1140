@@ -141,10 +141,10 @@ class CTCApp(QWidget):
             for row in range(0, rowPosition):
                 cur_train_id = self.greenTrainTable.item(row,0).text()
                 cur_train = CTCDispatcher.trains[int(cur_train_id)-1]
-                selected_block = self.greenChooseMaintenanceCombo.currentText()
-                # Set block status to True in line object and update choose block list
-                greenLine.setBlockStatus(int(selected_block), True)
-                self.greenChooseMaintenanceCombo.removeItem(self.greenChooseMaintenanceCombo.currentIndex())
+                # selected_block = self.greenChooseMaintenanceCombo.currentText()
+                # # Set block status to True in line object and update choose block list
+                # greenLine.setBlockStatus(int(selected_block), True)
+                # self.greenChooseMaintenanceCombo.removeItem(self.greenChooseMaintenanceCombo.currentIndex())
 
                 current_position = cur_train.current_position
 
@@ -355,7 +355,7 @@ class CTCApp(QWidget):
             if self.current_line_maint == "Green":
                 selected_block = self.greenChooseMaintenanceCombo.currentText()
                 # Set block status to True in line object and update choose block list
-                greenLine.setBlockStatus(int(selected_block), True)
+                # greenLine.setBlockStatus(int(selected_block), True)
                 self.greenChooseMaintenanceCombo.removeItem(self.greenChooseMaintenanceCombo.currentIndex())
 
             elif self.current_line_maint == "Red":

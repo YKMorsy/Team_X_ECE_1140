@@ -20,8 +20,15 @@ class Train:
 
     def setPosition(self, line_color, block_number, occupancy):
         if (block_number == self.route[1] and self.line.line_color == line_color and occupancy == True):
+
+            # Set previous authority to True
+            self.line.block_list[self.route[0]].block_authority = True
+
+            # Set suggested speed of previous block to speed limit
+            self.line.block_list[self.route[0]].block_suggested_speed = self.line.block_list[self.route[0]].block_speed_limit
+
             self.route.pop(0)
-            self.current_position = self.route[0]
+            self.current_position = self.route[0] # Current position
             current_block = self.line.block_list[self.current_position]
             current_station = current_block.block_station
             current_status = current_block.status
@@ -38,9 +45,7 @@ class Train:
             next_block_2_status = next_block_2.status
 
             next_station = self.station_list[0]
-            
-            upcoming_block = next_block_number_1
-            upcoming_block_authority = True
+
 
             # Check if next 2 blocks have destinations stations
             # If blocks have destiantion stations, slowly decrement suggested speed until 0
@@ -49,10 +54,8 @@ class Train:
             elif ((next_block_1_station == next_station) and (next_block_1_status == True)):
                 suggested_speed = 0.5*suggested_speed
             elif (current_station == next_station and (current_status == True)):
-                suggested_speed = 0*suggested_speed
+                suggested_speed = 1
 
-                # Wait then increase speed and remove station from list
-                ####### WAIT 
                 suggested_speed = current_block.block_speed_limit
                 self.station_list.pop(0)
 
@@ -60,10 +63,18 @@ class Train:
             elif (current_status == True):
                 suggested_speed = suggested_speed
 
-            # # Check if next 2 blocks have fault
-            # # If blocks have fault, decrement speed and set authority to 0
-            # if (next_block_2_status == False):
-            #     suggested_speed = 0.5*suggested_speed
-            # elif (next_block_1_status == False):
-            #     suggested_speed = 0*suggested_speed
-            #     upcoming_block_authority = False
+            # Check if next block is a switch
+            block_switch_1 = self.line.block_list[self.route[1]].block_switch_1
+            block_switch_2 = self.line.block_list[self.route[1]].block_switch_2
+
+            if self.route[1] == block_switch_1:
+                self.line.block_list[block_switch_2].block_authority = False
+            elif self.route[1] == block_switch_2:
+                self.line.block_list[block_switch_1].block_authority = False
+
+            # Set next authority to True
+            self.line.block_list[self.route[1]].block_authority = True
+
+            # Set suggested speed
+            self.line.block_list[self.route[0]].block_suggested_speed = suggested_speed
+            
