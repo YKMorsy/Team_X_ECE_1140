@@ -124,7 +124,7 @@ class TrainController:
     def __model_output_mapper(self):
         self.__train_model_output.service_brake = self.__train_driver_input.service_brake or self.__service_brakes
         self.__train_model_output.emergency_brake = self.__train_driver_input.emergency_brake or self.__emergency_brakes
-        self.__train_model_output.engine_power = self.__power
+        self.__train_model_output.engine_power = self.__power * 2500
         self.__train_model_output.left_side_doors = self.__train_driver_input.left_side_doors or self.__left_side_doors                                
         self.__train_model_output.right_side_doors = self.__train_driver_input.right_side_doors or self.__right_side_doors
         self.__train_model_output.announce_stop = self.__announce_stop
@@ -205,12 +205,9 @@ class TrainController:
     def __calculate_power(self):
         if self.__power < self.__max_power:
             self.__u_value = self.__u_value + (self.__time_step / 2 * (self.__command_set_point - self.__train_model_input.current_set_point + self.__e_value))
-            if(self.__u_value  < 0 or self.__command_set_point <= self.__train_model_input.current_set_point):
-                self.__u_value = 0
         self.__power = self.__engineer_input.kp * (self.__command_set_point - self.__train_model_input.current_set_point) + self.__engineer_input.ki * self.__u_value
         if self.__power < 0:
             self.__power = 0
-        self.__power *= 2500
 
     def __get_speed_limit(self):
         self.__speed_limit = self.__train_model_input.command_set_point
