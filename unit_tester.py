@@ -1,5 +1,5 @@
 import unittest
-import track_block
+import TrackModel.track_block as track_block
 import sys
 import numpy as np
 
