@@ -1,5 +1,4 @@
 from TrainController.trainController import TrainController
-from TrainModel.TrainModel import TrainModel
 from TrainModel.common import *
 from connect_train_model_train_controller import connect_train_model_train_controller
 
@@ -137,3 +136,6 @@ if __name__ == '__main__':
     connect_train_model_train_controller(train_controller, train_model_handler.train_list[1])
     train_model_handler.update(1)
     assert train_model_handler.train_list[1].service_brake
+
+    #Edge case testing
+    
