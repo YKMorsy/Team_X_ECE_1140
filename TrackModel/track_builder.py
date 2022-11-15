@@ -1,6 +1,6 @@
 import random
 import os
-import generate_tracks
+import TrackModel.generate_tracks as generate_tracks
 import sys
 import TrackModel.track_block as track_block
 import numpy as np
