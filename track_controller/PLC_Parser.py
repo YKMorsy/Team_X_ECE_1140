@@ -6,12 +6,7 @@ class PLC_Parser ():
 		self.PLC_file = ""
 
 	def get_table_value(self, table_data, block_value):
-		rowC = len(table_data)
-		for row in range(rowC):
-			(block, state) = table_data[row]
-			if str(block) == block_value:
-				return state
-		return False
+		return table_data[int(block_value)]
 
 	def parse_PLC (self, switchPos, Occupancy, Authority, sugSpeed, status, speedLim):
 		logic_queue = queue.LifoQueue()

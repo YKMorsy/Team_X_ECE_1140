@@ -5,16 +5,16 @@ class WaysideController ():
         self.wayside_id = 0
         self.PLC_info = PLC_Parser()
         self.PLC_info2 = PLC_Parser()
-        self.authority = []
-        self.occupancy = []
-        self.switch_positions = []
-        self.railway_crossings = []
-        self.light_colors = []
-        self.statuses = []
-        self.temp_statuses = []
-        self.suggested_speed = [] #0b00010100 #20 in binary
-        self.commanded_speed = []#0b00010100 #20 in binary
-        self.speed_limit = []#0b00010100 #20 in binary
+        self.authority = {}
+        self.occupancy = {}
+        self.switch_positions = {}
+        self.railway_crossings = {}
+        self.light_colors = {}
+        self.statuses = {}
+        self.temp_statuses = {}
+        self.suggested_speed = {} #0b00010100 #20 in binary
+        self.commanded_speed = {}#0b00010100 #20 in binary
+        self.speed_limit = {}#0b00010100 #20 in binary
         self.maintencMode = False
 
     def ParsePLC(self):
@@ -42,21 +42,12 @@ class WaysideController ():
                 self.make_speed_change(change, self.commanded_speed)
 
     def make_changes(self, change, table):
-        t= len(table)
         (typeS, bl, val) = change
-        for row in range(t):
-            (block, state) = table[row]
-            if str(block) == bl:
-                boolVal = val == "True"
-                table[row] = (int(bl), boolVal)
+        table[bl] = val == "True"
     
     def make_speed_change(self, change, table):
-        t= len(table)
         (typeS, bl, val) = change
-        for row in range(t):
-            (block, state) = table[row]
-            if str(block) == bl:
-                table[row] = (int(bl), int(val))
+        table[bl] = int(val)
 
     def make_light_changes(self, change, table):
         t= len(table)
@@ -69,14 +60,7 @@ class WaysideController ():
             val2 = True
         else:
             val2 = False
-
-        for row in range(t):
-            (block, state1, state2) = table[row]
-            if str(block) == bl:
-                table[row] = (int(bl), bool(val1), bool(val2))
-
-    def RunTrackLogic ():
-        print('Logic wow')
+        table[bl] = [val1, val2]
 
     #----setters----
     def set_wayside_id(self, wid):
@@ -93,9 +77,9 @@ class WaysideController ():
         self.light_colors = lc
     def set_statuses(self, st):
         self.statuses = st
-        for (bl, val) in st:
+        for key, val in st.items():
             if(val == False):
-                self.make_changes(("A", bl, False), self.authority)
+                self.authority[key] = False
         self.temp_statuses = st.copy()
     def set_suggested_speed(self, ss):
         self.suggested_speed = ss
@@ -107,9 +91,8 @@ class WaysideController ():
         self.maintencMode = m
         if(m):
             self.temp_statuses = self.statuses.copy()
-            for i in range(len(self.statuses)):
-                (bl, s) = self.statuses[i]
-                self.statuses[i] = (bl, False)
+            for i in self.statuses.keys():
+                self.statuses[i] = (i, False)
         else:
             self.statuses = self.temp_statuses.copy()
     def set_PLC (self, plc):

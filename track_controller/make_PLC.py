@@ -1,7 +1,7 @@
 
 
 with open("track_controller/RedLineBottom_yellow.txt", "w") as f:
-    for i in range(46, 67):
+    for i in range(2046, 2067):
         f.write("IF ( ( ( A-"+str(i-1)+" & F-"+str(i-1)+" & ! O-"+str(i-1)+" ) | ( A-"+str(i+1)+" & F-"+str(i+1)+" & ! O-"+str(i+1)+" ) ) & O-"+str(i)+" ) {\n")
         f.write("C-"+str(i)+" = D-"+str(i)+"\n")
         f.write("}\n")
@@ -9,9 +9,9 @@ with open("track_controller/RedLineBottom_yellow.txt", "w") as f:
         f.write("{\n")
         f.write("C-"+str(i)+" = 0\n")
         f.write("}\n")
-    switches = [52]
-    lower = [53]
-    higher = [66]
+    switches = [2052]
+    lower = [2053]
+    higher = [2066]
     for s in range(len(switches)):
         f.write("S-"+str(switches[s])+" = 1\n")
         f.write("IF ( O-"+str(switches[s])+" & A-"+str(lower[s])+" & ! A-"+str(higher[s])+" ) {\n")
@@ -29,7 +29,7 @@ with open("track_controller/RedLineBottom_yellow.txt", "w") as f:
     #write lights and rail way crossing logic
 
 with open("track_controller/GreenLineTop_Red.txt", "w") as f:
-    for i in range(1001, 1013):
+    for i in range(1002, 1013):
         f.write("IF ( ( A-"+str(i-1)+" & F-"+str(i-1)+" ) & O-"+str(i)+" ) {\n")
         f.write("C-"+str(i)+" = D-"+str(i)+"\n")
         f.write("}\n")
@@ -98,7 +98,7 @@ with open("track_controller/GreenLineMiddle_Yellow.txt", "w") as f:
         f.write("{\n")
         f.write("C-"+str(i)+" = 0\n")
         f.write("}\n")
-    for i in range(1105, 1151):
+    for i in range(1105, 1150):
         f.write("IF ( ( A-"+str(i+1)+" & F-"+str(i+1)+" ) & O-"+str(i)+" ) {\n")
         f.write("C-"+str(i)+" = D-"+str(i)+"\n")
         f.write("}\n")
@@ -106,7 +106,7 @@ with open("track_controller/GreenLineMiddle_Yellow.txt", "w") as f:
         f.write("{\n")
         f.write("C-"+str(i)+" = 0\n")
         f.write("}\n")
-    for i in range(1012, 1029):
+    for i in range(1021, 1029):
         f.write("IF ( ( ( A-"+str(i-1)+" & F-"+str(i-1)+" ) | ( A-"+str(i+1)+" & F-"+str(i+1)+" ) ) & O-"+str(i)+" ) {\n")
         f.write("C-"+str(i)+" = D-"+str(i)+"\n")
         f.write("}\n")
@@ -154,7 +154,7 @@ with open("track_controller/GreenLineBottom_Blue.txt", "w") as f:
     lower = [1000, 1000, 1076, 1086]
     higher = [1058, 1062, 1101, 1100]
 
-    for i in range(1036, 1105):
+    for i in range(1036, 1077):
         f.write("IF ( ( A-"+str(i+1)+" & F-"+str(i+1)+" ) & O-"+str(i)+" ) {\n")
         f.write("C-"+str(i)+" = D-"+str(i)+"\n")
         f.write("}\n")
@@ -170,7 +170,7 @@ with open("track_controller/GreenLineBottom_Blue.txt", "w") as f:
         f.write("{\n")
         f.write("C-"+str(i)+" = 0\n")
         f.write("}\n")
-    for i in range(1012, 1029):
+    for i in range(1077, 1086):
         f.write("IF ( ( ( A-"+str(i-1)+" & F-"+str(i-1)+" ) | ( A-"+str(i+1)+" & F-"+str(i+1)+" ) ) & O-"+str(i)+" ) {\n")
         f.write("C-"+str(i)+" = D-"+str(i)+"\n")
         f.write("}\n")
