@@ -13,6 +13,9 @@ class Dispatcher:
     def scheduleMultiple(self, filepath):
         pass
 
+    def updateStations(self, idx, station_list):
+        self.trains[idx].updateStations(station_list)
+
     # Function to check if train object needs to be created
     def dispatchTrain(self, cur_time):
         for train in self.trains:

@@ -101,5 +101,34 @@ class Line:
     def setRailWayCrossing(self, block_number, status):
         self.block_list[block_number].block_railway = status
 
+    # Function to return list of closed blocks
+    def getClosedBlocks(self):
+        closed_blocks = []
+
+        for block in self.block_list:
+            if block.status == False:
+                closed_blocks.append(block.block_number)
+
+        return closed_blocks
+
+    # Function to return list of switch positions ([origin, target])
+    def getSwitchState(self):
+        switch_state = []
+
+        for block in self.block_list:
+            if block.cur_switch_pos != -1:
+                switch_state.append([block.block_number, block.cur_switch_pos])
+        
+        return switch_state
+
+    # Function to return list of blocks and crossing status ([origin, target])
+    def getCrossingState(self):
+        cross_state = []
+        for block in self.block_list:
+            if block.block_railway != -1:
+                cross_state.append([block.block_number, block.block_railway])
+        
+        return cross_state
+
 # line_test = Line("Iteration3/Track_Layout_Green.xlsx")
 # print(line_test.getRoute())
