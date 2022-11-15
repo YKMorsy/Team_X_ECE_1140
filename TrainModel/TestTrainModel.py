@@ -1,5 +1,5 @@
 import unittest
-from TrainModel import TrainModel
+from TrainModel.TrainModel import TrainModel
 
 class TestTrainModel(unittest.TestCase):
     def test_generate_engine_failure(self):

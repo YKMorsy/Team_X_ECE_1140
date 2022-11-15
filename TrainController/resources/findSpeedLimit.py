@@ -1,6 +1,8 @@
 def get_speed_limit_red(last_stop, direction, distance):
     outside_lights = False
     distance_to_station = 0.0
+    next_stop = ""
+    door_side = 0
     match(last_stop):
         case "YARD":
             next_stop = "SHADYSIDE"
@@ -84,6 +86,8 @@ def get_speed_limit_red(last_stop, direction, distance):
 def get_speed_limit_green(last_stop, direction, distance):
     outside_lights = False
     distance_to_station = 0
+    next_stop = ""
+    door_side = 0
     match(last_stop):
         case "YARD":
             next_stop = "GLENBURY"

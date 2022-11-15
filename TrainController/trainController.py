@@ -1,16 +1,16 @@
 from dataclasses import dataclass
-from input.trainDriverInput import TrainDriverInput
-from input.trainModelInput import TrainModelInput
-from input.passengerInput import PassengerInput
-from input.engineerInput import EngineerInput
-from output.trainDriverOutput import TrainDriverOutput
-from output.trainModelOutput import TrainModelOutput
-from ui.testUIFiles.testUI import test_ui
-from ui.driverUIFiles.trainDriverUI import driver_ui
+from TrainController.input.trainDriverInput import TrainDriverInput
+from TrainController.input.trainModelInput import TrainModelInput
+from TrainController.input.passengerInput import PassengerInput
+from TrainController.input.engineerInput import EngineerInput
+from TrainController.output.trainDriverOutput import TrainDriverOutput
+from TrainController.output.trainModelOutput import TrainModelOutput
+from TrainController.ui.testUIFiles.testUI import test_ui
+from TrainController.ui.driverUIFiles.trainDriverUI import driver_ui
 from multiprocessing import Process
 from multiprocessing import Lock
-from ui.support.readAndWriteFiles import *
-from resources.findSpeedLimit import *
+from TrainController.ui.support.readAndWriteFiles import *
+from TrainController.resources.findSpeedLimit import *
 
 class TrainController:
     def __init__(self, train_number, train_line):
@@ -24,7 +24,7 @@ class TrainController:
         self.__train_line = train_line
         self.__test_ui_start = False
         self.__driver_ui_start = False
-        self.__max_power = 120000
+        self.__max_power = 480000
 
         self.__command_set_point = 0.0
         self.__power = 0.0
@@ -42,7 +42,7 @@ class TrainController:
         self.__speed_limit = 0.0
         self.__u_value = 0.0
         self.__e_value = 0.0
-        self.__time_step = 1.0
+        self.__time_step = 1
 
         self.__last_station = "YARD"
         self.__next_station = ""
@@ -55,6 +55,8 @@ class TrainController:
         self.__waiting_time = 30
         self.__past_time = 0
         self.__begin_wait = False
+        self.__old_power = 0.0
+        self.__exceeded_speed_limit = False
 
         self.__train_driver_input = TrainDriverInput()
         self.__train_model_input = TrainModelInput()
@@ -63,11 +65,11 @@ class TrainController:
         self.__train_driver_output = TrainDriverOutput()
         self.__train_model_output = TrainModelOutput()
 
-        self.__input_model_test_ui_file_name = "./ui/testUIFiles/utilities/modelInputDB_" + str(self.__train_number) + ".txt"
-        self.__output_model_test_ui_file_name = "./ui/testUIFiles/utilities/modelOutputDB_" + str(self.__train_number) + ".txt"
-        self.__input_driver_driver_ui_file_name = "./ui/driverUIFiles/utilities/driverInputDB_" + str(self.__train_number) + ".txt"
-        self.__output_driver_driver_ui_file_name = "./ui/driverUIFiles/utilities/driverOutputDB_" + str(self.__train_number) + ".txt"
-        self.__input_engineer_ui_file_name = "./ui/driverUIFiles/utilities/engineerInputDB_" + str(self.__train_number) + ".txt"
+        self.__input_model_test_ui_file_name = "./TrainController/ui/testUIFiles/utilities/modelInputDB_" + str(self.__train_number) + ".txt"
+        self.__output_model_test_ui_file_name = "./TrainController/ui/testUIFiles/utilities/modelOutputDB_" + str(self.__train_number) + ".txt"
+        self.__input_driver_driver_ui_file_name = "./TrainController/ui/driverUIFiles/utilities/driverInputDB_" + str(self.__train_number) + ".txt"
+        self.__output_driver_driver_ui_file_name = "./TrainController/ui/driverUIFiles/utilities/driverOutputDB_" + str(self.__train_number) + ".txt"
+        self.__input_engineer_ui_file_name = "./TrainController/ui/driverUIFiles/utilities/engineerInputDB_" + str(self.__train_number) + ".txt"
 
         write_driver_input_file(self.__input_driver_driver_ui_file_name, self.__lock_driver_input, self.__train_driver_input)
         write_driver_output_file(self.__output_driver_driver_ui_file_name, self.__lock_driver_output, self.__train_driver_output)
@@ -85,6 +87,8 @@ class TrainController:
         driver_ui_process = Process(target=driver_ui, args=(self, self.__lock_driver_output, self.__lock_driver_input, self.__lock_engineer_input))
         driver_ui_process.start()
     
+    def set_train_driver_input(self, train_driver_input):
+        self.__train_driver_input = train_driver_input
     def get_train_number(self):
         return self.__train_number
     
@@ -131,6 +135,7 @@ class TrainController:
 
     def __update_internal_values(self):
         self.__distance += .5 * (self.__train_model_input.current_set_point + self.__old_current_set_point) * self.__time_step
+
         if self.__last_station != self.__train_model_input.station_name:
             self.beaconCall(self.__train_model_input.station_name)
             if self.__train_model_input.command_set_point < 2:
@@ -187,16 +192,22 @@ class TrainController:
         
         if not self.__service_brakes and not self.__emergency_brakes:
             self.__calculate_power()
+        
 
         if self.__power > self.__max_power:
             self.__power = self.__max_power
-        
+            
         if self.__train_model_input.current_set_point > self.__speed_limit:
             self.__power = 0.0
             self.__service_brakes = True
             self.__u_value = 0.0
+            self.__old_power = self.__power
+            self.__exceeded_speed_limit = True
         elif self.__authority:
             self.__service_brakes = self.__train_driver_input.service_brake
+            if self.__exceeded_speed_limit:
+                self.__power = self.__old_power
+                self.__exceeded_speed_limit = False
 
         if self.__service_brakes or self.__emergency_brakes:
             self.__power = 0.0
@@ -210,6 +221,8 @@ class TrainController:
         self.__power = self.__engineer_input.kp * (self.__command_set_point - self.__train_model_input.current_set_point) + self.__engineer_input.ki * self.__u_value
         if self.__power < 0:
             self.__power = 0
+        self.__power *= 1000
+        self.__power += 50000
 
     def __get_speed_limit(self):
         self.__speed_limit = self.__train_model_input.command_set_point

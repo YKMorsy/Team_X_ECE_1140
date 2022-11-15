@@ -2,9 +2,9 @@ from PyQt6.QtWidgets import QApplication, QWidget, QFrame, QDialog, QGridLayout
 from PyQt6.QtWidgets import QLabel, QPushButton, QRadioButton, QSlider, QLineEdit, QSizePolicy, QTableView, QAbstractItemView, QHeaderView, QToolTip
 from PyQt6.QtCore import Qt, QRect, QTimer, QSortFilterProxyModel, QThread
 from PyQt6.QtGui import QFont, QStandardItemModel, QStandardItem
-from FontStyles import *
-from common import *
-from TrainModelHandler import TrainModelHandler
+from TrainModel.FontStyles import *
+from TrainModel.common import *
+from TrainModel.TrainModelHandler import TrainModelHandler
 
 class TestUICreatorModifier(QFrame):
 	def __init__(self, my_test_UI, modification = False, ID = None):

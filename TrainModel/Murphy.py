@@ -2,6 +2,7 @@ from PyQt6.QtWidgets import QApplication, QFrame, QGridLayout, QAbstractItemView
 from PyQt6.QtWidgets import QLabel, QPushButton, QRadioButton, QSlider, QSizePolicy, QTableWidget, QTableView, QAbstractItemView, QHeaderView
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QStandardItem
+
 from Test import TestUI, ExpandedTableUI
 from Passenger import PassengerUI
 from FontStyles import *
@@ -257,7 +258,7 @@ class MurphyUI(QFrame):
                     elif T.brake_failure and T.engine_failure and T.signal_failure: fault = "Brake Failure, Engine Failure, Signal Pickup Failure"
 
 
-                    self.train_info_model.setItem(i, 7, QStandardItem(fault)) 
+                    self.train_info_model.setItem(i, 8, QStandardItem(fault)) 
 
             #Show a confirmation message to the user
             my_message(msg = "Brake failure successfully generated for Train " + str(ID) + "!", title = "Brake Failure Generated", error = False, parent = self).exec()
@@ -290,7 +291,7 @@ class MurphyUI(QFrame):
                     elif not T.brake_failure and T.engine_failure and T.signal_failure: fault = "Engine Failure, Signal Pickup Failure"
                     elif T.brake_failure and T.engine_failure and T.signal_failure: fault = "Brake Failure, Engine Failure, Signal Pickup Failure"
 
-                    self.train_info_model.setItem(i, 7, QStandardItem(fault))
+                    self.train_info_model.setItem(i, 8, QStandardItem(fault))
             
             #Show a confirmation message to the user
             my_message(msg = "Engine failure successfully generated for Train " + str(ID) + "!", title = "Engine Failure Generated", error = False, parent = self).exec()
@@ -322,7 +323,7 @@ class MurphyUI(QFrame):
                     elif T.brake_failure and T.engine_failure and T.signal_failure: fault = "Brake Failure, Engine Failure, Signal Pickup Failure"
                     elif not T.brake_failure and T.engine_failure and T.signal_failure: fault = "Engine Failure, Signal Pickup Failure"
 
-                    self.train_info_model.setItem(i, 7, QStandardItem(fault))
+                    self.train_info_model.setItem(i, 8, QStandardItem(fault))
 
             #Show a confirmation message to the user
             my_message(msg = "Signal pickup failure successfully generated for Train " + str(ID) + "!", title = "Signal Pickup Failure Generated", error = False, parent = self).exec()
@@ -345,7 +346,7 @@ class MurphyUI(QFrame):
             #Finally, update the table
             for i in range(self.train_info_model.rowCount()):
                 if int(self.train_info_model.item(i, 0).text()) == ID:
-                    self.train_info_model.setItem(i, 7, QStandardItem("None"))
+                    self.train_info_model.setItem(i, 8, QStandardItem("None"))
 
             #Show a confirmation message to the user
             my_message(msg = "All failures have been successfully removed for Train " + str(ID) + "!", title = "Failures Removed", error = False, parent = self).exec()
@@ -368,7 +369,7 @@ class MurphyUI(QFrame):
 
         #Finally, update the table
         for i in range(self.train_info_model.rowCount()):
-            self.train_info_model.setItem(i, 7, QStandardItem("None"))
+            self.train_info_model.setItem(i, 8, QStandardItem("None"))
 
         #Show a confirmation message to the user
         my_message(msg = "All failures have been successfully removed for all trains!", title = "All Failures Removed", error = False, parent = self).exec()
