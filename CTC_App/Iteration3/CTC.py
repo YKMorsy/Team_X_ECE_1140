@@ -403,13 +403,7 @@ class CTCApp(QWidget):
         
 
     
-
-
-if __name__ == "__main__":
+def retWindow(self):
     app = QApplication(sys.argv)
     window = CTCApp()
-    window.show()
-    try:
-        sys.exit(app.exec())
-    except SystemExit:
-        print('Closing Window')
+    return window
