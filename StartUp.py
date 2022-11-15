@@ -14,10 +14,12 @@ def SetTrackControlData():
     Green_master_switch = trcControl[3].get_switch_positions() | trcControl[4].get_switch_positions() | trcControl[5].get_switch_positions()
     
     #railway 
-    Red_master_switc = trcControl[0].get_railway_crossings() | trcControl[1].get_railway_crossings() | trcControl[2].get_railway_crossings()
+    Red_master_switch = trcControl[0].get_railway_crossings() | trcControl[1].get_railway_crossings() | trcControl[2].get_railway_crossings()
     Green_master_switch = trcControl[3].get_railway_crossings() | trcControl[4].get_railway_crossings() | trcControl[5].get_railway_crossings()
     
     #status
+    Red_master_switch = trcControl[0].get_statuses() | trcControl[1].get_statuses() | trcControl[2].get_statuses()
+    Green_master_switch = trcControl[3].get_statuses() | trcControl[4].get_statuses() | trcControl[5].get_statuses()
 
     print("hello")
 

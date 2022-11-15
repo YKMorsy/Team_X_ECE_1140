@@ -5,7 +5,7 @@ class track_control_controller():
     def __init__(self):
         self.track_controller_list = [WaysideController(), WaysideController(), WaysideController(), WaysideController(), WaysideController(), WaysideController()] 
 
-        #toy data  "brand": "Ford",
+        #toy data  
         self.track_controller_list[0].set_authority({1:True, 2:False, 3:False})
         self.track_controller_list[0].set_switch_positions({1:True, 2:False, 3:False})
         self.track_controller_list[0].set_occupancy({1:True, 2:False, 3:False})
@@ -17,16 +17,16 @@ class track_control_controller():
         self.track_controller_list[0].set_speed_limit({1:0b000000000, 2:0b000000000, 3:0b000000000})
         self.track_controller_list[0].set_PLC("track_controller/testPLCfile.txt")
 
-        self.track_controller_list[1].set_authority({1:True, 2:False, 3:False, 4:False, 5:False})
-        self.track_controller_list[1].set_switch_positions({1:True})
-        self.track_controller_list[1].set_occupancy({1:True, 2:False, 3:False, 4:False, 5:False})
-        self.track_controller_list[1].set_railway_crossings({1:True})
-        self.track_controller_list[1].set_light_colors({1:[True, True]})
-        self.track_controller_list[1].set_statuses({1:True, 2:False, 3:False, 4:False, 5:False})
-        self.track_controller_list[1].set_suggested_speed({1:0b00011010, 2:0b00100111, 3:0b00010101, 4:0b00010101, 5:0b00010101})
-        self.track_controller_list[1].set_commanded_speed({1:0b000000000, 2:0b000000000, 3:0b000000000, 4:0b00010101, 5:0b00010101})
-        self.track_controller_list[1].set_speed_limit({1:0b000100000, 2:0b00000100, 3:0b00100000, 4:0b00000101, 5:0b100000001})
-        self.track_controller_list[1].set_PLC("track_controller/testPLCfile.txt")
+        self.track_controller_list[2].set_authority({1:True, 2:False, 3:False, 4:False, 5:False})
+        self.track_controller_list[2].set_switch_positions({1:True})
+        self.track_controller_list[2].set_occupancy({1:True, 2:False, 3:False, 4:False, 5:False})
+        self.track_controller_list[2].set_railway_crossings({1:True})
+        self.track_controller_list[2].set_light_colors({1:[True, True]})
+        self.track_controller_list[2].set_statuses({1:True, 2:False, 3:False, 4:False, 5:False})
+        self.track_controller_list[2].set_suggested_speed({1:0b00011010, 2:0b00100111, 3:0b00010101, 4:0b00010101, 5:0b00010101})
+        self.track_controller_list[2].set_commanded_speed({1:0b000000000, 2:0b000000000, 3:0b000000000, 4:0b00010101, 5:0b00010101})
+        self.track_controller_list[2].set_speed_limit({1:0b000100000, 2:0b00000100, 3:0b00100000, 4:0b00000101, 5:0b100000001})
+        self.track_controller_list[2].set_PLC("track_controller/testPLCfile.txt")
 
         #temp redline
         auth = {}
@@ -50,16 +50,16 @@ class track_control_controller():
             sug.update({i: 0b00100000})
             com.update({i: 0b00000000})
             lim.update({i: 0b00100100})
-        self.track_controller_list[2].set_authority(auth)
-        self.track_controller_list[2].set_switch_positions({2027:False, 2032:False, 2038:False, 2043:False})
-        self.track_controller_list[2].set_occupancy(occ)
-        self.track_controller_list[2].set_railway_crossings({1:True})
-        self.track_controller_list[2].set_light_colors({1:[True,True]})
-        self.track_controller_list[2].set_statuses(stat)
-        self.track_controller_list[2].set_suggested_speed(sug)
-        self.track_controller_list[2].set_commanded_speed(com)
-        self.track_controller_list[2].set_speed_limit(lim)
-        self.track_controller_list[2].set_PLC("track_controller/RedLine_Middle_blue_PLC.txt")
+        self.track_controller_list[1].set_authority(auth)
+        self.track_controller_list[1].set_switch_positions({2027:False, 2032:False, 2038:False, 2043:False})
+        self.track_controller_list[1].set_occupancy(occ)
+        self.track_controller_list[1].set_railway_crossings({1:True})
+        self.track_controller_list[1].set_light_colors({1:[True,True]})
+        self.track_controller_list[1].set_statuses(stat)
+        self.track_controller_list[1].set_suggested_speed(sug)
+        self.track_controller_list[1].set_commanded_speed(com)
+        self.track_controller_list[1].set_speed_limit(lim)
+        self.track_controller_list[1].set_PLC("track_controller/RedLine_Middle_blue_PLC.txt")
 
         #temp green line
         auth = {}
