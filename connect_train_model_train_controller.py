@@ -1,6 +1,3 @@
-from TrainController.trainController import TrainController
-from TrainModel.TrainModel import TrainModel
-
 def connect_train_model_train_controller(train_controller, train_model):
     command_set_point = train_model.commanded_speed
     authority = train_model.commanded_authority[0:4] == 'True'

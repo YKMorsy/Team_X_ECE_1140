@@ -3,8 +3,8 @@ from PyQt6.QtWidgets import QLabel, QPushButton, QRadioButton, QSlider, QSizePol
 from PyQt6.QtCore import Qt, QRect, QTimer, QSortFilterProxyModel
 from PyQt6.QtGui import QFont, QStandardItemModel, QStandardItem
 
-from FontStyles import *
-from common import *
+from TrainModel.FontStyles import *
+from TrainModel.common import *
 
     
 class PassengerUI(QFrame):
