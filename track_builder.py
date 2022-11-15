@@ -1,4 +1,6 @@
 import random
+import os
+import generate_tracks
 import sys
 import track_block
 import numpy as np
@@ -169,10 +171,12 @@ class Ui_track_model_test_window(object):
 
 
 class Ui_Track_Model(object):
-    track_list = np.empty(15,track_block.block)
-    red_line_len = 0
+    track_holder = np.empty(226,track_block.block)
+    track_list   = track_holder
+    outside_temp = 60
+    red_line_len = 76
     blue_line_len = 0
-    green_line_len = 0
+    green_line_len = 150
     def setupUi(self, Track_Model):
         self.track_model_test_window = QtWidgets.QWidget()
         self.window = Ui_track_model_test_window()
@@ -213,11 +217,20 @@ class Ui_Track_Model(object):
         self.centralwidget = QtWidgets.QWidget(Track_Model)
         self.centralwidget.setObjectName("centralwidget")
         self.load_button = QtWidgets.QPushButton(self.centralwidget)
-        self.load_button.setGeometry(QtCore.QRect(180, 90, 75, 23))
+        self.load_button.setGeometry(QtCore.QRect(120, 90, 75, 23))
         self.load_button.setObjectName("load_button")
-        self.track_load_text = QtWidgets.QTextEdit(self.centralwidget)
-        self.track_load_text.setGeometry(QtCore.QRect(80, 50, 281, 31))
-        self.track_load_text.setObjectName("track_load_text")
+        self.load_button1 = QtWidgets.QPushButton(self.centralwidget)
+        self.load_button1.setGeometry(QtCore.QRect(220, 90, 75, 23))
+        self.load_button1.setObjectName("load_button1")
+        self.temp_track_label = QtWidgets.QLabel(self.centralwidget)
+        self.temp_track_label.setGeometry(QtCore.QRect(180, 50, 80, 31))
+        font = QtGui.QFont()
+        font.setFamily("Rockwell")
+        font.setPointSize(15)
+        font.setBold(True)
+        font.setWeight(75)
+        self.temp_track_label.setFont(font)
+        self.temp_track_label.setObjectName("temp_track_label")
         self.load_track_label = QtWidgets.QLabel(self.centralwidget)
         self.load_track_label.setGeometry(QtCore.QRect(100, 20, 251, 21))
         font = QtGui.QFont()
@@ -361,6 +374,7 @@ class Ui_Track_Model(object):
         
         #start of button connections
         self.select_track_combo.currentIndexChanged.connect(self.set_block_info_combo)
+        self.select_track_combo.currentIndexChanged.connect(self.set_block_status_table)
         self.select_block_combo.currentIndexChanged.connect(self.set_block_status_table)
         self.broken_rail_bt.clicked.connect(self.randomize_broken_rail)
         self.circuit_failure_bt.clicked.connect(self.randomize_circuit_failure)
@@ -369,6 +383,8 @@ class Ui_Track_Model(object):
         self.window.clear_failure_bt.clicked.connect(self.clear_failure)
         self.window.toggle_switch_bt.clicked.connect(self.toggle_switch)
         self.window.toggle_occupancy_bt.clicked.connect(self.toggle_occupancy)
+        self.load_button.clicked.connect(self.load_button_pressed)
+        self.load_button1.clicked.connect(self.load_button1_pressed)
         
         self.block_status_table = QtWidgets.QTableWidget(self.centralwidget)
         self.block_status_table.setGeometry(QtCore.QRect(80, 340, 261, 311))
@@ -382,7 +398,7 @@ class Ui_Track_Model(object):
         self.block_status_table.setAlternatingRowColors(True)
         self.block_status_table.setColumnCount(1)
         self.block_status_table.setObjectName("block_status_table")
-        self.block_status_table.setRowCount(10)
+        self.block_status_table.setRowCount(12)
         item = QtWidgets.QTableWidgetItem()
         self.block_status_table.setVerticalHeaderItem(0, item)
         item = QtWidgets.QTableWidgetItem()
@@ -403,6 +419,10 @@ class Ui_Track_Model(object):
         self.block_status_table.setVerticalHeaderItem(8, item)
         item = QtWidgets.QTableWidgetItem()
         self.block_status_table.setVerticalHeaderItem(9, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.block_status_table.setVerticalHeaderItem(10, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.block_status_table.setVerticalHeaderItem(11, item)
         self.block_status_table.horizontalHeader().setVisible(False)
         self.block_status_table.horizontalHeader().setCascadingSectionResizes(True)
         self.block_status_table.horizontalHeader().setSortIndicatorShown(False)
@@ -445,17 +465,262 @@ class Ui_Track_Model(object):
         self.menuFile.addAction(self.actionNew)
         self.menuFile.addAction(self.actionExit)
         self.menubar.addAction(self.menuFile.menuAction())
-        self.load_button.clicked.connect(self.load_button_pressed)
+        
         self.retranslateUi(Track_Model)
         QtCore.QMetaObject.connectSlotsByName(Track_Model)
         self.actionNew.triggered.connect(self.show_test_window)
         self.actionExit.triggered.connect(QtWidgets.qApp.quit)
+        self.track_holder[0] = track_block.block("Green","A1",0.5,0.5,45,"none",100,"D13","D13",'n','n')
+        self.track_holder[1] = track_block.block("Green","A2",1,1.5,45,"Pioneer",100,"A1","A1",'n','n')
+        self.track_holder[2] = track_block.block("Green","A3",1.5,3,45,"none",100,"A2","A2",'n','n')
+        self.track_holder[3] = track_block.block("Green","B4",2,5,45,"none",100,"A3","A3",'n','n')
+        self.track_holder[4] = track_block.block("Green","B5",3,8,45,"none",100,"B4","B4",'n','n')
+        self.track_holder[5] = track_block.block("Green","B6",4,12,45,"none",100,"B5","B5",'n','n')
+        self.track_holder[6] = track_block.block("Green","C7",5,17,45,"none",100,"B6","B6",'n','n')
+        self.track_holder[7] = track_block.block("Green","C8",0,17,45,"none",100,"C7","C7",'n','n')
+        self.track_holder[8] = track_block.block("Green","C9",-5,12,45,"Edgebrook",100,"C8","C8",'n','n')
+        self.track_holder[9] = track_block.block("Green","C10",-4.5,7.5,45,"none",100,"C9","C9",'n','n')
+        self.track_holder[10] = track_block.block("Green","C11",-4,3.5,45,"none",100,"C10","C10",'n','n')
+        self.track_holder[11] = track_block.block("Green","C12",3,0.5,45,"none",100,"C11","C11",'n','n')
+        self.track_holder[12] = track_block.block("Green","D13",0,0.5,70,"none",100,"C12","A1",'n','n')
+        self.track_holder[13] = track_block.block("Green","D14",0,0.5,70,"none",150,"D15","D15",'n','n')
+        self.track_holder[14] = track_block.block("Green","D15",0,0.5,70,"none",150,"D16","D16",'n','n')
+        self.track_holder[15] = track_block.block("Green","D16",0,0.5,70,"Station",150,"E17","E16",'n','n')
+        self.track_holder[16] = track_block.block("Green","E17",0,0.5,60,"none",150,"E18","E18",'n','n')
+        self.track_holder[17] = track_block.block("Green","E18",0,0.5,60,"none",100,"E19","E19",'n','n')
+        self.track_holder[18] = track_block.block("Green","E19",0,0.5,60,"none",150,"E20","E20",'y','n')
+        self.track_holder[19] = track_block.block("Green","E20",0,0.5,60,"none",150,"F21","F21",'n','n')
+        self.track_holder[20] = track_block.block("Green","F21",0,0.5,70,"none",300,"F22","F22",'n','n')
+        self.track_holder[21] = track_block.block("Green","F22",0,0.5,70,"Whited",300,"F23","F23",'n','n')
+        self.track_holder[22] = track_block.block("Green","F23",0,0.5,70,"none",300,"F24","F24",'n','n')
+        self.track_holder[23] = track_block.block("Green","F24",0,0.5,70,"none",300,"F25","F25",'n','n')
+        self.track_holder[24] = track_block.block("Green","F25",0,0.5,70,"none",200,"F26","F26",'n','n')
+        self.track_holder[25] = track_block.block("Green","F26",0,0.5,70,"none",100,"F27","F27",'n','n')
+        self.track_holder[26] = track_block.block("Green","F27",0,0.5,30,"none",50,"F28","F28",'n','n')
+        self.track_holder[27] = track_block.block("Green","F28",0,0.5,30,"none",50,"G29","G29",'n','n')
+        self.track_holder[28] = track_block.block("Green","G29",0,0.5,30,"none",50,"G30","Z150",'n','n')
+        self.track_holder[29] = track_block.block("Green","G30",0,0.5,30,"none",50,"G31","G31",'n','n')
+        self.track_holder[30] = track_block.block("Green","G31",0,0.5,30,"South Bank",50,"G32","G32",'n','n')
+        self.track_holder[31] = track_block.block("Green","G32",0,0.5,30,"none",50,"H33","H33",'n','n')
+        self.track_holder[32] = track_block.block("Green","H33",0,0.5,30,"none",50,"H34","H34",'n','n')
+        self.track_holder[33] = track_block.block("Green","H34",0,0.5,30,"none",50,"H35","H35",'n','n')
+        self.track_holder[34] = track_block.block("Green","H35",0,0.5,30,"none",50,"I36","I36",'n','n')
+        self.track_holder[35] = track_block.block("Green","I36",0,0.5,30,"none",50,"I37","I37",'n','y')
+        self.track_holder[36] = track_block.block("Green","I37",0,0.5,30,"none",50,"I38","I38",'n','y')
+        self.track_holder[37] = track_block.block("Green","I38",0,0.5,30,"none",50,"I39","I39",'n','y')
+        self.track_holder[38] = track_block.block("Green","I39",0,0.5,30,"Central",50,"I40","I40",'n','y')
+        self.track_holder[39] = track_block.block("Green","I40",0,0.5,30,"none",50,"I41","I41",'n','y')
+        self.track_holder[40] = track_block.block("Green","I41",0,0.5,30,"none",50,"I42","I42",'n','y')
+        self.track_holder[41] = track_block.block("Green","I42",0,0.5,30,"none",50,"I43","I43",'n','y')
+        self.track_holder[42] = track_block.block("Green","I43",0,0.5,30,"none",50,"I44","I44",'n','y')
+        self.track_holder[43] = track_block.block("Green","I44",0,0.5,30,"none",50,"I45","I45",'n','y')
+        self.track_holder[44] = track_block.block("Green","I45",0,0.5,30,"none",50,"I46","I46",'n','y')
+        self.track_holder[45] = track_block.block("Green","I46",0,0.5,30,"none",50,"I47","I47",'n','y')
+        self.track_holder[46] = track_block.block("Green","I47",0,0.5,30,"none",50,"I48","I48",'n','y')
+        self.track_holder[47] = track_block.block("Green","I48",0,0.5,30,"Inglewood",50,"I49","I49",'n','y')
+        self.track_holder[48] = track_block.block("Green","I49",0,0.5,30,"none",50,"I50","I50",'n','y')
+        self.track_holder[49] = track_block.block("Green","I50",0,0.5,30,"none",50,"I51","I51",'n','y')
+        self.track_holder[50] = track_block.block("Green","I51",0,0.5,30,"none",50,"I52","I52",'n','y')
+        self.track_holder[51] = track_block.block("Green","I52",0,0.5,30,"none",50,"I53","I53",'n','y')
+        self.track_holder[52] = track_block.block("Green","I53",0,0.5,30,"none",50,"I54","I54",'n','y')
+        self.track_holder[53] = track_block.block("Green","I54",0,0.5,30,"none",50,"I55","I55",'n','y')
+        self.track_holder[54] = track_block.block("Green","I55",0,0.5,30,"none",50,"I56","I56",'n','y')
+        self.track_holder[55] = track_block.block("Green","I56",0,0.5,30,"none",50,"I57","I57",'n','y')
+        self.track_holder[56] = track_block.block("Green","I57",0,0.5,30,"Overbrook",50,"J58","Yard",'n','y')
+        self.track_holder[57] = track_block.block("Green","J58",0,0.5,30,"none",50,"J59","J59",'n','n')
+        self.track_holder[58] = track_block.block("Green","J59",0,0.5,30,"none",50,"J60","J60",'n','n')
+        self.track_holder[59] = track_block.block("Green","J60",0,0.5,30,"none",50,"J61","J61",'n','n')
+        self.track_holder[60] = track_block.block("Green","J61",0,0.5,30,"none",50,"J62","J62",'n','n')
+        self.track_holder[61] = track_block.block("Green","J62",0,0.5,30,"none",50,"K63","K63",'n','n')
+        self.track_holder[62] = track_block.block("Green","K63",0,0.5,70,"none",100,"K64","K64",'n','n')
+        self.track_holder[63] = track_block.block("Green","K64",0,0.5,70,"none",100,"K65","K65",'n','n')
+        self.track_holder[64] = track_block.block("Green","K65",0,0.5,70,"Glenbury",100,"K66","K66",'n','n')
+        self.track_holder[65] = track_block.block("Green","K66",0,0.5,70,"none",100,"K67","K67",'n','n')
+        self.track_holder[66] = track_block.block("Green","K67",0,0.5,40,"none",100,"K68","K68",'n','n')
+        self.track_holder[67] = track_block.block("Green","K68",0,0.5,40,"none",100,"L69","L69",'n','n')
+        self.track_holder[68] = track_block.block("Green","L69",0,0.5,40,"none",100,"L70","L70",'n','n')
+        self.track_holder[69] = track_block.block("Green","L70",0,0.5,40,"none",100,"L71","L71",'n','n')
+        self.track_holder[70] = track_block.block("Green","L71",0,0.5,40,"none",100,"L72","L72",'n','n')
+        self.track_holder[71] = track_block.block("Green","L72",0,0.5,40,"none",100,"L73","L73",'n','n')
+        self.track_holder[72] = track_block.block("Green","L73",0,0.5,40,"Dormont",100,"M74","M74",'n','n')
+        self.track_holder[73] = track_block.block("Green","M74",0,0.5,40,"none",100,"M75","M75",'n','n')
+        self.track_holder[74] = track_block.block("Green","M75",0,0.5,40,"none",100,"M76","M76",'n','n')
+        self.track_holder[75] = track_block.block("Green","M76",0,0.5,40,"none",100,"N77","N77",'n','n')
+        self.track_holder[76] = track_block.block("Green","N77",0,0.5,70,"Mt. Lebanon",300,"N78","R101",'n','n')
+        self.track_holder[77] = track_block.block("Green","N78",0,0.5,70,"none",300,"N79","N79",'n','n')
+        self.track_holder[78] = track_block.block("Green","N79",0,0.5,70,"none",300,"N80","N80",'n','n')
+        self.track_holder[79] = track_block.block("Green","N80",0,0.5,70,"none",300,"N81","N81",'n','n')
+        self.track_holder[80] = track_block.block("Green","N81",0,0.5,70,"none",300,"N82","N82",'n','n')
+        self.track_holder[81] = track_block.block("Green","N82",0,0.5,70,"none",300,"N83","N83",'n','n')
+        self.track_holder[82] = track_block.block("Green","N83",0,0.5,70,"none",300,"N84","N84",'n','n')
+        self.track_holder[83] = track_block.block("Green","N84",0,0.5,70,"none",300,"N85","N85",'n','n')
+        self.track_holder[84] = track_block.block("Green","N85",0,0.5,70,"none",300,"O86","Q100",'n','n')
+        self.track_holder[85] = track_block.block("Green","O86",0,0.5,25,"none",100,"O87","O87",'n','n')
+        self.track_holder[86] = track_block.block("Green","O87",0,0.5,25,"none",86.6,"O88","O88",'n','n')
+        self.track_holder[87] = track_block.block("Green","O88",0,0.5,25,"none",100,"P89","P89",'n','n')
+        self.track_holder[88] = track_block.block("Green","P89",-0.5,0.125,25,"none",75,"P90","P90",'n','n')
+        self.track_holder[89] = track_block.block("Green","P90",-1,-0.625,25,"none",75,"P91","P91",'n','n')
+        self.track_holder[90] = track_block.block("Green","P91",-2,-2.125,25,"none",75,"P92","P92",'n','n')
+        self.track_holder[91] = track_block.block("Green","P92",0,-2.125,25,"none",75,"P93","P93",'n','n')
+        self.track_holder[92] = track_block.block("Green","P93",0,-2.125,25,"none",75,"P94","P94",'n','n')
+        self.track_holder[93] = track_block.block("Green","P94",2,-0.625,25,"none",75,"P95","P95",'n','n')
+        self.track_holder[94] = track_block.block("Green","P95",1,0.125,25,"none",75,"P96","P96",'n','n')
+        self.track_holder[95] = track_block.block("Green","P96",0.5,0.5,25,"Castle Shannon",75,"P97","P97",'n','n')
+        self.track_holder[96] = track_block.block("Green","P97",0,0.5,25,"none",75,"Q98","Q98",'n','n')
+        self.track_holder[97] = track_block.block("Green","Q98",0,0.5,25,"none",75,"Q99","Q99",'n','n')
+        self.track_holder[98] = track_block.block("Green","Q99",0,0.5,25,"none",75,"Q100","Q100",'n','n')
+        self.track_holder[99] = track_block.block("Green","Q100",0,0.5,25,"none",75,"R101","R101",'n','n')
+        self.track_holder[100] = track_block.block("Green","R101",0,0.5,26,"none",35,"S102","S102",'n','n')
+        self.track_holder[101] = track_block.block("Green","S102",0,0.5,28,"none",100,"S103","S103",'n','n')
+        self.track_holder[102] = track_block.block("Green","S103",0,0.5,28,"none",100,"S104","S104",'n','n')
+        self.track_holder[103] = track_block.block("Green","S104",0,0.5,28,"none",80,"T105","T105",'n','n')
+        self.track_holder[104] = track_block.block("Green","T105",0,0.5,28,"Dormont",100,"T106","T106",'n','n')
+        self.track_holder[105] = track_block.block("Green","T106",0,0.5,28,"none",100,"T107","T107",'n','n')
+        self.track_holder[106] = track_block.block("Green","T107",0,0.5,28,"none",90,"T108","T108",'n','n')
+        self.track_holder[107] = track_block.block("Green","T108",0,0.5,28,"none",100,"T109","T109",'n','n')
+        self.track_holder[108] = track_block.block("Green","T109",0,0.5,28,"none",100,"U110","U110",'n','n')
+        self.track_holder[109] = track_block.block("Green","U110",0,0.5,30,"none",100,"U111","U111",'n','n')
+        self.track_holder[110] = track_block.block("Green","U111",0,0.5,30,"none",100,"U112","U112",'n','n')
+        self.track_holder[111] = track_block.block("Green","U112",0,0.5,30,"none",100,"U113","U113",'n','n')
+        self.track_holder[112] = track_block.block("Green","U113",0,0.5,30,"none",100,"U114","U114",'n','n')
+        self.track_holder[113] = track_block.block("Green","U114",0,0.5,30,"Glenbury",162,"U115","U115",'n','n')
+        self.track_holder[114] = track_block.block("Green","U115",0,0.5,30,"none",100,"U116","U116",'n','n')
+        self.track_holder[115] = track_block.block("Green","U116",0,0.5,30,"none",100,"V117","V117",'n','n')
+        self.track_holder[116] = track_block.block("Green","V117",0,0.5,15,"none",50,"V118","V118",'n','n')
+        self.track_holder[117] = track_block.block("Green","V118",0,0.5,15,"none",50,"V119","V119",'n','n')
+        self.track_holder[118] = track_block.block("Green","V119",0,0.5,15,"none",40,"V120","V120",'n','n')
+        self.track_holder[119] = track_block.block("Green","V120",0,0.5,15,"none",50,"V121","V121",'n','n')
+        self.track_holder[120] = track_block.block("Green","V121",0,0.5,15,"none",50,"W122","W122",'n','n')
+        self.track_holder[121] = track_block.block("Green","W122",0,0.5,20,"none",50,"W123","W123",'n','y')
+        self.track_holder[122] = track_block.block("Green","W123",0,0.5,20,"none",50,"W124","W124",'n','y')
+        self.track_holder[123] = track_block.block("Green","W124",0,0.5,20,"none",50,"W125","W125",'n','y')
+        self.track_holder[124] = track_block.block("Green","W125",0,0.5,20,"none",50,"W126","W126",'n','y')
+        self.track_holder[125] = track_block.block("Green","W126",0,0.5,20,"none",50,"W127","W127",'n','y')
+        self.track_holder[126] = track_block.block("Green","W127",0,0.5,20,"none",50,"W128","W128",'n','y')
+        self.track_holder[127] = track_block.block("Green","W128",0,0.5,20,"none",50,"W129","W129",'n','y')
+        self.track_holder[128] = track_block.block("Green","W129",0,0.5,20,"none",50,"W130","W130",'n','y')
+        self.track_holder[129] = track_block.block("Green","W130",0,0.5,20,"none",50,"W131","W131",'n','y')
+        self.track_holder[130] = track_block.block("Green","W131",0,0.5,20,"none",50,"W132","W132",'n','y')
+        self.track_holder[131] = track_block.block("Green","W132",0,0.5,20,"Inglewood",50,"W133","W133",'n','y')
+        self.track_holder[132] = track_block.block("Green","W133",0,0.5,20,"none",50,"W134","W134",'n','y')
+        self.track_holder[133] = track_block.block("Green","W134",0,0.5,20,"none",50,"W135","W135",'n','y')
+        self.track_holder[134] = track_block.block("Green","W135",0,0.5,20,"none",50,"W136","W136",'n','y')
+        self.track_holder[135] = track_block.block("Green","W136",0,0.5,20,"none",50,"W137","W137",'n','y')
+        self.track_holder[136] = track_block.block("Green","W137",0,0.5,20,"none",50,"W138","W138",'n','y')
+        self.track_holder[137] = track_block.block("Green","W138",0,0.5,20,"none",50,"W139","W139",'n','y')
+        self.track_holder[138] = track_block.block("Green","W139",0,0.5,20,"none",50,"W140","W140",'n','y')
+        self.track_holder[139] = track_block.block("Green","W140",0,0.5,20,"none",50,"W141","W141",'n','y')
+        self.track_holder[140] = track_block.block("Green","W141",0,0.5,20,"Central",50,"W142","W142",'n','y')
+        self.track_holder[141] = track_block.block("Green","W142",0,0.5,20,"none",50,"W143","W143",'n','y')
+        self.track_holder[142] = track_block.block("Green","W143",0,0.5,20,"none",50,"X144","X144",'n','y')
+        self.track_holder[143] = track_block.block("Green","X144",0,0.5,20,"none",50,"X144","X144",'n','n')
+        self.track_holder[144] = track_block.block("Green","X145",0,0.5,20,"none",50,"X144","X144",'n','n')
+        self.track_holder[145] = track_block.block("Green","X146",0,0.5,20,"none",50,"X144","X144",'n','n')
+        self.track_holder[146] = track_block.block("Green","Y147",0,0.5,20,"none",50,"X144","X144",'n','n')
+        self.track_holder[147] = track_block.block("Green","Y148",0,0.5,20,"none",184,"X144","X144",'n','n')
+        self.track_holder[148] = track_block.block("Green","Y149",0,0.5,20,"none",40,"X144","X144",'n','n')
+        self.track_holder[149] = track_block.block("Green","Z150",0,0.5,20,"none",35,"G29","G29",'n','n')
+        self.track_holder[150] = track_block.block("Red","A1",0.5,0.25,40,"none",50,"A2","F16",'n','n')
+        self.track_holder[151] = track_block.block("Red","A2",1,0.75,40,"none",50,"A3","A3",'n','n')
+        self.track_holder[152] = track_block.block("Red","A3",1.5,1.5,40,"none",50,"B4","B4",'n','n')
+        self.track_holder[153] = track_block.block("Red","B4",2,2.5,40,"none",50,"B5","B5",'n','n')
+        self.track_holder[154] = track_block.block("Red","B5",1.5,3.25,40,"none",50,"B6","B6",'n','n')
+        self.track_holder[155] = track_block.block("Red","B6",1,3.75,40,"none",50,"C7","C7",'n','n')
+        self.track_holder[156] = track_block.block("Red","C7",0.5,4.13,40,"Shadyside",75,"C8","C8",'n','n')
+        self.track_holder[157] = track_block.block("Red","C8",0,4.13,40,"none",75,"C9","C9",'n','n')
+        self.track_holder[158] = track_block.block("Red","C9",0,4.13,40,"none",75,"D10","Yard",'n','n')
+        self.track_holder[159] = track_block.block("Red","D10",0,4.13,40,"none",75,"D11","D11",'n','n')
+        self.track_holder[160] = track_block.block("Red","D11",-0.5,3.75,40,"none",75,"D12","D12",'n','n')
+        self.track_holder[161] = track_block.block("Red","D12",-1,3,40,"none",75,"E13","E13",'n','n')
+        self.track_holder[162] = track_block.block("Red","E13",-2,1.6,40,"none",70,"E14","E14",'n','n')
+        self.track_holder[163] = track_block.block("Red","E14",-1.25,0.85,40,"none",60,"E15","E15",'n','n')
+        self.track_holder[164] = track_block.block("Red","E15",-1,0.25,40,"none",60,"F16","A1",'n','n')
+        self.track_holder[165] = track_block.block("Red","F16",-0.5,0,40,"Herron Ave.",50,"F17","F17",'n','n')
+        self.track_holder[166] = track_block.block("Red","F17",-0.5,-1,55,"none",200,"F18","F18",'n','n')
+        self.track_holder[167] = track_block.block("Red","F18",-0.06025,-1.24,70,"none",400,"F19","F19",'n','n')
+        self.track_holder[168] = track_block.block("Red","F19",0,-1.24,70,"none",400,"F20","F20",'n','n')
+        self.track_holder[169] = track_block.block("Red","F20",0,-1.24,70,"none",200,"G21","G21",'n','n')
+        self.track_holder[170] = track_block.block("Red","G21",0,-1.24,55,"Swissville",100,"G22","G22",'n','n')
+        self.track_holder[171] = track_block.block("Red","G22",0,-1.24,55,"none",100,"G23","G23",'n','n')
+        self.track_holder[172] = track_block.block("Red","G23",0,-1.24,55,"none",100,"H24","H24",'n','n')
+        self.track_holder[173] = track_block.block("Red","H24",0,-1.24,70,"none",50,"H25","H25",'n','y')
+        self.track_holder[174] = track_block.block("Red","H25",0,-1.24,70,"Penn Station",50,"H26","H26",'n','y')
+        self.track_holder[175] = track_block.block("Red","H26",0,-1.24,70,"none",50,"H27","H27",'n','y')
+        self.track_holder[176] = track_block.block("Red","H27",0,-1.24,70,"none",50,"H28","T76",'n','y')
+        self.track_holder[177] = track_block.block("Red","H28",0,-1.24,70,"none",50,"H29","H29",'n','y')
+        self.track_holder[178] = track_block.block("Red","H29",0,-1.24,70,"none",60,"H30","H30",'n','y')
+        self.track_holder[179] = track_block.block("Red","H30",0,-1.24,70,"none",60,"H31","H31",'n','y')
+        self.track_holder[180] = track_block.block("Red","H31",0,-1.24,70,"none",50,"H32","H32",'n','y')
+        self.track_holder[181] = track_block.block("Red","H32",0,-1.24,70,"none",50,"H33","H33",'n','y')
+        self.track_holder[182] = track_block.block("Red","H33",0,-1.24,70,"none",50,"H34","R72",'n','y')
+        self.track_holder[183] = track_block.block("Red","H34",0,-1.24,70,"none",50,"H35","H35",'n','y')
+        self.track_holder[184] = track_block.block("Red","H35",0,-1.24,70,"Steel Plaza",50,"H36","H36",'n','y')
+        self.track_holder[185] = track_block.block("Red","H36",0,-1.24,70,"none",50,"H37","H37",'n','y')
+        self.track_holder[186] = track_block.block("Red","H37",0,-1.24,70,"none",50,"H38","H38",'n','y')
+        self.track_holder[187] = track_block.block("Red","H38",0,-1.24,70,"none",50,"H39","Q71",'n','y')
+        self.track_holder[188] = track_block.block("Red","H39",0,-1.24,70,"none",50,"H40","H40",'n','y')
+        self.track_holder[189] = track_block.block("Red","H40",0,-1.24,70,"none",60,"H41","H41",'n','y')
+        self.track_holder[190] = track_block.block("Red","H41",0,-1.24,70,"none",60,"H42","H42",'n','y')
+        self.track_holder[191] = track_block.block("Red","H42",0,-1.24,70,"none",50,"H43","H43",'n','y')
+        self.track_holder[192] = track_block.block("Red","H43",0,-1.24,70,"none",50,"H44","O67",'n','y')
+        self.track_holder[193] = track_block.block("Red","H44",0,-1.24,70,"none",50,"H45","H45",'n','y')
+        self.track_holder[194] = track_block.block("Red","H45",0,-1.24,70,"First Ave.",50,"I46","I46",'n','y')
+        self.track_holder[195] = track_block.block("Red","I46",0,-1.24,70,"none",75,"I47","I47",'n','y')
+        self.track_holder[196] = track_block.block("Red","I47",0,-1.24,70,"none",75,"I48","I48",'y','n')
+        self.track_holder[197] = track_block.block("Red","I48",0,-1.24,70,"Station Square",75,"J49","J49",'n','n')
+        self.track_holder[198] = track_block.block("Red","J49",0,-1.24,60,"none",50,"J50","J50",'n','n')
+        self.track_holder[199] = track_block.block("Red","J50",0,-1.24,60,"none",50,"J51","J51",'n','n')
+        self.track_holder[200] = track_block.block("Red","J51",0,-1.24,55,"none",50,"J52","J52",'n','n')
+        self.track_holder[201] = track_block.block("Red","J52",0,-1.24,55,"none",43.2,"J53","N66",'n','n')
+        self.track_holder[202] = track_block.block("Red","J53",0,-1.24,55,"none",50,"J54","J54",'n','n')
+        self.track_holder[203] = track_block.block("Red","J54",0,-1.24,55,"none",50,"K55","K55",'n','n')
+        self.track_holder[204] = track_block.block("Red","K55",0.5,-0.87,55,"none",75,"K56","K56",'n','n')
+        self.track_holder[205] = track_block.block("Red","K56",0.5,-0.49,55,"none",75,"K57","K57",'n','n')
+        self.track_holder[206] = track_block.block("Red","K57",0.5,-0.12,55,"none",75,"L58","L58",'n','n')
+        self.track_holder[207] = track_block.block("Red","L58",1,0.63,55,"none",75,"L59","L59",'n','n')
+        self.track_holder[208] = track_block.block("Red","L59",0.5,1.01,55,"none",75,"L60","L60",'n','n')
+        self.track_holder[209] = track_block.block("Red","L60",0,1.01,55,"South Hills Junction",75,"M61","M61",'n','n')
+        self.track_holder[210] = track_block.block("Red","M61",-0.5,0.63,55,"none",75,"M62","M62",'n','n')
+        self.track_holder[211] = track_block.block("Red","M62",-1,-0.12,55,"none",75,"M63","M63",'n','n')
+        self.track_holder[212] = track_block.block("Red","M63",-1,-0.87,55,"none",75,"N64","N64",'n','n')
+        self.track_holder[213] = track_block.block("Red","N64",-0.5,-1.24,55,"none",75,"N65","N65",'n','n')
+        self.track_holder[214] = track_block.block("Red","N65",0,-1.24,55,"none",75,"N66","N66",'n','n')
+        self.track_holder[215] = track_block.block("Red","N66",0,-1.24,55,"none",75,"O67","J52",'n','n')
+        self.track_holder[216] = track_block.block("Red","O67",0,-1.24,55,"none",50,"P68","H42",'n','y')
+        self.track_holder[217] = track_block.block("Red","P68",0,-1.24,55,"none",50,"P69","P69",'n','y')
+        self.track_holder[218] = track_block.block("Red","P69",0,-1.24,55,"none",50,"P70","P70",'n','y')
+        self.track_holder[219] = track_block.block("Red","P70",0,-1.24,55,"none",50,"Q71","Q71",'n','y')
+        self.track_holder[220] = track_block.block("Red","Q71",0,-1.24,55,"none",50,"R72","H38",'n','y')
+        self.track_holder[221] = track_block.block("Red","R72",0,-1.24,55,"none",50,"S73","H33",'n','y')
+        self.track_holder[222] = track_block.block("Red","S73",0,-1.24,55,"none",50,"S74","S74",'n','y')
+        self.track_holder[223] = track_block.block("Red","S74",0,-1.24,55,"none",50,"S75","S75",'n','y')
+        self.track_holder[224] = track_block.block("Red","S75",0,-1.24,55,"none",50,"T76","T76",'n','y')
+        self.track_holder[225] = track_block.block("Red","T76",0,-1.24,55,"none",50,"H27","H27",'n','y')
+        self.track_list = self.track_holder
+        self.track_info_table.setItem(1,0,QtWidgets.QTableWidgetItem("Green Line"))
+        self.track_info_table.setItem(1,1,QtWidgets.QTableWidgetItem("Normal"))
+        self.track_info_table.setItem(1,2,QtWidgets.QTableWidgetItem("None"))
+        self.track_info_table.setItem(1,3,QtWidgets.QTableWidgetItem("N/A"))
+        self.track_info_table.setItem(0,0,QtWidgets.QTableWidgetItem("Red Line"))
+        self.track_info_table.setItem(0,1,QtWidgets.QTableWidgetItem("Normal"))
+        self.track_info_table.setItem(0,2,QtWidgets.QTableWidgetItem("None"))
+        self.track_info_table.setItem(0,3,QtWidgets.QTableWidgetItem("N/A"))
+    
+        
+        self.select_track_combo.addItem(self.track_list[0].get_line_name())
+        self.failure_line_select_combo.addItem(self.track_list[0].get_line_name())
+        self.window.select_track_combo.addItem(self.track_list[0].get_line_name())
+        self.select_track_combo.addItem(self.track_list[150].get_line_name())
+        self.failure_line_select_combo.addItem(self.track_list[150].get_line_name())
+        self.window.select_track_combo.addItem(self.track_list[150].get_line_name())
 
     def retranslateUi(self, Track_Model):
         _translate = QtCore.QCoreApplication.translate
         Track_Model.setWindowTitle(_translate("Track_Model", "Track Model"))
-        self.load_button.setText(_translate("Track_Model", "select"))
-        self.load_track_label.setText(_translate("Track_Model", "Load Track Database:"))
+        self.load_button.setText(_translate("Track_Model", "Lower"))
+        self.load_button1.setText(_translate("Track_Model", "Raise"))
+        self.load_track_label.setText(_translate("Track_Model", "Current Temperature:"))
+        self.temp_track_label.setText(_translate("Track_Model", str(self.outside_temp) + "\u00B0 F"))
         item = self.track_info_table.verticalHeaderItem(0)
         item.setText(_translate("Track_Model", "New Row"))
         item = self.track_info_table.verticalHeaderItem(1)
@@ -500,6 +765,10 @@ class Ui_Track_Model(object):
         item.setText(_translate("Track_Model", "Crossing:"))
         item = self.block_status_table.verticalHeaderItem(9)
         item.setText(_translate("Track_Model", "Forward to Block:"))
+        item = self.block_status_table.verticalHeaderItem(10)
+        item.setText(_translate("Track_Model", "Track Heater:"))
+        item = self.block_status_table.verticalHeaderItem(11)
+        item.setText(_translate("Track_Model", "Track Lights:"))
         self.block_status_track_lb.setText(_translate("Track_Model", "Select Line:"))
         self.block_status_block_lb.setText(_translate("Track_Model", "Select Block:"))
         self.menuFile.setTitle(_translate("Track_Model", "File"))
@@ -510,77 +779,59 @@ class Ui_Track_Model(object):
         self.actionExit.setText(_translate("Track_Model", "Exit"))
         
     def load_button_pressed(self):
-        doc_title = self.track_load_text.toPlainText()
-        self.track_load_text.clear()
-        if ".xlsx" not in doc_title:
-            msg = QtWidgets.QMessageBox()
-            msg.setWindowTitle("ERROR")
-            msg.setIcon(QtWidgets.QMessageBox.Critical)
-            msg.setText("Please use proper document!")
-            msg.exec_()
+        
+        if self.outside_temp <= 32:
+            self.outside_temp -= 1
+            self.temp_track_label.setText(str(self.outside_temp) + "\u00B0 F")
         else:
+            self.outside_temp -= 1
+            self.temp_track_label.setText(str(self.outside_temp) + "\u00B0 F")
+            if self.outside_temp <= 32:
+                i = 0
+                while i < len(self.track_list):
+                    self.track_list[i].set_track_heater()
+                    i += 1
+                self.set_block_status_table()
             
-            block1 = track_block.block("Blue Line","A1",0,0,50,"none",50,"A2","A2")
-            block2 = track_block.block("Blue Line","A2",0,0,50,"none",50,"A3","A3")
-            block3 = track_block.block("Blue Line","A3",0,0,50,"none",50,"A4","A4")
-            block4 = track_block.block("Blue Line","A4",0,0,50,"none",50,"A5","A5")
-            block5 = track_block.block("Blue Line","A5",0,0,50,"none",50,"B6","C11")
-            block6 = track_block.block("Blue Line","B6",0,0,50,"none",50,"B7","A5")
-            block7 = track_block.block("Blue Line","B7",0,0,50,"none",50,"B8","B8")
-            block8 = track_block.block("Blue Line","B8",0,0,50,"none",50,"B9","B9")
-            block9 = track_block.block("Blue Line","B9",0,0,50,"none",50,"B10","B10")
-            block10 = track_block.block("Blue Line","B10",0,0,50,"Station B",50,"none","none")
-            block11 = track_block.block("Blue Line","C11",0,0,50,"none",50,"C12","A5")
-            block12 = track_block.block("Blue Line","C12",0,0,50,"none",50,"C13","C13")
-            block13 = track_block.block("Blue Line","C14",0,0,50,"none",50,"C14","C14")
-            block14 = track_block.block("Blue Line","C14",0,0,50,"none",50,"C15","C15")
-            block15 = track_block.block("Blue Line","C15",0,0,50,"Station C",50,"none","none")
-            
-            self.track_info_table.setItem(1,0,QtWidgets.QTableWidgetItem("Blue Line"))
-            self.track_info_table.setItem(1,1,QtWidgets.QTableWidgetItem("Normal"))
-            self.track_info_table.setItem(1,2,QtWidgets.QTableWidgetItem("None"))
-            self.track_info_table.setItem(1,3,QtWidgets.QTableWidgetItem("N/A"))
-            
-            self.track_list[0] = block1
-            self.track_list[1] = block2
-            self.track_list[2] = block3
-            self.track_list[3] = block4
-            self.track_list[4] = block5
-            self.track_list[5] = block6
-            self.track_list[6] = block7
-            self.track_list[7] = block8
-            self.track_list[8] = block9
-            self.track_list[9] = block10
-            self.track_list[10] = block11
-            self.track_list[11] = block12
-            self.track_list[12] = block13
-            self.track_list[13] = block14
-            self.track_list[14] = block15
-            
-            self.blue_line_len = 15
-            
-            self.select_track_combo.addItem(self.track_list[0].get_line_name())
-            self.failure_line_select_combo.addItem(self.track_list[0].get_line_name())
-            self.window.select_track_combo.addItem(self.track_list[0].get_line_name())
-    
+    def load_button1_pressed(self):
+        if self.outside_temp > 32:
+            self.outside_temp += 1
+            self.temp_track_label.setText(str(self.outside_temp) + "\u00B0 F")
+        else:
+            self.outside_temp += 1
+            self.temp_track_label.setText(str(self.outside_temp) + "\u00B0 F")
+            if self.outside_temp > 32:
+                i = 0
+                while i < len(self.track_list):
+                    self.track_list[i].reset_track_heater()
+                    i += 1
+                self.set_block_status_table()
+
     def set_block_info_combo(self):
         i = 0
-        while i < self.blue_line_len :
-            self.select_block_combo.addItem(self.track_list[i].get_block_name())
-            self.window.select_block_combo.addItem(self.track_list[i].get_block_name())
-            i += 1
+        if self.select_track_combo.currentText() == "Green" :
+            while i < 150 :
+                self.select_block_combo.addItem(self.track_list[i].get_block_name())
+                self.window.select_block_combo.addItem(self.track_list[i].get_block_name())
+                i += 1
+        else:
+            i = 150
+            while i < len(self.track_list):
+                self.select_block_combo.addItem(self.track_list[i].get_block_name())
+                self.window.select_block_combo.addItem(self.track_list[i].get_block_name())
+                i += 1
     
     def clear_failure(self):
         i = 0
         while i < len(self.track_list):
-            if self.track_list[i].get_line_name() == self.window.select_track_combo.currentText():
-                if self.track_list[i].get_block_name() == self.window.select_block_combo.currentText():
-                    self.track_list[i].clear_failure()
-                    self.set_block_status_table
-                    self.track_info_table.setItem(1,1,QtWidgets.QTableWidgetItem("Normal"))
-                    self.track_info_table.setItem(1,2,QtWidgets.QTableWidgetItem("None"))
-                    self.track_info_table.setItem(1,3,QtWidgets.QTableWidgetItem("N/A"))
-                    i = len(self.track_list)
+            self.track_list[i].clear_failure()
+            self.set_block_status_table
+            self.track_info_table.setItem(1,1,QtWidgets.QTableWidgetItem("Normal"))
+            self.track_info_table.setItem(1,2,QtWidgets.QTableWidgetItem("None"))
+            self.track_info_table.setItem(1,3,QtWidgets.QTableWidgetItem("N/A"))
+            self.track_info_table.setItem(0,1,QtWidgets.QTableWidgetItem("Normal"))
+            self.track_info_table.setItem(0,2,QtWidgets.QTableWidgetItem("None"))
+            self.track_info_table.setItem(0,3,QtWidgets.QTableWidgetItem("N/A"))
             i += 1
     
     def toggle_switch(self):
@@ -614,36 +865,51 @@ class Ui_Track_Model(object):
                     self.block_status_table.setItem(0,2,QtWidgets.QTableWidgetItem(str(self.track_list[i].get_grade()) + "%"))
                     self.block_status_table.setItem(0,3,QtWidgets.QTableWidgetItem(str(self.track_list[i].get_elevation()) + " m"))
                     self.block_status_table.setItem(0,4,QtWidgets.QTableWidgetItem(str(self.track_list[i].get_speed()) + " Km/Hr"))
-                    self.block_status_table.setItem(0,5,QtWidgets.QTableWidgetItem("Above"))
+                    if self.track_list[i].get_underground() == 'n':
+                        self.block_status_table.setItem(0,5,QtWidgets.QTableWidgetItem("Above"))
+                    else :
+                        self.block_status_table.setItem(0,5,QtWidgets.QTableWidgetItem("Underground"))
                     if self.track_list[i].get_occupancy() == 1 :
                         self.block_status_table.setItem(0,6,QtWidgets.QTableWidgetItem("Occupied"))
                     else :
                         self.block_status_table.setItem(0,6,QtWidgets.QTableWidgetItem("Not Occupied"))
                     self.block_status_table.setItem(0,7,QtWidgets.QTableWidgetItem(self.track_list[i].get_station_name()))
-                    if self.track_list[i].get_crossing() == 1 :
-                        self.block_status_table.setItem(0,8,QtWidgets.QTableWidgetItem("Crossing Activated"))
+                    if self.track_list[i].get_crossing() == 'n' :
+                        self.block_status_table.setItem(0,8,QtWidgets.QTableWidgetItem("None"))
                     else :
-                        self.block_status_table.setItem(0,8,QtWidgets.QTableWidgetItem("Clear"))
+                        if self.track_list[i].get_crossing_status() == 1:
+                            self.block_status_table.setItem(0,8,QtWidgets.QTableWidgetItem("Crossing Activated"))
+                        else:
+                            self.block_status_table.setItem(0,8,QtWidgets.QTableWidgetItem("Clear"))
                     if self.track_list[i].get_switch() == 1 :
                         self.block_status_table.setItem(0,9,QtWidgets.QTableWidgetItem(self.track_list[i].get_switch_forward_loc()))
                     else :
                         self.block_status_table.setItem(0,9,QtWidgets.QTableWidgetItem(self.track_list[i].get_next_loc()))
+                    if self.track_list[i].get_track_heater() == 0:
+                        self.block_status_table.setItem(0,10,QtWidgets.QTableWidgetItem("Off"))
+                    else:
+                        self.block_status_table.setItem(0,10,QtWidgets.QTableWidgetItem("On"))
+                    
+                    if self.track_list[i].get_authority() == 1:
+                        self.block_status_table.setItem(0,11,QtWidgets.QTableWidgetItem("Green"))
+                    else:
+                        self.block_status_table.setItem(0,11,QtWidgets.QTableWidgetItem("Red"))
                     i = len(self.track_list)
             i += 1
             
     def randomize_broken_rail(self):
         line_s = self.failure_line_select_combo.currentText()
-        if line_s == "Red Line":
+        if line_s == "Red":
              rand = random.randint(0,self.red_line_len -1)
-             self.track_list[rand].toggle_fault_rail()
+             self.track_list[150 +rand].toggle_fault_rail()
              msg = QtWidgets.QMessageBox()
              msg.setWindowTitle("Failure Initiated")
              msg.setIcon(QtWidgets.QMessageBox.Critical)
-             msg.setText("Broken Rail on block " + self.track_list[rand].get_block_name() + "!")
+             msg.setText("Broken Rail on block " + self.track_list[150 + rand].get_block_name() + "!")
              msg.exec_()
-             self.track_info_table.setItem(1,1,QtWidgets.QTableWidgetItem("Down"))
-             self.track_info_table.setItem(1,2,QtWidgets.QTableWidgetItem("Broken Rail"))
-             self.track_info_table.setItem(1,3,QtWidgets.QTableWidgetItem(self.track_list[rand].get_block_name()))
+             self.track_info_table.setItem(0,1,QtWidgets.QTableWidgetItem("Down"))
+             self.track_info_table.setItem(0,2,QtWidgets.QTableWidgetItem("Broken Rail"))
+             self.track_info_table.setItem(0,3,QtWidgets.QTableWidgetItem(self.track_list[150 + rand].get_block_name()))
         else :
             if line_s == "Blue Line":
                 rand = random.randint(0,self.blue_line_len -1)
@@ -670,17 +936,17 @@ class Ui_Track_Model(object):
     
     def randomize_circuit_failure(self):
         line_s = self.failure_line_select_combo.currentText()
-        if line_s == "Red Line":
+        if line_s == "Red":
              rand = random.randint(0,self.red_line_len -1)
-             self.track_list[rand].toggle_fault_circuit()
+             self.track_list[150 + rand].toggle_fault_circuit()
              msg = QtWidgets.QMessageBox()
              msg.setWindowTitle("Failure Initiated")
              msg.setIcon(QtWidgets.QMessageBox.Critical)
-             msg.setText("Circuit Failure on " + self.track_list[rand].get_block_name() + "!")
+             msg.setText("Circuit Failure on " + self.track_list[150 +rand].get_block_name() + "!")
              msg.exec_()
-             self.track_info_table.setItem(1,1,QtWidgets.QTableWidgetItem("Down"))
-             self.track_info_table.setItem(1,2,QtWidgets.QTableWidgetItem("Circuit Failure"))
-             self.track_info_table.setItem(1,3,QtWidgets.QTableWidgetItem(self.track_list[rand].get_block_name()))
+             self.track_info_table.setItem(0,1,QtWidgets.QTableWidgetItem("Down"))
+             self.track_info_table.setItem(0,2,QtWidgets.QTableWidgetItem("Circuit Failure"))
+             self.track_info_table.setItem(0,3,QtWidgets.QTableWidgetItem(self.track_list[150 + rand].get_block_name()))
         else :
             if line_s == "Blue Line":
                 rand = random.randint(0,self.blue_line_len -1)
@@ -707,17 +973,17 @@ class Ui_Track_Model(object):
     
     def randomize_power_failure(self):
         line_s = self.failure_line_select_combo.currentText()
-        if line_s == "Red Line":
+        if line_s == "Red":
              rand = random.randint(0,self.red_line_len -1)
-             self.track_list[rand].toggle_fault_power()
+             self.track_list[150 + rand].toggle_fault_power()
              msg = QtWidgets.QMessageBox()
              msg.setWindowTitle("Failure Initiated")
              msg.setIcon(QtWidgets.QMessageBox.Critical)
-             msg.setText("Power Failure on " + self.track_list[rand].get_block_name() + "!")
+             msg.setText("Power Failure on " + self.track_list[150 + rand].get_block_name() + "!")
              msg.exec_()
-             self.track_info_table.setItem(1,1,QtWidgets.QTableWidgetItem("Down"))
-             self.track_info_table.setItem(1,2,QtWidgets.QTableWidgetItem("Power Failure"))
-             self.track_info_table.setItem(1,3,QtWidgets.QTableWidgetItem(self.track_list[rand].get_block_name()))
+             self.track_info_table.setItem(0,1,QtWidgets.QTableWidgetItem("Down"))
+             self.track_info_table.setItem(0,2,QtWidgets.QTableWidgetItem("Power Failure"))
+             self.track_info_table.setItem(0,3,QtWidgets.QTableWidgetItem(self.track_list[150 + rand].get_block_name()))
         else :
             if line_s == "Blue Line":
                 rand = random.randint(0,self.blue_line_len -1)
@@ -746,7 +1012,7 @@ class Ui_Track_Model(object):
         line_s = self.failure_line_select_combo.currentText()
         fail_type = self.failure_type_combo.currentText()
         block_num = int(self.failure_text_box.toPlainText()) - 1
-        if line_s == "Red Line" :
+        if line_s == "Red" :
             if fail_type == "Broken Rail":
                 if block_num >= self.red_line_len or block_num < 0:
                     msg = QtWidgets.QMessageBox()
@@ -755,15 +1021,15 @@ class Ui_Track_Model(object):
                     msg.setText("Block Does Not Exist!")
                     msg.exec_()
                 else :
-                    self.track_list[block_num].toggle_fault_rail()
+                    self.track_list[150 + block_num].toggle_fault_rail()
                     msg = QtWidgets.QMessageBox()
                     msg.setWindowTitle("Failure Initiated")
                     msg.setIcon(QtWidgets.QMessageBox.Critical)
-                    msg.setText("Broken Rail on block " + self.track_list[block_num].get_block_name() + "!")
+                    msg.setText("Broken Rail on block " + self.track_list[150 + block_num].get_block_name() + "!")
                     msg.exec_()
-                    self.track_info_table.setItem(1,1,QtWidgets.QTableWidgetItem("Down"))
-                    self.track_info_table.setItem(1,2,QtWidgets.QTableWidgetItem("Broken Rail"))
-                    self.track_info_table.setItem(1,3,QtWidgets.QTableWidgetItem(self.track_list[block_num].get_block_name()))
+                    self.track_info_table.setItem(0,1,QtWidgets.QTableWidgetItem("Down"))
+                    self.track_info_table.setItem(0,2,QtWidgets.QTableWidgetItem("Broken Rail"))
+                    self.track_info_table.setItem(0,3,QtWidgets.QTableWidgetItem(self.track_list[150 + block_num].get_block_name()))
             else :
                 if fail_type == "Circuit Failure" :
                     if block_num >= self.red_line_len or block_num < 0:
@@ -773,15 +1039,15 @@ class Ui_Track_Model(object):
                         msg.setText("Block Does Not Exist!")
                         msg.exec_()
                     else :
-                        self.track_list[block_num].toggle_fault_circuit()
+                        self.track_list[150+ block_num].toggle_fault_circuit()
                         msg = QtWidgets.QMessageBox()
                         msg.setWindowTitle("Failure Initiated")
                         msg.setIcon(QtWidgets.QMessageBox.Critical)
-                        msg.setText("Circuit Failure On " + self.track_list[block_num].get_block_name() + "!")
+                        msg.setText("Circuit Failure On " + self.track_list[150 + block_num].get_block_name() + "!")
                         msg.exec_()
-                        self.track_info_table.setItem(1,1,QtWidgets.QTableWidgetItem("Down"))
-                        self.track_info_table.setItem(1,2,QtWidgets.QTableWidgetItem("Circuit Failure"))
-                        self.track_info_table.setItem(1,3,QtWidgets.QTableWidgetItem(self.track_list[block_num].get_block_name()))
+                        self.track_info_table.setItem(0,1,QtWidgets.QTableWidgetItem("Down"))
+                        self.track_info_table.setItem(0,2,QtWidgets.QTableWidgetItem("Circuit Failure"))
+                        self.track_info_table.setItem(0,3,QtWidgets.QTableWidgetItem(self.track_list[150 + block_num].get_block_name()))
                 else:
                     if fail_type == "Power Failure" :
                         if block_num >= self.red_line_len or block_num < 0:
@@ -791,15 +1057,15 @@ class Ui_Track_Model(object):
                             msg.setText("Block Does Not Exist!")
                             msg.exec_()
                         else :
-                            self.track_list[block_num].toggle_fault_power()
+                            self.track_list[150 + block_num].toggle_fault_power()
                             msg = QtWidgets.QMessageBox()
                             msg.setWindowTitle("Failure Initiated")
                             msg.setIcon(QtWidgets.QMessageBox.Critical)
-                            msg.setText("Power Failure On " + self.track_list[block_num].get_block_name() + "!")
+                            msg.setText("Power Failure On " + self.track_list[150 + block_num].get_block_name() + "!")
                             msg.exec_()
-                            self.track_info_table.setItem(1,1,QtWidgets.QTableWidgetItem("Down"))
-                            self.track_info_table.setItem(1,2,QtWidgets.QTableWidgetItem("Power Failure"))
-                            self.track_info_table.setItem(1,3,QtWidgets.QTableWidgetItem(self.track_list[block_num].get_block_name()))
+                            self.track_info_table.setItem(0,1,QtWidgets.QTableWidgetItem("Down"))
+                            self.track_info_table.setItem(0,2,QtWidgets.QTableWidgetItem("Power Failure"))
+                            self.track_info_table.setItem(0,3,QtWidgets.QTableWidgetItem(self.track_list[150 + block_num].get_block_name()))
         else:
             if line_s == "Blue Line" :
                 if fail_type == "Broken Rail":
@@ -912,11 +1178,3 @@ class Ui_Track_Model(object):
     def show_test_window(self, checked):
         self.track_model_test_window.show()
 
-if __name__ == "__main__":
-
-    app = QtWidgets.QApplication(sys.argv)
-    Track_Model = QtWidgets.QMainWindow()
-    ui = Ui_Track_Model()
-    ui.setupUi(Track_Model)
-    Track_Model.show()
-    sys.exit(app.exec_())
