@@ -47,22 +47,18 @@ class PLC_Parser ():
 					expression.put(")")
 					
 				elif (arg == "{"):
-					if(logic_queue.get() == "if"):
+					if(self.safe_get(logic_queue) == "if"):
 						condition = self.determine_condition(expression)
 					logic_queue.put("{")
 				elif (arg == "}"):
-					logic_queue.get()
+					self.safe_get(logic_queue)
 				elif (arg == "="):
 					logic_queue.put("=")
-					print(" ")
 				elif (arg == "&"):
-					print(" ")
 					expression.put("&")
 				elif (arg == "|"):
-					print(" ")
 					expression.put("|")
 				elif (arg == "!"):
-					print(" ")
 					expression.put("!")
 				else:
 					if(condition == False and (self.get_state(logic_queue) == "{" or self.get_state(logic_queue) == "=")):
@@ -106,7 +102,8 @@ class PLC_Parser ():
 						elif (var[0] == "A"):
 							state = self.get_state(logic_queue)
 							if ( state == "{" or state == " "):
-								return "You can't set the Authority"
+								set_var.append("A")
+								set_var.append(var[1])
 							else:
 								val = self.get_table_value(Authority, var[1])
 								expression.put(val == "True" or val == True)
@@ -138,7 +135,7 @@ class PLC_Parser ():
 
 							set_var.clear()
 							changes.append(tup)
-							logic_queue.get()
+							self.safe_get(logic_queue)
 						else:
 							return "Found Unknown character '"+ str(arg) +"' in line '"+str(line)+" '"
 					except  Exception as e:
@@ -150,10 +147,10 @@ class PLC_Parser ():
 		condition = None
 		newQueue = queue.LifoQueue()
 		while expression.qsize()>0:
-			state = expression.get()
+			state = self.safe_get(expression)
 			if ( state == ")" ):
 				while expression.qsize()>0:
-					expp = expression.get()
+					expp = self.safe_get(expression)
 					if(expp=='('):
 						break
 					if(expp==')'):
@@ -164,23 +161,23 @@ class PLC_Parser ():
 			elif ( state == "(" ):
 				continue
 			elif ( state == "|" ):
-				operate = expression.get()
+				operate = self.safe_get(expression)
 				if(operate == ')'):
 					expression.put(operate)
 					operate = self.determine_condition(expression)
 				elif(operate == '!'):
-					operate = not(expression.get())
+					operate = not(self.safe_get(expression))
 				condition = condition or operate
 			elif ( state == "&" ):
-				operate = expression.get()
+				operate = self.safe_get(expression)
 				if(operate == ')'):
 					expression.put(operate)
 					operate = self.determine_condition(expression)
 				elif(operate == '!'):
-					operate = not(expression.get())
+					operate = not(self.safe_get(expression))
 				condition = condition and operate
 			elif ( state == "!" ):
-				expression.put(not(expression.get()))
+				expression.put(not(self.safe_get(expression)))
 				condition = self.determine_condition(expression)
 			elif (isinstance(state, bool)):
 				condition = state
@@ -195,6 +192,11 @@ class PLC_Parser ():
 		state = qu.get()
 		qu.put(state)
 		return state
+
+	def safe_get(self, qu):
+		if qu.empty() :
+			return False
+		return qu.get()
 
 	def change_PLC_file(self, new_file):
 		self.PLC_file = new_file

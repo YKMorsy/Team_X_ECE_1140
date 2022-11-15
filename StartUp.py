@@ -13,7 +13,7 @@ window.show()
 
 timer = QTimer()
 timer.timeout.connect(window.Timer_TrackControl)
-timer.setInterval(1000)  # 1000ms = 1s
-#timer.start()
+timer.setInterval(3000)  # 1000ms = 1s
+timer.start()
 
 app.exec_()

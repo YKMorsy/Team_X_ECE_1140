@@ -20,8 +20,8 @@ class WaysideController ():
     def ParsePLC(self):
         changes = self.PLC_info.parse_PLC(self.switch_positions, self.occupancy, self.authority,self.suggested_speed, self.statuses, self.speed_limit)
         changes2 = 2#changes2 = self.PLC_info2.parse_PLC(self.switch_positions, self.occupancy, self.authority,self.suggested_speed, self.statuses, self.speed_limit)
-        if(changes != changes2):
-            print("  ")
+        #if(changes != changes2):
+            #print("  ")
         if isinstance(changes, str):
             print("Error " + changes)
             return False
@@ -30,8 +30,7 @@ class WaysideController ():
             if typeS == "S":
                 self.make_changes(change, self.switch_positions)
             elif typeS == "A":
-                #self.make_changes(change, self.authority)
-                return False
+                self.make_changes(change, self.authority)
             elif typeS == "R":
                 self.make_changes(change, self.railway_crossings)
             elif typeS == "L":
@@ -94,6 +93,9 @@ class WaysideController ():
         self.light_colors = lc
     def set_statuses(self, st):
         self.statuses = st
+        for (bl, val) in st:
+            if(val == False):
+                self.make_changes(("A", bl, False), self.authority)
         self.temp_statuses = st.copy()
     def set_suggested_speed(self, ss):
         self.suggested_speed = ss
