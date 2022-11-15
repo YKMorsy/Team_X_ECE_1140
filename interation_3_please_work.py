@@ -1,7 +1,6 @@
 import time
 from TrainController.trainController import TrainController
 
-
 if __name__ == '__main__':
     #Initialize  all objects
     #Build track
