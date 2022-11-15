@@ -2,8 +2,8 @@ from PyQt6.QtWidgets import QApplication, QWidget, QFrame, QDialog, QGridLayout,
 from PyQt6.QtWidgets import QLabel, QPushButton, QRadioButton, QSlider, QSizePolicy, QTableWidget, QTableView, QAbstractItemView, QHeaderView
 from PyQt6.QtCore import Qt, QRect, QTimer, QSortFilterProxyModel
 from PyQt6.QtGui import QFont, QStandardItemModel, QStandardItem
-from FontStyles import *
-from common import *
+from TrainModel.FontStyles import *
+from TrainModel.common import *
     
 class PassengerUI(QFrame):
     def __init__(self, my_murphy_UI, ID):

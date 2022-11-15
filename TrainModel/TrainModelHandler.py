@@ -1,4 +1,4 @@
-from TrainModel import TrainModel
+from TrainModel.TrainModel import TrainModel
 from PyQt6.QtGui import QStandardItem
 
 class TrainModelHandler:
@@ -24,7 +24,7 @@ class TrainModelHandler:
 			list_of_lists.append(self.UI_train_row(T))
 		
 		#Update the UI
-		self.UI_update(self, list_of_lists)
+		self.UI_update(list_of_lists)
 
 	def reset_time(self, time_step = 0):
 		#This function will build a list of all the train rows, and return it back
