@@ -2,10 +2,11 @@ from PyQt6.QtWidgets import QApplication, QFrame, QGridLayout, QAbstractItemView
 from PyQt6.QtWidgets import QLabel, QPushButton, QRadioButton, QSlider, QSizePolicy, QTableWidget, QTableView, QAbstractItemView, QHeaderView
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QStandardItem
-from TrainModel.Test import TestUI, ExpandedTableUI
-from TrainModel.Passenger import PassengerUI
-from TrainModel.FontStyles import *
-from TrainModel.common import *
+
+from Test import TestUI, ExpandedTableUI
+from Passenger import PassengerUI
+from FontStyles import *
+from common import *
     
 class MurphyUI(QFrame):
     def __init__(self):
