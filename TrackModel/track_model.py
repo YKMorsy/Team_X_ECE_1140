@@ -433,6 +433,7 @@ class track_model(object):
                 list1 = [] 
                 list1.append(train.most_recent_block)
                 train.block_list = list1
+                return 0
             else:
                 
                 train.event_distance_in_block = 32
@@ -451,6 +452,7 @@ class track_model(object):
                 train.commanded_authority = self.get_green_line_authority(new_block)
                 train.commanded_speed = self.get_green_line_commanded_speed(new_block)
                 train.beacon_info = {}
+                return 0
                 
         else:
             block_number = int(train.most_recent_block)
@@ -463,6 +465,7 @@ class track_model(object):
                 list1 = [] 
                 list1.append(train.most_recent_block)
                 train.block_list = list1
+                return 0
             else:
                 
                 train.event_distance_in_block = 32
@@ -481,6 +484,7 @@ class track_model(object):
                 train.commanded_authority = self.get_red_line_authority(new_block)
                 train.commanded_speed = self.get_red_line_commanded_speed(new_block)
                 train.beacon_info = {}
+                return 0
                 
             
         
