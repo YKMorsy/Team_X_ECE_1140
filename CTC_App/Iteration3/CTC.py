@@ -1,9 +1,9 @@
 import sys
 import time
-from PyQt6.QtCore import *
-from PyQt6.QtWidgets import *
-from PyQt6.QtGui import *
-from PyQt6 import uic
+from PyQt5.QtCore import *
+from PyQt5.QtWidgets import *
+from PyQt5.QtGui import *
+from PyQt5 import uic
 from CTC_App.Iteration3.Line import Line
 from CTC_App.Iteration3.Dispatcher import Dispatcher
 
