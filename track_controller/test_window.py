@@ -67,30 +67,36 @@ class test_window (QtWidgets.QMainWindow, Ui_TestingWindow):
     def update_table(self, data, table, changable):
         numrows = len(data)
         table.setRowCount(numrows)
-        for row in range(numrows):
+        row=0
+        for key, val in data.items():
             for column in range(2):
-                item = QTableWidgetItem(str(data[row][column]))
+                item = QTableWidgetItem(str(val))
+                if column ==0:
+                    item = QTableWidgetItem(str(key))
                 if not(changable) or column==0 :
                     item.setFlags(QtCore.Qt.ItemIsEditable)
                 table.setItem(row, column, item)
+            row=row+1
 
     def update_light_table(self, data, table, changable):
         numrows = len(data)
         table.setRowCount(numrows)
-        for row in range(numrows):
+        row=0
+        for key, val in data.items():
             for column in range(2):
                 if(column == 1):
-                    if(data[row][column] and data[row][column+1]):
+                    if(val[0] and val[1]):
                         item = QTableWidgetItem("Green")
-                    elif(data[row][column] or data[row][column+1]):
+                    elif(val[0] or val[1]):
                         item = QTableWidgetItem("Yellow")
                     else:
                         item = QTableWidgetItem("Red")
                 else:
-                    item = QTableWidgetItem(str(data[row][column]))
+                    item = QTableWidgetItem(str(key))
                 if not(changable) or column==0 :
                     item.setFlags(QtCore.Qt.ItemIsEditable)
                 table.setItem(row, column, item)
+            row=row+1
 
     def run_plc (self):
         self.make_changes()
@@ -109,8 +115,5 @@ class test_window (QtWidgets.QMainWindow, Ui_TestingWindow):
     def get_table_change (self, table_data, table):
         rowC = table.rowCount()
         for row in range(rowC):
-            for dat_row in range(rowC):
-                (block, state) = table_data[dat_row]
-                if str(block) == table.item(row, 0).data(0):
-                    table_data[dat_row] = (block, table.item(row, 1).data(0))
+            table_data[row] = table.item(row, 1).data(0)
 
