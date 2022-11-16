@@ -75,8 +75,12 @@ class Iteration3(QWidget):
             self.train_id_list.append(train_id)
             if train_line == 'Red':
                 self.train_controller[train_id] = TrainController(train_id, 0)
+                handler.create_train(ID=train_id, line_name='Red')
             else:
                 self.train_controller[train_id] = TrainController(train_id, 1)
+                handler.create_train(ID=train_id, line_name='Green')
+        
+        #Train deletion, wont do this for iteration 3 cause too hard
 
 
 
