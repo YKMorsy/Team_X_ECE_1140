@@ -253,7 +253,7 @@ class TrainController:
     def __approaching_station(self):
         if not self.__begin_slow_down:
             self.__begin_slow_down = True
-            deceleration = self.__train_model_input.current_set_point ** 2 / (2 * 32.2) * self.__time_step
+            deceleration = self.__train_model_input.current_set_point ** 2 / (2 * (self.__distance_to_station + (32.2 / 2))) * self.__time_step
             self.__command_set_point_list = []
             current_speed = self.__train_model_input.current_set_point - deceleration
             while(current_speed > 0):

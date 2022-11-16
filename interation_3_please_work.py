@@ -6,7 +6,6 @@ from CTC_App.Iteration3.Line import Line
 from CTC_App.Iteration3.Dispatcher import Dispatcher
 from CTC_App.Iteration3.CTC import CTCApp
 
-from TrainModel.TrainModelHandler import TrainModelHandler
 from TrainModel.Murphy import MurphyUI
 from TrainModel.common import *
 

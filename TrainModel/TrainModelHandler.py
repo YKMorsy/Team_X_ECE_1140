@@ -1,4 +1,5 @@
 from TrainModel.TrainModel import TrainModel
+
 from PyQt6.QtGui import QStandardItem
 
 class TrainModelHandler:
