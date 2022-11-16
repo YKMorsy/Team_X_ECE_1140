@@ -56,7 +56,7 @@ class Train:
             elif (current_station == next_station and (current_status == True)):
                 suggested_speed = 1
 
-                suggested_speed = current_block.block_speed_limit
+                # suggested_speed = current_block.block_speed_limit
                 self.station_list.pop(0)
 
 
