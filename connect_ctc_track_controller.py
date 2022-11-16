@@ -8,7 +8,7 @@ def connect_ctc_track_controller(dispatcherCTC, greenLineCTC, redLineCTC, trcCon
     dispatcherCTC.setOccupancy(occupancy_from_trc)
 
     green_switch_position_trc = trcControl[3].get_switch_positions() | trcControl[4].get_switch_positions() | trcControl[5].get_switch_positions()
-    print(green_switch_position_trc)
+
     greenLineCTC.setSwitchPosition(green_switch_position_trc)
 
     # red_switch_position_trc = trcControl[0].get_switch_positions() | trcControl[1].get_switch_positions() | trcControl[2].get_switch_positions()

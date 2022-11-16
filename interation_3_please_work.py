@@ -20,49 +20,76 @@ from connect_train_model_train_controller import connect_train_model_train_contr
 
 from PyQt6.QtWidgets import QApplication as q6App
 from PyQt5.QtWidgets import QApplication as q5App
+from PyQt5.QtWidgets import QWidget
 from PyQt5.QtCore import QTimer
 
-def update_everything(dispatcher, green_line, track_controller_list, track_model_var, train_model, train_controller):
+class Iteration3(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.time_step = 1
+        #Create track model
+        self.track_model_var = track_model()
+        self.track_model_var.show()
 
-    connect_ctc_track_controller(dispatcher, green_line, green_line, track_controller_list)
+        #Create CTC
+        self.green_line = Line("./CTC_App/Iteration3/Track_Layout_Green.xlsx")
+        self.dispatcher = Dispatcher()
+        self.ctc_office = CTCApp(self.green_line, self.dispatcher)
+        self.ctc_office.show()
+        #Place waysides
+        self.wayside_sign_in = sign_in_window()
+        self.wayside_sign_in.show()
 
-    Connect_Track_Control_And_Model(track_controller_list, track_model_var)
+        #Train Model Handler
+        self.murphy = MurphyUI()
+        self.murphy.show()
 
-    #Ryan and peter connect here
+        self.train_id_list = []
+        self.train_controller = {}
 
-    for i in range(len(train_controller)):
-        connect_train_model_train_controller(train_controller[i], train_model[i])
-    
-    #Update all modules
+    def update_everything(self):
+
+        connect_ctc_track_controller(self.dispatcher, self.green_line, self.green_line, self.wayside_sign_in.get_all_track_controllers())
+
+        Connect_Track_Control_And_Model(self.wayside_sign_in.get_all_track_controllers(), self.track_model_var)
+
+        #Ryan and peter connect here
+
+        for i in range(len(self.train_controller)):
+            connect_train_model_train_controller(self.train_controller[self.train_id_list[i]], handler.train_list[self.train_id_list[i]])
+        
+        #Update all modules
+        #Yassers update
+        new_trains = self.ctc_office.updateTimer()
+        #Sierra call your update here
+        
+        #Peter call your update here
+
+        #Ryans update
+        handler.update(self.time_step)
+
+        #New train creation, Ryan can you add in the coded needed to create your train
+        for train in new_trains:
+            train_id = train.train_id
+            train_line = train.line.line_color
+            self.train_id_list.append(train_id)
+            if train_line == 'red':
+                self.train_controller[train_id] = TrainController(train_id, 0)
+            else:
+                self.train_controller[train_id] = TrainController(train_id, 1)
+
 
 
 if __name__ == '__main__':
     #Initialize  all objects
     fiveO = q5App([])
     sixers = q6App([])
-    
-    #Build track
-    track_model_var = track_model()
-    track_model_var.show()
 
-    #Create CTC
-    green_line = Line("./CTC_App/Iteration3/Track_Layout_Green.xlsx")
-    dispatcher = Dispatcher()
-    ctc_office = CTCApp(green_line, dispatcher)
-    ctc_office.show()
-    #Place waysides
-    wayside_sign_in = sign_in_window()
-    wayside_sign_in.show()
-
-    #Train Model Handler
-    murphy = MurphyUI()
-    murphy.show()
-
-    train_controller = []
+    god_help_us = Iteration3()
 
     fps = 10
     timer = QTimer()
-    timer.timeout.connect(update_everything(dispatcher, green_line, wayside_sign_in.get_all_track_controllers(), track_model_var, handler.train_list, train_controller))
+    timer.timeout.connect(god_help_us.update_everything)
     handler.update(1)
     timer.setInterval(int(1000 / fps))
     timer.start()
