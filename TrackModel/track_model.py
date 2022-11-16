@@ -313,19 +313,112 @@ class track_model(object):
         return out
 
     def set_total_authority(self, auth_dic):
-        i = 1
+        for key in auth_dic:
+            temp = key
+            if temp == 1000:
+                if auth_dic[key] == True:
+                    self.ui.track_list[227].set_authority()
+                else:
+                    self.ui.track_list[227].reset_authority()
+            if temp == 2000:
+                if auth_dic[key] == True:
+                    self.ui.track_list[226].set_authority()
+                else:
+                    self.ui.track_list[226].reset_authority()
+            if temp > 2000:
+                temp -= 2000
+                if auth_dic[key] == True:
+                    self.ui.track_list[149 + temp].set_authority()
+                else:
+                    self.ui.track_list[149 + temp].reset_authority()
+            if temp > 1000 and temp < 2000:
+                temp -= 1000
+                if auth_dic[key] == True:
+                    self.ui.track_list[temp - 1].set_authority()
+                else:
+                    self.ui.track_list[temp - 1].reset_authority()
 
     def set_switch_position(self,sw_dic):
-        i = 1
+        for key in sw_dic:
+            temp = key
+            if temp == 1000:
+                if sw_dic[key] == True:
+                    self.ui.track_list[227].set_switch()
+                else:
+                    self.ui.track_list[227].reset_switch()
+            if temp == 2000:
+                if sw_dic[key] == True:
+                    self.ui.track_list[226].set_switch()
+                else:
+                    self.ui.track_list[226].reset_switch()
+            if temp > 2000:
+                temp -= 2000
+                if sw_dic[key] == True:
+                    self.ui.track_list[149 + temp].set_switch()
+                else:
+                    self.ui.track_list[149 + temp].reset_switch()
+            if temp > 1000 and temp < 2000:
+                temp -= 1000
+                if sw_dic[key] == True:
+                    self.ui.track_list[temp - 1].set_switch()
+                else:
+                    self.ui.track_list[temp - 1].reset_switch()
 
     def set_commanded_speed(self,com_dic):
-        i = 1
+        for key in com_dic:
+            temp = key
+            if temp == 1000:
+                self.ui.track_list[227].set_commanded_speed(com_dic[key])
+            
+            if temp == 2000:
+                    self.ui.track_list[226].set_commanded_speed(com_dic[key])
+            if temp > 2000:
+                temp -= 2000
+                self.ui.track_list[149 + temp].set_commanded_speed(com_dic[key])
+            if temp > 1000 and temp < 2000:
+                temp -= 1000
+                self.ui.track_list[temp - 1].set_commanded_speed(com_dic[key])
 
     def set_lights(self, lights_dic):
-        i = 1
+        for key in lights_dic:
+            temp = key
+            if temp == 1000:
+                if lights_dic[key] == True:
+                    self.ui.track_list[227].lights = 1
+                else:
+                    self.ui.track_list[227].lights = 0
+            if temp == 2000:
+                if lights_dic[key] == True:
+                    self.ui.track_list[226].lights = 1
+                else:
+                    self.ui.track_list[226].lights = 0
+            if temp > 2000:
+                temp -= 2000
+                if lights_dic[key] == True:
+                    self.ui.track_list[149 + temp].lights = 1
+                else:
+                    self.ui.track_list[149 + temp].lights = 0
+            if temp > 1000 and temp < 2000:
+                temp -= 1000
+                if lights_dic[key] == True:
+                    self.ui.track_list[temp - 1].lights = 1
+                else:
+                    self.ui.track_list[temp - 1].lights = 0
 
     def set_crossings(self, cr_dic):
-        i = 1
+        for key in cr_dic:
+            temp = key
+            if temp == 1019 :
+                if cr_dic[key] == True:
+                    self.ui.track_list[18].crossing_status = 1
+                else:
+                    self.ui.track_list[18].crossing_status = 0
+            if temp == 2047 :
+                if cr_dic[key] == True:
+                    self.ui.track_list[196].crossing_status = 1
+                else:
+                    self.ui.track_list[196].crossing_status = 0
+                
     
     def set_train_status(self, train):
         if train.line_name == "GREEN":
@@ -371,21 +464,6 @@ class track_model(object):
                 train.beacon_info = self.get_red_line_above_below_ground(train.most_recent_block)
                 
             
-            
-    def set_total_authority(self, auth_dic):
-        i = 1
-    
-    def set_switch_position(self,sw_dic):
-        i = 1
-        
-    def set_commanded_speed(self,com_dic):
-        i = 1
-    
-    def set_lights(self, lights_dic):
-        i = 1
-        
-    def set_crossings(self, cr_dic):
-        i = 1
         
   
     # sys.exit(app.exec_())
