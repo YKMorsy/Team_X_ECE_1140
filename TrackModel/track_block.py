@@ -180,3 +180,11 @@ class block:
     
     def reset_authority(self):
         self.authority = 0
+    def get_next_block(self, dir):
+        if dir == True :
+            if self.switch == 0:
+                return self.next_loc
+            else:
+                return self.switch_forward_loc
+        else:
+            return self.next_loc
