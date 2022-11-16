@@ -13,11 +13,11 @@ def Connect_Track_Control_And_Model(trcControl, model):
     model.set_commanded_speed(cs)
 
     #lights
-    li = trcControl[0].set_light_colors() | trcControl[1].set_light_colors() | trcControl[2].set_light_colors() | trcControl[3].set_light_colors() | trcControl[4].set_light_colors() | trcControl[5].set_light_colors()
+    li = trcControl[0].get_light_colors() | trcControl[1].get_light_colors() | trcControl[2].get_light_colors() | trcControl[3].get_light_colors() | trcControl[4].get_light_colors() | trcControl[5].get_light_colors()
     model.set_lights(li)
 
     #railway crossings
-    rc = trcControl[0].set_railway_crossings() | trcControl[1].set_railway_crossings() | trcControl[2].set_railway_crossings() | trcControl[3].set_railway_crossings() | trcControl[4].set_railway_crossings() | trcControl[5].set_railway_crossings()
+    rc = trcControl[0].get_railway_crossings() | trcControl[1].get_railway_crossings() | trcControl[2].get_railway_crossings() | trcControl[3].get_railway_crossings() | trcControl[4].get_railway_crossings() | trcControl[5].get_railway_crossings()
     model.set_crossings(rc)
 
     #Track Model - > Track Control

@@ -191,22 +191,28 @@ class track_model(object):
         return green_line_occupancy
 
     def get_fault_0(self):
-        i = 150
+        out = {}
+        return out
 
     def get_fault_1(self):
-        i = 150
+        out = {}
+        return out
 
     def get_fault_2(self):
-        i = 150
+        out = {}
+        return out
 
     def get_fault_3(self):
-        i = 150
+        out = {}
+        return out
 
     def get_fault_4(self):
-        i = 150
+        out = {}
+        return out
 
     def get_fault_5(self):
-        i = 150
+        out = {}
+        return out
 
     def set_total_authority(self, auth_dic):
         i = 1
