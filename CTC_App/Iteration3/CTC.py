@@ -4,8 +4,8 @@ from PyQt6.QtCore import *
 from PyQt6.QtWidgets import *
 from PyQt6.QtGui import *
 from PyQt6 import uic
-from Line import Line
-from Dispatcher import Dispatcher
+from CTC_App.Iteration3.Line import Line
+from CTC_App.Iteration3.Dispatcher import Dispatcher
 
 # greenLine = Line("Iteration3/Track_Layout_Green.xlsx")
 
@@ -13,18 +13,17 @@ from Dispatcher import Dispatcher
 
 class CTCApp(QWidget):
     def __init__(self, greenLine, CTCDispatcher):
-
+        super().__init__()
+        
         self.greenLine = greenLine
         self.CTCDispatcher = CTCDispatcher
 
         self.train_list_length = 0
-
-        super().__init__()
-
-        uic.loadUi('Iteration3/CTC.ui', self)
+    
+        uic.loadUi('./CTC_App/Iteration3/CTC.ui', self)
         self.tabWidget.setTabText(0,'Schedule/Trains')
         self.tabWidget.setTabText(1,'Maintenace')
-
+        
         # Sizing stuff
         header = self.stationsTable.horizontalHeader() 
         header.setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)
@@ -82,6 +81,7 @@ class CTCApp(QWidget):
         self.timer.timeout.connect(self.updateTimer)
         self.timer.setInterval(1000)
         self.timer.start()
+
 
         # Constantly update train table
 
@@ -414,11 +414,3 @@ class CTCApp(QWidget):
 
             elif self.current_line_maint == "Red":
                 pass
-
-        
-
-    
-def retWindow(self):
-    app = QApplication(sys.argv)
-    window = CTCApp()
-    return window

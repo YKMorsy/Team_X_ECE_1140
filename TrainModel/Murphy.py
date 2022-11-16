@@ -3,10 +3,10 @@ from PyQt6.QtWidgets import QLabel, QPushButton, QRadioButton, QSlider, QSizePol
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QStandardItem
 
-from Test import TestUI, ExpandedTableUI
-from Passenger import PassengerUI
-from FontStyles import *
-from common import *
+from TrainModel.Test import TestUI, ExpandedTableUI
+from TrainModel.Passenger import PassengerUI
+from TrainModel.FontStyles import *
+from TrainModel.common import *
     
 class MurphyUI(QFrame):
     def __init__(self):
@@ -423,11 +423,11 @@ class MurphyUI(QFrame):
 #print(dlg.exec())
 
 #Set up the Qapp and murphy window
-app = QApplication([])
-murphy_window = MurphyUI()
+# app = QApplication([])
+# murphy_window = MurphyUI()
 
-#Show the murphy window
-murphy_window.show()
+# #Show the murphy window
+# murphy_window.show()
 
-#Start the event loop
-app.exec()
+# #Start the event loop
+# app.exec()

@@ -6,12 +6,16 @@ import TrackModel.track_builder as track_builder
 
 
 class track_model(object):
-    app = QtWidgets.QApplication(sys.argv)
-    Track_Model = QtWidgets.QMainWindow()
-    ui = track_builder.Ui_Track_Model()
-    ui.setupUi(Track_Model)
-    Track_Model.show()
-    stations = station.station()
+
+    def __init__(self):
+        self.Track_Model = QtWidgets.QMainWindow()
+        self.ui = track_builder.Ui_Track_Model()
+        self.ui.setupUi(self.Track_Model)
+        self.stations = station.station()
+
+    def show(self):
+        self.Track_Model.show()
+    
     def get_red_line_occupancy(self):
         red_line_occupancy = []
         i = 150
@@ -156,8 +160,70 @@ class track_model(object):
         
     def get_red_line_authority(self, loc):
         return self.ui.track_list[loc + 149].get_authority()
+
+    def get_occupancy_0(self):
+        red_line_occupancy = {}
+        i = 150
+        j = 1000
+        while i < 10:
+            red_line_occupancy.append(self.ui.track_list[i].get_occupancy())
+            i += 1
+        return red_line_occupancy
+
+    def get_occupancy_1(self):
+        i = 150
+
+    def get_occupancy_2(self):
+        i = 150
+
+    def get_occupancy_3(self):
+        i = 150
+
+    def get_occupancy_4(self):
+        i = 150 
+
+    def get_occupancy_5(self):
+        green_line_occupancy = []
+        i = 0
+        while i < 150 :
+            green_line_occupancy.append(self.ui.track_list[i].get_occupancy())
+            i += 1
+        return green_line_occupancy
+
+    def get_fault_0(self):
+        i = 150
+
+    def get_fault_1(self):
+        i = 150
+
+    def get_fault_2(self):
+        i = 150
+
+    def get_fault_3(self):
+        i = 150
+
+    def get_fault_4(self):
+        i = 150
+
+    def get_fault_5(self):
+        i = 150
+
+    def set_total_authority(self, auth_dic):
+        i = 1
+
+    def set_switch_position(self,sw_dic):
+        i = 1
+
+    def set_commanded_speed(self,com_dic):
+        i = 1
+
+    def set_lights(self, lights_dic):
+        i = 1
+
+    def set_crossings(self, cr_dic):
+        i = 1
     
         
-    sys.exit(app.exec_())
+    # sys.exit(app.exec_())
 
    

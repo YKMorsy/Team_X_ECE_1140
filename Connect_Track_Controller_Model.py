@@ -1,5 +1,3 @@
-import track_controller.WaysideController
-
 def Connect_Track_Control_And_Model(trcControl, model):
     #Track Control - > Track Model
     #switch 

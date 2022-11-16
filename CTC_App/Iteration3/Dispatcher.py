@@ -1,4 +1,4 @@
-from Train import Train
+from CTC_App.Iteration3.Train import Train
 
 class Dispatcher:
 
