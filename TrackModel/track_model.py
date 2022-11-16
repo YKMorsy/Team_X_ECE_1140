@@ -14,7 +14,44 @@ class track_model(object):
 
     def show(self):
         self.Track_Model.show()
-        
+    
+    def get_commanded_speed_dict(self):
+        out = {}
+        i = 0
+        out.update({"YARDR" : self.ui.track_list[226].get_commanded_speed()})
+        out.update({"YARDG" : self.ui.track_list[227].get_commanded_speed()})
+        while i < 150:
+            store_block_num = str(i + 1)
+            new_key = store_block_num + "G"
+            out.update({new_key : self.ui.track_list[i].get_commanded_speed()})
+            i += 1
+        i = 150
+        j = 1
+        while i < 226 :
+            new_key = str(j) + "R"
+            out.update({new_key : self.ui.track_list[i].get_commanded_speed()})
+            i += 1
+            j += 1
+        return out 
+    def get_authority_dict(self):
+        out = {}
+        i = 0
+        out.update({"YARDR" : self.ui.track_list[226].get_authority()})
+        out.update({"YARDG" : self.ui.track_list[227].get_authority()})
+        while i < 150:
+            store_block_num = str(i + 1)
+            new_key = store_block_num + "G"
+            out.update({new_key : self.ui.track_list[i].get_authority()})
+            i += 1
+        i = 150
+        j = 1
+        while i < 226 :
+            new_key = str(j) + "R"
+            out.update({new_key : self.ui.track_list[i].get_authority()})
+            i += 1
+            j += 1
+        return out
+    
     def set_red_line_occupancy(self, loc):
         self.ui.track_list[loc + 149].set_occupancy()
     
