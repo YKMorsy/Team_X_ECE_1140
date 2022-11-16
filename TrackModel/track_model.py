@@ -19,7 +19,7 @@ class track_model(object):
         red_line_occupancy = {}
         i = 150
         j = 1000
-        while i < :
+        while i < 10:
             red_line_occupancy.append(self.ui.track_list[i].get_occupancy())
             i += 1
         return red_line_occupancy
@@ -45,7 +45,7 @@ class track_model(object):
         return green_line_occupancy
     
     def get_fault_0(self):
-        1 = 150
+        i = 150
     
     def get_fault_1(self):
         i = 150
