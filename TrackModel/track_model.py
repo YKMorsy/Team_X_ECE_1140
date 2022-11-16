@@ -6,7 +6,6 @@ import TrackModel.track_builder as track_builder
 
 
 class track_model(object):
-
     def __init__(self):
         self.Track_Model = QtWidgets.QMainWindow()
         self.ui = track_builder.Ui_Track_Model()
@@ -15,23 +14,7 @@ class track_model(object):
 
     def show(self):
         self.Track_Model.show()
-    
-    def get_red_line_occupancy(self):
-        red_line_occupancy = []
-        i = 150
-        while i < len(self.ui.track_list):
-            red_line_occupancy.append(self.ui.track_list[i].get_occupancy())
-            i += 1
-        return red_line_occupancy
         
-    def get_green_line_occupancy(self):
-        green_line_occupancy = []
-        i = 0
-        while i < 150 :
-            green_line_occupancy.append(self.ui.track_list[i].get_occupancy())
-            i += 1
-        return green_line_occupancy
-    
     def set_red_line_occupancy(self, loc):
         self.ui.track_list[loc + 149].set_occupancy()
     
@@ -260,8 +243,7 @@ class track_model(object):
         return out
 
     def get_fault_1(self):
-        out = {}
-        
+        out = {}     
         i = 172
         j = 2023
         
@@ -280,7 +262,6 @@ class track_model(object):
 
     def get_fault_2(self):
         out = {}
-        
         i = 194
         j = 2045
         
@@ -291,8 +272,7 @@ class track_model(object):
         return out
 
     def get_fault_3(self):
-        out = {}
-        
+        out = {}        
         i = 0
         j = 1001
         
@@ -304,7 +284,6 @@ class track_model(object):
 
     def get_fault_4(self):
         out = {}
-        
         i = 19
         j = 1020
         
@@ -319,12 +298,10 @@ class track_model(object):
             out.update({j : self.ui.track_list[i].controller_fault_status()})
             i += 1
             j += 1
-            
         return out
 
     def get_fault_5(self):
         out = {}
-        
         i = 34
         j = 1000
         out.update({j : self.ui.track_list[227].controller_fault_status()})
@@ -350,7 +327,67 @@ class track_model(object):
     def set_crossings(self, cr_dic):
         i = 1
     
+    def set_train_status(self, train):
+        if train.line_name == "GREEN":
+            if train.current_distance_in_block >=  32 and train.current_distance_in_block < self.get_green_line_block_len(train.most_recent_block) : 
+                train.block_list.append(self.ui.track_list[train.most_recent_block].get_next_block())
+                train.event_distance_in_block = self.get_green_line_block_len(train.most_recent_block)
+                last_block = train.block_list[0]
+                self.reset_green_line_occupancy(last_block)
+                list1 = [] 
+                list1.append(train.most_recent_block)
+                train.block_list = list1
+            else:
+                
+                
+                train.event_distance_in_block = 32
+                if train.direction:
+                    train.current_grade = self.get_green_line_grade(train.most_recent_block)
+                else: 
+                    train.current_grade = 0 - self.get_green_line_grade(train.most_recent_block)
+                train.commanded_authority = self.get_green_line_authority(train.most_recent_block)
+                train.commanded_speed = self.get_green_line_commanded_speed(train.most_recent_block)
+                train.beacon_info = self.get_green_line_above_below_ground(train.most_recent_block)
+                
+        else:
+            if train.current_distance_in_block >=  32 and train.current_distance_in_block < self.get_red_line_block_len(train.most_recent_block) : 
+                list1 = [] 
+                list1.append(train.most_recent_block)
+                last_block = train.block_list[0]
+                self.reset_red_line_occupancy(last_block)
+                train.block_list.append(self.ui.track_list[train.most_recent_block].get_next_block())
+                
+                train.block_list = list1
+                train.event_distance_in_block = self.get_red_line_block_len(train.most_recent_block)
+            else:
+                
+                train.event_distance_in_block = 32
+                if train.direction:
+                    train.current_grade = self.get_red_line_grade(train.most_recent_block)
+                else:
+                    train.current_grade = 0 - self.get_red_line_grade(train.most_recent_block)
+                train.commanded_authority = self.get_red_line_authority(train.most_recent_block)
+                train.commanded_speed = self.get_red_line_commanded_speed(train.most_recent_block)
+                train.beacon_info = self.get_red_line_above_below_ground(train.most_recent_block)
+                
+            
+            
+    def set_total_authority(self, auth_dic):
+        i = 1
+    
+    def set_switch_position(self,sw_dic):
+        i = 1
         
+    def set_commanded_speed(self,com_dic):
+        i = 1
+    
+    def set_lights(self, lights_dic):
+        i = 1
+        
+    def set_crossings(self, cr_dic):
+        i = 1
+        
+  
     # sys.exit(app.exec_())
 
    

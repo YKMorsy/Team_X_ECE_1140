@@ -1,0 +1,10 @@
+0.01
+60
+70
+0.0
+False
+False
+False
+False
+False
+WHITED

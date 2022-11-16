@@ -1,0 +1,10 @@
+0.0
+40
+70
+0.0
+False
+False
+False
+False
+False
+SHADYSIDE
