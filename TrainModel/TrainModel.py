@@ -157,4 +157,4 @@ class TrainModel:
         self.velocity = new_velocity
 
         #If we exceed the event distance, call the track model event update function
-        if self.current_distance_in_block > self.event_distance_in_block: self.track_model.set_train_status(self)
+        # if self.current_distance_in_block > self.event_distance_in_block: self.track_model.set_train_status(self)

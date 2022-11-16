@@ -313,79 +313,180 @@ class track_model(object):
         return out
 
     def set_total_authority(self, auth_dic):
-        i = 1
+        for key in auth_dic:
+            temp = key
+            if temp == 1000:
+                if auth_dic[key] == True:
+                    self.ui.track_list[227].set_authority()
+                else:
+                    self.ui.track_list[227].reset_authority()
+            if temp == 2000:
+                if auth_dic[key] == True:
+                    self.ui.track_list[226].set_authority()
+                else:
+                    self.ui.track_list[226].reset_authority()
+            if temp > 2000:
+                temp -= 2000
+                if auth_dic[key] == True:
+                    self.ui.track_list[149 + temp].set_authority()
+                else:
+                    self.ui.track_list[149 + temp].reset_authority()
+            if temp > 1000 and temp < 2000:
+                temp -= 1000
+                if auth_dic[key] == True:
+                    self.ui.track_list[temp - 1].set_authority()
+                else:
+                    self.ui.track_list[temp - 1].reset_authority()
 
     def set_switch_position(self,sw_dic):
-        i = 1
+        for key in sw_dic:
+            temp = key
+            if temp == 1000:
+                if sw_dic[key] == True:
+                    self.ui.track_list[227].set_switch()
+                else:
+                    self.ui.track_list[227].reset_switch()
+            if temp == 2000:
+                if sw_dic[key] == True:
+                    self.ui.track_list[226].set_switch()
+                else:
+                    self.ui.track_list[226].reset_switch()
+            if temp > 2000:
+                temp -= 2000
+                if sw_dic[key] == True:
+                    self.ui.track_list[149 + temp].set_switch()
+                else:
+                    self.ui.track_list[149 + temp].reset_switch()
+            if temp > 1000 and temp < 2000:
+                temp -= 1000
+                if sw_dic[key] == True:
+                    self.ui.track_list[temp - 1].set_switch()
+                else:
+                    self.ui.track_list[temp - 1].reset_switch()
 
     def set_commanded_speed(self,com_dic):
-        i = 1
+        for key in com_dic:
+            temp = key
+            if temp == 1000:
+                self.ui.track_list[227].set_commanded_speed(com_dic[key])
+            
+            if temp == 2000:
+                    self.ui.track_list[226].set_commanded_speed(com_dic[key])
+            if temp > 2000:
+                temp -= 2000
+                self.ui.track_list[149 + temp].set_commanded_speed(com_dic[key])
+            if temp > 1000 and temp < 2000:
+                temp -= 1000
+                self.ui.track_list[temp - 1].set_commanded_speed(com_dic[key])
 
     def set_lights(self, lights_dic):
-        i = 1
+        for key in lights_dic:
+            temp = key
+            if temp == 1000:
+                if lights_dic[key] == True:
+                    self.ui.track_list[227].lights = 1
+                else:
+                    self.ui.track_list[227].lights = 0
+            if temp == 2000:
+                if lights_dic[key] == True:
+                    self.ui.track_list[226].lights = 1
+                else:
+                    self.ui.track_list[226].lights = 0
+            if temp > 2000:
+                temp -= 2000
+                if lights_dic[key] == True:
+                    self.ui.track_list[149 + temp].lights = 1
+                else:
+                    self.ui.track_list[149 + temp].lights = 0
+            if temp > 1000 and temp < 2000:
+                temp -= 1000
+                if lights_dic[key] == True:
+                    self.ui.track_list[temp - 1].lights = 1
+                else:
+                    self.ui.track_list[temp - 1].lights = 0
 
     def set_crossings(self, cr_dic):
-        i = 1
+        for key in cr_dic:
+            temp = key
+            if temp == 1019 :
+                if cr_dic[key] == True:
+                    self.ui.track_list[18].crossing_status = 1
+                else:
+                    self.ui.track_list[18].crossing_status = 0
+            if temp == 2047 :
+                if cr_dic[key] == True:
+                    self.ui.track_list[196].crossing_status = 1
+                else:
+                    self.ui.track_list[196].crossing_status = 0
+                
     
     def set_train_status(self, train):
-        if train.line_name == "GREEN":
-            if train.current_distance_in_block >=  32 and train.current_distance_in_block < self.get_green_line_block_len(train.most_recent_block) : 
-                train.block_list.append(self.ui.track_list[train.most_recent_block].get_next_block())
-                train.event_distance_in_block = self.get_green_line_block_len(train.most_recent_block)
-                last_block = train.block_list[0]
+        line = train.line_name
+        if line.upper() == "GREEN":
+            block_number = int(train.most_recent_block)
+            if train.current_distance_in_block >=  32 and train.current_distance_in_block < self.get_green_line_block_len(block_number) : 
+                store_curr = self.ui.track_list[block_number - 1].name
+                curr_block = store_curr[1:]
+                train.event_distance_in_block = self.get_green_line_block_len(block_number)
+                last_block = int(train.block_list[0])
                 self.reset_green_line_occupancy(last_block)
                 list1 = [] 
                 list1.append(train.most_recent_block)
                 train.block_list = list1
+                return 0
             else:
                 
-                
                 train.event_distance_in_block = 32
+                block_number = int(train.most_recent_block)
+                next_block = self.ui.track_list[block_number - 1].get_next_block_green(train,self.ui.track_list)
+                if next_block.upper() == "YARD":
+                    return -1
+                curr_block = next_block[1:]
+                train.block_list.append(curr_block)
+                new_block = int(curr_block)
                 if train.direction:
-                    train.current_grade = self.get_green_line_grade(train.most_recent_block)
+                    train.current_grade = self.get_green_line_grade(new_block)
                 else: 
-                    train.current_grade = 0 - self.get_green_line_grade(train.most_recent_block)
-                train.commanded_authority = self.get_green_line_authority(train.most_recent_block)
-                train.commanded_speed = self.get_green_line_commanded_speed(train.most_recent_block)
-                train.beacon_info = self.get_green_line_above_below_ground(train.most_recent_block)
+                    train.current_grade = 0 - self.get_green_line_grade(new_block)
+                    self.ui.track_list[new_block - 1].set_occupancy()
+                train.commanded_authority = self.get_green_line_authority(new_block)
+                train.commanded_speed = self.get_green_line_commanded_speed(new_block)
+                train.beacon_info = {}
+                return 0
                 
         else:
-            if train.current_distance_in_block >=  32 and train.current_distance_in_block < self.get_red_line_block_len(train.most_recent_block) : 
+            block_number = int(train.most_recent_block)
+            if train.current_distance_in_block >=  32 and train.current_distance_in_block < self.get_red_line_block_len(block_number) : 
+                store_curr = self.ui.track_list[block_number - 1].name
+                curr_block = store_curr[1:]
+                train.event_distance_in_block = self.get_red_line_block_len(block_number)
+                last_block = int(train.block_list[0])
+                self.reset_red_line_occupancy(last_block)
                 list1 = [] 
                 list1.append(train.most_recent_block)
-                last_block = train.block_list[0]
-                self.reset_red_line_occupancy(last_block)
-                train.block_list.append(self.ui.track_list[train.most_recent_block].get_next_block())
-                
                 train.block_list = list1
-                train.event_distance_in_block = self.get_red_line_block_len(train.most_recent_block)
+                return 0
             else:
                 
                 train.event_distance_in_block = 32
+                block_number = int(train.most_recent_block)
+                next_block = self.ui.track_list[block_number - 1].get_next_block_red(train,self.ui.track_list)
+                if next_block.upper() == "YARD":
+                    return -1
+                curr_block = next_block[1:]
+                train.block_list.append(curr_block)
+                new_block = int(curr_block)
                 if train.direction:
-                    train.current_grade = self.get_red_line_grade(train.most_recent_block)
-                else:
-                    train.current_grade = 0 - self.get_red_line_grade(train.most_recent_block)
-                train.commanded_authority = self.get_red_line_authority(train.most_recent_block)
-                train.commanded_speed = self.get_red_line_commanded_speed(train.most_recent_block)
-                train.beacon_info = self.get_red_line_above_below_ground(train.most_recent_block)
+                    train.current_grade = self.get_red_line_grade(new_block)
+                else: 
+                    train.current_grade = 0 - self.get_red_line_grade(new_block)
+                    self.ui.track_list[new_block - 1].set_occupancy()
+                train.commanded_authority = self.get_red_line_authority(new_block)
+                train.commanded_speed = self.get_red_line_commanded_speed(new_block)
+                train.beacon_info = {}
+                return 0
                 
             
-            
-    def set_total_authority(self, auth_dic):
-        i = 1
-    
-    def set_switch_position(self,sw_dic):
-        i = 1
-        
-    def set_commanded_speed(self,com_dic):
-        i = 1
-    
-    def set_lights(self, lights_dic):
-        i = 1
-        
-    def set_crossings(self, cr_dic):
-        i = 1
         
   
     # sys.exit(app.exec_())
