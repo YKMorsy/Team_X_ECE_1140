@@ -1,5 +1,5 @@
 import pandas as pd
-from Block import Block
+from CTC_App.Iteration3.Block import Block
 
 class Line:
     # Constructor
@@ -122,10 +122,10 @@ class Line:
         for key in switch_dict:
             if self.line_color == "Green":
                 cur_key = key - 1000
-                self.block_list[cur_key].setSwitchPos(switch_dict[cur_key])
+                self.block_list[cur_key].setSwitchPos(switch_dict[key])
             elif self.line_color == "Red":
                 cur_key = key - 2000
-                self.block_list[cur_key].setSwitchPos(switch_dict[cur_key])
+                self.block_list[cur_key].setSwitchPos(switch_dict[key])
 
     # # Function to upate occupancy
     # def setBlockOccupancy(self, block_number, occupancy):
@@ -136,20 +136,20 @@ class Line:
         for key in status_dict:
             if self.line_color == "Green":
                 cur_key = key - 1000
-                self.block_list[cur_key].status = status_dict[cur_key]
+                self.block_list[cur_key].status = status_dict[key]
             elif self.line_color == "Red":
                 cur_key = key - 2000
-                self.block_list[cur_key].status(status_dict[cur_key])
+                self.block_list[cur_key].status(status_dict[key])
 
     # Function to update railway crossing
     def setRailWayCrossing(self, crossing_dict):
         for key in crossing_dict:
             if self.line_color == "Green":
                 cur_key = key - 1000
-                self.block_list[cur_key].block_railway = crossing_dict[cur_key]
+                self.block_list[cur_key].block_railway = crossing_dict[key]
             elif self.line_color == "Red":
                 cur_key = key - 2000
-                self.block_list[cur_key].block_railway = crossing_dict[cur_key]
+                self.block_list[cur_key].block_railway = crossing_dict[key]
 
 
 
@@ -161,9 +161,9 @@ class Line:
 
         for block in self.block_list:
             if self.line_color == "Green":
-                cur_block = block + 1000
+                cur_block = block.block_number + 1000
             if self.line_color == "Red":
-                cur_block = block + 2000
+                cur_block = block.block_number + 2000
             authority_dict[cur_block] = block.block_authority
 
         return authority_dict
@@ -173,9 +173,9 @@ class Line:
 
         for block in self.block_list:
             if self.line_color == "Green":
-                cur_block = block + 1000
+                cur_block = block.block_number + 1000
             if self.line_color == "Red":
-                cur_block = block + 2000
+                cur_block = block.block_number + 2000
             speed_dict[cur_block] = block.block_suggested_speed
 
         return speed_dict

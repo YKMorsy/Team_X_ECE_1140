@@ -1,5 +1,5 @@
 import pandas as pd
-from Line import Line
+from CTC_App.Iteration3.Line import Line
 
 class Train:
 
