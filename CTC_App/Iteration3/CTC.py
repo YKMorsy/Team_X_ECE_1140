@@ -93,6 +93,9 @@ class CTCApp(QWidget):
         output = []
 
         while (self.train_list_length != len(self.CTCDispatcher.trains)):
+            self.greenLine.block_list[0].block_authority = True
+            self.greenLine.block_list[0].block_suggested_speed = self.greenLine.block_list[0].block_speed_limit
+
             output.append((self.CTCDispatcher.trains[self.train_list_length]))
             self.train_list_length += 1
 
