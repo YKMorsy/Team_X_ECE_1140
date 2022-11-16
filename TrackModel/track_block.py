@@ -21,7 +21,7 @@ class block:
     track_heater = 0
     authority = 0
     underground = 'n'
-    signal = np.array([0, 0, 0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0])
+    lights = 0
     
     #default constructor
     def __init__(self,ln, n, g, e, s, st, len, nl, sw,cr,u):
