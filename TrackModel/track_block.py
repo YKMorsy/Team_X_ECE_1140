@@ -180,6 +180,13 @@ class block:
     
     def reset_authority(self):
         self.authority = 0
+        
+    def controller_fault_status(self):
+        if self.fault_cir == 0 and self.fault_pow == 0 and self.fault_rail == 0:
+            return True
+        else:
+            return False
+            
     def get_next_block(self, dir):
         if dir == True :
             if self.switch == 0:

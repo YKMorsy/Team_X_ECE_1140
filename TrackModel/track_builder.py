@@ -171,7 +171,7 @@ class Ui_track_model_test_window(object):
 
 
 class Ui_Track_Model(object):
-    track_holder = np.empty(226,track_block.block)
+    track_holder = np.empty(228,track_block.block)
     track_list   = track_holder
     outside_temp = 60
     red_line_len = 76
@@ -696,6 +696,8 @@ class Ui_Track_Model(object):
         self.track_holder[223] = track_block.block("Red","S74",0,-1.24,55,"none",50,"S75","S75",'n','y')
         self.track_holder[224] = track_block.block("Red","S75",0,-1.24,55,"none",50,"T76","T76",'n','y')
         self.track_holder[225] = track_block.block("Red","T76",0,-1.24,55,"none",50,"H27","H27",'n','y')
+        self.track_holder[226] = track_block.block("Red", "YARD",0,0,30,"none",75,"C9","C9",'n','n')
+        self.track_holder[227] = track_block.block("Green", "YARD",0,0,30,"none",75,"K63","K63",'n','n')
         self.track_list = self.track_holder
         self.track_info_table.setItem(1,0,QtWidgets.QTableWidgetItem("Green Line"))
         self.track_info_table.setItem(1,1,QtWidgets.QTableWidgetItem("Normal"))

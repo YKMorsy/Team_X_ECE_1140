@@ -14,53 +14,6 @@ class track_model(object):
 
     def show(self):
         self.Track_Model.show()
-    
-    def get_red_line_occupancy(self):
-        red_line_occupancy = {}
-        i = 150
-        j = 1000
-        while i < 10:
-            red_line_occupancy.append(self.ui.track_list[i].get_occupancy())
-            i += 1
-        return red_line_occupancy
-    
-    def get_occupancy_1(self):
-        i = 150
-        
-    def get_occupancy_2(self):
-        i = 150
-        
-    def get_occupancy_3(self):
-        i = 150
-        
-    def get_occupancy_4(self):
-        i = 150 
-        
-    def get_occupancy_5(self):
-        green_line_occupancy = []
-        i = 0
-        while i < 150 :
-            green_line_occupancy.append(self.ui.track_list[i].get_occupancy())
-            i += 1
-        return green_line_occupancy
-    
-    def get_fault_0(self):
-        i = 150
-    
-    def get_fault_1(self):
-        i = 150
-        
-    def get_fault_2(self):
-        i = 150
-        
-    def get_fault_3(self):
-        i = 150
-        
-    def get_fault_4(self):
-        i = 150
-        
-    def get_fault_5(self):
-        i = 150
         
     def set_red_line_occupancy(self, loc):
         self.ui.track_list[loc + 149].set_occupancy()
@@ -192,56 +145,171 @@ class track_model(object):
         return self.ui.track_list[loc + 149].get_authority()
 
     def get_occupancy_0(self):
-        red_line_occupancy = {}
+        out = {}
+        out.update({2000 : self.ui.track_list[226].get_occupancy()})
         i = 150
-        j = 1000
-        while i < 10:
-            red_line_occupancy.append(self.ui.track_list[i].get_occupancy())
+        j = 2001
+        
+        while i < 174:
+            out.update({j : self.ui.track_list[i].get_occupancy()})
             i += 1
-        return red_line_occupancy
+            j += 1
+        return out
 
     def get_occupancy_1(self):
-        i = 150
-
+        out = {}
+        
+        i = 172
+        j = 2023
+        
+        while i < 196:
+            out.update({j : self.ui.track_list[i].get_occupancy()})
+            i += 1
+            j += 1
+        i = 216
+        j = 2067
+        
+        while i < 226:
+            out.update({j : self.ui.track_list[i].get_occupancy()})
+            i += 1
+            j += 1
+        return out
     def get_occupancy_2(self):
-        i = 150
+        out = {}
+        
+        i = 194
+        j = 2045
+        
+        while i < 216:
+            out.update({j : self.ui.track_list[i].get_occupancy()})
+            i += 1
+            j += 1
+        return out
 
     def get_occupancy_3(self):
-        i = 150
+        out = {}
+        
+        i = 0
+        j = 1001
+        
+        while i < 24:
+            out.update({j : self.ui.track_list[i].get_occupancy()})
+            i += 1
+            j += 1
+        return out
 
     def get_occupancy_4(self):
-        i = 150 
-
-    def get_occupancy_5(self):
-        green_line_occupancy = []
-        i = 0
-        while i < 150 :
-            green_line_occupancy.append(self.ui.track_list[i].get_occupancy())
+        out = {}
+        
+        i = 19
+        j = 1020
+        
+        while i < 36:
+            out.update({j : self.ui.track_list[i].get_occupancy()})
             i += 1
-        return green_line_occupancy
+            j += 1
+        
+        i = 103
+        j = 1104
+        while i < 150:
+            out.update({j : self.ui.track_list[i].get_occupancy()})
+            i += 1
+            j += 1
+            
+        return out
+    def get_occupancy_5(self):
+        out = {}
+        
+        i = 34
+        j = 1000
+        out.update({j : self.ui.track_list[227].get_occupancy()})
+        j = 1035
+        while i < 105:
+            out.update({j : self.ui.track_list[i].get_occupancy()})
+            i += 1
+            j += 1
+        return out
 
     def get_fault_0(self):
         out = {}
+        out.update({2000 : self.ui.track_list[226].controller_fault_status()})
+        i = 150
+        j = 2001
+        
+        while i < 174:
+            out.update({j : self.ui.track_list[i].controller_fault_status()})
+            i += 1
+            j += 1
         return out
 
     def get_fault_1(self):
-        out = {}
+        out = {}     
+        i = 172
+        j = 2023
+        
+        while i < 196:
+            out.update({j : self.ui.track_list[i].controller_fault_status()})
+            i += 1
+            j += 1
+        i = 216
+        j = 2067
+        
+        while i < 226:
+            out.update({j : self.ui.track_list[i].controller_fault_status()})
+            i += 1
+            j += 1
         return out
 
     def get_fault_2(self):
         out = {}
+        i = 194
+        j = 2045
+        
+        while i < 216:
+            out.update({j : self.ui.track_list[i].controller_fault_status()})
+            i += 1
+            j += 1
         return out
 
     def get_fault_3(self):
-        out = {}
+        out = {}        
+        i = 0
+        j = 1001
+        
+        while i < 24:
+            out.update({j : self.ui.track_list[i].controller_fault_status()})
+            i += 1
+            j += 1
         return out
 
     def get_fault_4(self):
         out = {}
+        i = 19
+        j = 1020
+        
+        while i < 36:
+            out.update({j : self.ui.track_list[i].controller_fault_status()})
+            i += 1
+            j += 1
+        
+        i = 103
+        j = 1104
+        while i < 150:
+            out.update({j : self.ui.track_list[i].controller_fault_status()})
+            i += 1
+            j += 1
         return out
 
     def get_fault_5(self):
         out = {}
+        i = 34
+        j = 1000
+        out.update({j : self.ui.track_list[227].controller_fault_status()})
+        j = 1035
+        while i < 105:
+            out.update({j : self.ui.track_list[i].controller_fault_status()})
+            i += 1
+            j += 1
         return out
 
     def set_total_authority(self, auth_dic):
@@ -319,7 +387,7 @@ class track_model(object):
     def set_crossings(self, cr_dic):
         i = 1
         
-    
+  
     # sys.exit(app.exec_())
 
    
