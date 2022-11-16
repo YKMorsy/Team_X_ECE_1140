@@ -421,47 +421,66 @@ class track_model(object):
                 
     
     def set_train_status(self, train):
-        if train.line_name == "GREEN":
-            if train.current_distance_in_block >=  32 and train.current_distance_in_block < self.get_green_line_block_len(train.most_recent_block) : 
-                train.block_list.append(self.ui.track_list[train.most_recent_block].get_next_block())
-                train.event_distance_in_block = self.get_green_line_block_len(train.most_recent_block)
-                last_block = train.block_list[0]
+        line = train.line_name
+        if line.upper() == "GREEN":
+            block_number = int(train.most_recent_block)
+            if train.current_distance_in_block >=  32 and train.current_distance_in_block < self.get_green_line_block_len(block_number) : 
+                store_curr = self.ui.track_list[block_number - 1].name
+                curr_block = store_curr[1:]
+                train.event_distance_in_block = self.get_green_line_block_len(block_number)
+                last_block = int(train.block_list[0])
                 self.reset_green_line_occupancy(last_block)
                 list1 = [] 
                 list1.append(train.most_recent_block)
                 train.block_list = list1
             else:
                 
-                
                 train.event_distance_in_block = 32
+                block_number = int(train.most_recent_block)
+                next_block = self.ui.track_list[block_number - 1].get_next_block_green(train,self.ui.track_list)
+                if next_block.upper() == "YARD":
+                    return -1
+                curr_block = next_block[1:]
+                train.block_list.append(curr_block)
+                new_block = int(curr_block)
                 if train.direction:
-                    train.current_grade = self.get_green_line_grade(train.most_recent_block)
+                    train.current_grade = self.get_green_line_grade(new_block)
                 else: 
-                    train.current_grade = 0 - self.get_green_line_grade(train.most_recent_block)
-                train.commanded_authority = self.get_green_line_authority(train.most_recent_block)
-                train.commanded_speed = self.get_green_line_commanded_speed(train.most_recent_block)
-                train.beacon_info = self.get_green_line_above_below_ground(train.most_recent_block)
+                    train.current_grade = 0 - self.get_green_line_grade(new_block)
+                    self.ui.track_list[new_block - 1].set_occupancy()
+                train.commanded_authority = self.get_green_line_authority(new_block)
+                train.commanded_speed = self.get_green_line_commanded_speed(new_block)
+                train.beacon_info = {}
                 
         else:
-            if train.current_distance_in_block >=  32 and train.current_distance_in_block < self.get_red_line_block_len(train.most_recent_block) : 
+            block_number = int(train.most_recent_block)
+            if train.current_distance_in_block >=  32 and train.current_distance_in_block < self.get_red_line_block_len(block_number) : 
+                store_curr = self.ui.track_list[block_number - 1].name
+                curr_block = store_curr[1:]
+                train.event_distance_in_block = self.get_red_line_block_len(block_number)
+                last_block = int(train.block_list[0])
+                self.reset_red_line_occupancy(last_block)
                 list1 = [] 
                 list1.append(train.most_recent_block)
-                last_block = train.block_list[0]
-                self.reset_red_line_occupancy(last_block)
-                train.block_list.append(self.ui.track_list[train.most_recent_block].get_next_block())
-                
                 train.block_list = list1
-                train.event_distance_in_block = self.get_red_line_block_len(train.most_recent_block)
             else:
                 
                 train.event_distance_in_block = 32
+                block_number = int(train.most_recent_block)
+                next_block = self.ui.track_list[block_number - 1].get_next_block_red(train,self.ui.track_list)
+                if next_block.upper() == "YARD":
+                    return -1
+                curr_block = next_block[1:]
+                train.block_list.append(curr_block)
+                new_block = int(curr_block)
                 if train.direction:
-                    train.current_grade = self.get_red_line_grade(train.most_recent_block)
-                else:
-                    train.current_grade = 0 - self.get_red_line_grade(train.most_recent_block)
-                train.commanded_authority = self.get_red_line_authority(train.most_recent_block)
-                train.commanded_speed = self.get_red_line_commanded_speed(train.most_recent_block)
-                train.beacon_info = self.get_red_line_above_below_ground(train.most_recent_block)
+                    train.current_grade = self.get_red_line_grade(new_block)
+                else: 
+                    train.current_grade = 0 - self.get_red_line_grade(new_block)
+                    self.ui.track_list[new_block - 1].set_occupancy()
+                train.commanded_authority = self.get_red_line_authority(new_block)
+                train.commanded_speed = self.get_red_line_commanded_speed(new_block)
+                train.beacon_info = {}
                 
             
         
