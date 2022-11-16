@@ -1,11 +1,12 @@
-from TrainModel.TrainModel import TrainModel
+from TrainModel import TrainModel
 
 from PyQt6.QtGui import QStandardItem
 
 class TrainModelHandler:
-	def __init__(self, train_info_model):
+	def __init__(self, train_info_model, track_model):
 		self.train_list = {}
 		self.train_info_model = train_info_model
+		self.track_model = track_model
 		
 	def UI_update(self, list_of_lists):
 		for i in range(self.train_info_model.rowCount()):
@@ -24,9 +25,32 @@ class TrainModelHandler:
 			T.update(time_step)
 			list_of_lists.append(self.UI_train_row(T))
 		
+		#Check that no trains have crashed into each other
+		blocks_occupied = {}
+		for T in self.train_list.values():
+			for B in T.block_list:
+				if B in blocks_occupied.keys():
+					#The dictionary consists of blocks for the keys and IDs for the values, so if the block is already in the dicionary, a crash is assumed
+					print("TRAIN " + str(blocks_occupied[B]) + " AND TRAIN " + str(T.ID) + " HAVE BOTH ENTERED BLOCK " + str(B) + ".\nA CRASH HAS BEEN ASSUMED.")
+				else:
+					blocks_occupied[B] = T.ID
+
 		#Update the UI
 
 		self.UI_update(list_of_lists)
+
+	def set_authority(self, Authority):
+		for T in self.train_list.values:
+			if T.most_recent_block in Authority.keys:
+				if Authority[T.most_recent_block]: T.commanded_authority = "True"
+				else: T.commanded_authority = "False"
+
+
+	def set_speed(self, Speed):
+		for T in self.train_list.values:
+			if T.most_recent_block in Speed.keys:
+				T.commanded_speed = Speed[T.most_recent_block]
+
 
 	def reset_time(self, time_step = 0):
 		#This function will build a list of all the train rows, and return it back
@@ -81,16 +105,18 @@ class TrainModelHandler:
 		total_mass = (T.mass + (T.passenger_count + T.crew_count)*75.0)/907.185
 
 		#Return back the fully assembled list
-		return [str(T.ID), "{:.2f}".format(round(T.velocity/0.44704, 2)), "{:.2f}".format(round(T.distance/0.3048, 2)), str(round(T.engine_power)), "{:.2f}".format(round(total_mass, 2)), brake,
+		return [str(T.ID), "{:.2f}".format(round(T.velocity/0.44704, 2)), "{:.2f}".format(round(T.current_distance_in_block/0.3048, 2)), str(round(T.engine_power)), "{:.2f}".format(round(total_mass, 2)), brake,
 				str(round(T.current_grade)), str(T.passenger_count), str(fault), str(T.interior_temperature), interior_lights,
 				exterior_lights, left_doors, right_doors, T.commanded_authority, str(T.commanded_speed)]
 	
-	def create_train(self, ID, mass, crew_count, passenger_capacity, speed_limit, acceleration_limit, 
-					 service_deceleration, emergency_deceleration, max_engine_power, length, height, width, car_count):
+	def create_train(self, ID, mass = 40.9, crew_count = 2, passenger_capacity = 222, speed_limit = 43.50, acceleration_limit = 3.00, 
+    service_deceleration = 3.94, emergency_deceleration = 8.96, max_engine_power = 480000, length = 106, height = 11.2, width = 8.69, 
+    car_count = 1, direction = True, line_name = "Red"):
 						 
 		#Create an instance of TrainModel and add it to the dictionary
 		self.train_list[ID] =  TrainModel(self, ID, mass, crew_count, passenger_capacity, speed_limit, acceleration_limit, 
-                                          service_deceleration, emergency_deceleration, max_engine_power, length, height, width, car_count)
+                                          service_deceleration, emergency_deceleration, max_engine_power, length, height, 
+										  width, car_count, direction, line_name, self.track_model)
 
 		#Put the train in the UI table
 		self.train_info_model.insertRow(self.train_info_model.rowCount())

@@ -94,30 +94,39 @@ class track_control_display (QtWidgets.QMainWindow, Ui_MainWindow):
     def update_table(self, data, table, changable):
         numrows = len(data)
         table.setRowCount(numrows)
-        for row in range(numrows):
+        row=0
+        for key, val in data.items():
             for column in range(2):
-                item = QTableWidgetItem(str(data[row][column]))
+                item = QTableWidgetItem(str(val))
+                if column ==0:
+                    item = QTableWidgetItem(str(key))
                 if not(changable) or column==0 :
                     item.setFlags(QtCore.Qt.ItemIsEditable)
                 table.setItem(row, column, item)
+            row=row+1
 
     def update_light_table(self, data, table, changable):
         numrows = len(data)
         table.setRowCount(numrows)
-        for row in range(numrows):
+        row=0
+        for key, val in data.items():
             for column in range(2):
                 if(column == 1):
-                    if(data[row][column] and data[row][column+1]):
+                    if(val[0] and val[1]):
                         item = QTableWidgetItem("Green")
-                    elif(data[row][column] or data[row][column+1]):
+                    elif(val[0] or val[1]):
                         item = QTableWidgetItem("Yellow")
                     else:
                         item = QTableWidgetItem("Red")
                 else:
-                    item = QTableWidgetItem(str(data[row][column]))
+                    item = QTableWidgetItem(str(val))
+
+                if column ==0:
+                    item = QTableWidgetItem(str(key))
                 if not(changable) or column==0 :
                     item.setFlags(QtCore.Qt.ItemIsEditable)
                 table.setItem(row, column, item)
+            row=row+1
 
     def make_changes(self):
         self.get_table_change(self.track_data.get_switch_positions(), self.maint_SwitchPosTable)
@@ -130,23 +139,18 @@ class track_control_display (QtWidgets.QMainWindow, Ui_MainWindow):
     def get_table_change (self, table_data, table):
         rowC = table.rowCount()
         for row in range(rowC):
-            for dat_row in range(rowC):
-                (block, state) = table_data[dat_row]
-                if str(block) == table.item(row, 0).data(0):
-                    table_data[dat_row] = (block, table.item(row, 1).data(0))
+            table_data[row] = table.item(row, 1).data(0)
 
     def get_light_table_change (self, table_data, table):
         rowC = table.rowCount()
         for row in range(rowC):
-            for dat_row in range(rowC):
-                (block, state1, state2) = table_data[dat_row]
-                if str(block) == table.item(row, 0).data(0):
-                    if(table.item(row, 1).data(0) =="Green"):
-                        table_data[dat_row] = (block, True, True)
-                    elif(table.item(row, 1).data(0) =="Yellow"):
-                        table_data[dat_row] = (block, False, True)
-                    elif(table.item(row, 1).data(0) =="Red"):
-                        table_data[dat_row] = (block, False, False)
+            if str(block) == table.item(row, 0).data(0):
+                if(table.item(row, 1).data(0) =="Green"):
+                    table_data[row] = [True, True]
+                elif(table.item(row, 1).data(0) =="Yellow"):
+                    table_data[row] = [False, True]
+                elif(table.item(row, 1).data(0) =="Red"):
+                    table_data[row] = [False, False]
                     
     def run_PLC(self):
         #self.track_data.ParsePLC()

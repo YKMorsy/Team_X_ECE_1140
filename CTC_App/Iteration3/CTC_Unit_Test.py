@@ -1,5 +1,5 @@
 import unittest
-from Iteration3.CTC_old import CTC
+from CTC_App.Iteration3.CTC_old import CTC
 
 class Test_CTC(unittest.TestCase):
     def test_add_track(self):

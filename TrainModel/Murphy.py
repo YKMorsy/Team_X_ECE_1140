@@ -423,11 +423,11 @@ class MurphyUI(QFrame):
 #print(dlg.exec())
 
 #Set up the Qapp and murphy window
-app = QApplication([])
-murphy_window = MurphyUI()
+# app = QApplication([])
+# murphy_window = MurphyUI()
 
-#Show the murphy window
-murphy_window.show()
+# #Show the murphy window
+# murphy_window.show()
 
-#Start the event loop
-app.exec()
+# #Start the event loop
+# app.exec()

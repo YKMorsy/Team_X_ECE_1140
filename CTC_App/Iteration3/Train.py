@@ -1,5 +1,5 @@
 import pandas as pd
-from Line import Line
+from CTC_App.Iteration3.Line import Line
 
 class Train:
 
@@ -21,11 +21,11 @@ class Train:
     def setPosition(self, line_color, block_number, occupancy):
         if (block_number == self.route[1] and self.line.line_color == line_color and occupancy == True):
 
-            # Set previous authority to True
-            self.line.block_list[self.route[0]].block_authority = True
+            # Set previous authority to False
+            self.line.block_list[self.route[0]].block_authority = False
 
-            # Set suggested speed of previous block to speed limit
-            self.line.block_list[self.route[0]].block_suggested_speed = self.line.block_list[self.route[0]].block_speed_limit
+            # # Set suggested speed of previous block to speed limit
+            # self.line.block_list[self.route[0]].block_suggested_speed = self.line.block_list[self.route[0]].block_speed_limit
 
             self.route.pop(0)
             self.current_position = self.route[0] # Current position
@@ -56,7 +56,7 @@ class Train:
             elif (current_station == next_station and (current_status == True)):
                 suggested_speed = 1
 
-                suggested_speed = current_block.block_speed_limit
+                # suggested_speed = current_block.block_speed_limit
                 self.station_list.pop(0)
 
 
@@ -74,6 +74,10 @@ class Train:
 
             # Set next authority to True
             self.line.block_list[self.route[1]].block_authority = True
+
+            # Set current authority to True
+            # Set next authority to True
+            self.line.block_list[self.route[0]].block_authority = True
 
             # Set suggested speed
             self.line.block_list[self.route[0]].block_suggested_speed = suggested_speed
