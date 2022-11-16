@@ -22,6 +22,7 @@ class block:
     authority = 0
     underground = 'n'
     lights = 0
+    beacon = {}
     
     #default constructor
     def __init__(self,ln, n, g, e, s, st, len, nl, sw,cr,u):
@@ -187,11 +188,46 @@ class block:
         else:
             return False
             
-    def get_next_block(self, dir):
-        if dir == True :
+    def get_next_block_green(self, train, block_list):
+        if train.direction == True :
+            if self.name == "Q100":
+                train.direction = False
+            if self.name == "Z150" :
+                train.direction = False
             if self.switch == 0:
                 return self.next_loc
             else:
                 return self.switch_forward_loc
         else:
-            return self.next_loc
+            if self.name == "N77":
+                train.direction = True
+                return self.switch_forward_loc
+            if self.name == "D13":
+                train.direction = True
+                return self.next_loc
+            new_block = self.name
+            get_rev = int(new_block[1:])-2
+            return block_list[get_rev].name 
+        
+        #this function will not work properly currently
+    def get_next_block_red(self,train,block_list):
+        if train.direction == True :
+            if self.name == "Q100":
+                train.direction = False
+            if self.name == "Z150" :
+                train.direction = False
+            if self.switch == 0:
+                return self.next_loc
+            else:
+                return self.switch_forward_loc
+        else:
+            if self.name == "N77":
+                train.direction = True
+                return self.switch_forward_loc
+            if self.name == "D13":
+                train.direction = True
+                return self.next_loc
+            new_block = self.name
+            get_rev = int(new_block[1:])-2
+            return block_list[get_rev].name 
+            
