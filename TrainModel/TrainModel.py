@@ -3,9 +3,7 @@ from math import sin, cos, pi
 class TrainModel:
     def __init__(self, handler, ID, mass = 40.9, crew_count = 2, passenger_capacity = 222, speed_limit = 43.50, acceleration_limit = 3.00, 
     service_deceleration = 3.94, emergency_deceleration = 8.96, max_engine_power = 480000, length = 106, height = 11.2, width = 8.69, 
-    car_count = 1):
-		
-        #TODO: Setup I/O Channel with Train Controller
+    car_count = 1, direction = True, line_name = "Red", track_model = None):
 
         #Copy all the inputs to the class, with all the necessary conversions
         self.handler = handler
@@ -25,11 +23,29 @@ class TrainModel:
 
 
         self.velocity = 0.0
-        self.distance = 0.0
+        self.current_distance_in_block = 0.0
+        if line_name == "Red":
+            self.event_distance_in_block = 75.0
+            self.block_list = ["9"]
+            self.most_recent_block = "9"
+            self.direction = direction
+            self.commanded_authority = "True"
+            self.commanded_speed = 11.111
+            self.current_grade = 0.0
+        else:
+            self.event_distance_in_block = 100.0
+            self.block_list = ["63"]
+            self.most_recent_block = "63"
+            self.direction = direction
+            self.commanded_authority = "True"
+            self.commanded_speed = 19.444
+            self.current_grade = 0.0
+
+        self.beacon_data = {}
+        self.line_name = line_name
         self.engine_power = 0.0
         self.service_brake = False
         self.emergency_brake = False
-        self.current_grade = 0.0
         self.passenger_count = 0
         self.brake_failure = False
         self.engine_failure = False
@@ -39,8 +55,8 @@ class TrainModel:
         self.exterior_lights = False
         self.left_doors_opened = False
         self.right_doors_opened = False
-        self.commanded_authority = ""
-        self.commanded_speed = 0
+        self.track_model = track_model
+
         
     def modify_train(self, ID, mass, crew_count, passenger_capacity, speed_limit, acceleration_limit, 
     service_deceleration, emergency_deceleration, max_engine_power, length, height, width, car_count):
@@ -62,7 +78,7 @@ class TrainModel:
         
     def reset_time(self):
         self.velocity = 0.0
-        self.distance = 0.0
+        self.current_distance_in_block = 0.0
         self.passenger_count = 0
         self.brake_failure = False
         self.engine_failure = False
@@ -93,8 +109,6 @@ class TrainModel:
         self.engine_power = value
 
     def update(self, time_step):
-        #TODO: Add support for input from train controller
-
         #First, calculate total mass from # of passengers and crew
         total_mass = self.mass + (self.passenger_count + self.crew_count)*75.0
 
@@ -124,7 +138,8 @@ class TrainModel:
             #If the brakes are pressed, then we assume that the engine power is zero. Also, if both are pressed, then the emergency brake takes precedence
 
             if self.service_brake: velocity_change = (-self.service_deceleration * (self.mass/total_mass) - 9.8*sin(2*pi*self.current_grade/360)) * time_step
-            if self.emergency_brake: velocity_change = (-self.emergency_deceleration * (self.mass/total_mass) - 9.8*sin(2*pi*self.current_grade/360)) * time_step
+
+        if self.emergency_brake: velocity_change = (-self.emergency_deceleration * (self.mass/total_mass) - 9.8*sin(2*pi*self.current_grade/360)) * time_step
         
         #Set the new velocity in a temp variable
         new_velocity = self.velocity + velocity_change
@@ -136,9 +151,10 @@ class TrainModel:
         if new_velocity>self.speed_limit: new_velocity = self.speed_limit
         
         #Calculate the new position by taking the average of the old and new velocities
-        self.distance = self.distance + (self.velocity + new_velocity)/2 * time_step
+        self.current_distance_in_block = self.current_distance_in_block + (self.velocity + new_velocity)/2 * time_step
         
         #Actually set the new velocity
         self.velocity = new_velocity
 
-        #TODO: Add support for output to train controller
+        #If we exceed the event distance, call the track model event update function
+        if self.current_distance_in_block > self.event_distance_in_block: self.track_model.set_train_status(self)
