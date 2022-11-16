@@ -29,20 +29,20 @@ class Iteration3(QWidget):
         self.time_step = 1
         #Create track model
         self.track_model_var = track_model()
-        self.track_model_var.show()
+        # self.track_model_var.show()
 
         #Create CTC
         self.green_line = Line("./CTC_App/Iteration3/Track_Layout_Green.xlsx")
         self.dispatcher = Dispatcher()
         self.ctc_office = CTCApp(self.green_line, self.dispatcher)
-        self.ctc_office.show()
+        # self.ctc_office.show()
         #Place waysides
         self.wayside_sign_in = sign_in_window()
-        self.wayside_sign_in.show()
+        # self.wayside_sign_in.show()
 
         #Train Model Handler
         self.murphy = MurphyUI()
-        self.murphy.show()
+        # self.murphy.show()
 
         self.train_id_list = []
         self.train_controller = {}
@@ -62,7 +62,7 @@ class Iteration3(QWidget):
         #Yassers update
         new_trains = self.ctc_office.updateTimer()
         #Sierra call your update here
-        
+
         #Peter call your update here
 
         #Ryans update
@@ -73,7 +73,7 @@ class Iteration3(QWidget):
             train_id = train.train_id
             train_line = train.line.line_color
             self.train_id_list.append(train_id)
-            if train_line == 'red':
+            if train_line == 'Red':
                 self.train_controller[train_id] = TrainController(train_id, 0)
             else:
                 self.train_controller[train_id] = TrainController(train_id, 1)
