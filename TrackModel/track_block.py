@@ -187,6 +187,9 @@ class block:
             return True
         else:
             return False
+        
+    def get_beacon(self):
+        return self.beacon
             
     def get_next_block_green(self, train, block_list):
         if train.direction == True :

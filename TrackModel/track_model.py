@@ -451,13 +451,13 @@ class track_model(object):
                     self.ui.track_list[new_block - 1].set_occupancy()
                 train.commanded_authority = self.get_green_line_authority(new_block)
                 train.commanded_speed = self.get_green_line_commanded_speed(new_block)
-                train.beacon_info = {}
+                train.beacon_info = self.track_list[new_block -1].get_beacon()
                 return 0
                 
         else:
             block_number = int(train.most_recent_block)
             if train.current_distance_in_block >=  32 and train.current_distance_in_block < self.get_red_line_block_len(block_number) : 
-                store_curr = self.ui.track_list[block_number - 1].name
+                store_curr = self.ui.track_list[block_number + 149].name
                 curr_block = store_curr[1:]
                 train.event_distance_in_block = self.get_red_line_block_len(block_number)
                 last_block = int(train.block_list[0])
@@ -470,7 +470,7 @@ class track_model(object):
                 
                 train.event_distance_in_block = 32
                 block_number = int(train.most_recent_block)
-                next_block = self.ui.track_list[block_number - 1].get_next_block_red(train,self.ui.track_list)
+                next_block = self.ui.track_list[block_number + 149].get_next_block_red(train,self.ui.track_list)
                 if next_block.upper() == "YARD":
                     return -1
                 curr_block = next_block[1:]
@@ -480,10 +480,10 @@ class track_model(object):
                     train.current_grade = self.get_red_line_grade(new_block)
                 else: 
                     train.current_grade = 0 - self.get_red_line_grade(new_block)
-                    self.ui.track_list[new_block - 1].set_occupancy()
+                    self.ui.track_list[new_block + 149 ].set_occupancy()
                 train.commanded_authority = self.get_red_line_authority(new_block)
                 train.commanded_speed = self.get_red_line_commanded_speed(new_block)
-                train.beacon_info = {}
+                train.beacon_info = self.ui.track_list[new_block + 149].get_beacon()
                 return 0
                 
             

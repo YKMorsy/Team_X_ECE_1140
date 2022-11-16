@@ -707,6 +707,33 @@ class Ui_Track_Model(object):
         self.track_info_table.setItem(0,1,QtWidgets.QTableWidgetItem("Normal"))
         self.track_info_table.setItem(0,2,QtWidgets.QTableWidgetItem("None"))
         self.track_info_table.setItem(0,3,QtWidgets.QTableWidgetItem("N/A"))
+        
+        self.track_list[1].beacon = {2 : [["PIONEER", 0], ["PIONEER", 0]]}
+        self.track_list[8].beacon = {9 : [["EDGEBROOK", 0], ["EDGEBROOK", 0]]}
+        self.track_list[15].beacon = {16 : [["STATION", 0], ["STATION", 1]]}
+        self.track_list[21].beacon = {22 : [["WHITED", 0], ["WHITED", 1]]}
+        self.track_list[30].beacon = {31 : [["SOUTH BANK", 0], ["SOUTH BANK", 0]]}
+        self.track_list[38].beacon = {39 : [["CENTRAL", 1], ["CENTRAL", 1]]}
+        self.track_list[47].beacon = {48 : [["INGLEWOOD", 1], ["INGLEWOOD", 1]]}
+        self.track_list[56].beacon = {57 : [["OVERBROOK", 1], ["OVERBROOK", 1]]}
+        self.track_list[64].beacon = {65 : [["GLENBURY", 1], ["GLENBURY", 1]]}
+        self.track_list[72].beacon = {73 : [["DORMONT", 1], ["DORMONT", 1]]}
+        self.track_list[76].beacon = {77 : [["MT LEBANON", 1], ["MT LEBANON", 0]]}
+        self.track_list[87].beacon = {88 : [["POPLAR", 0], ["POPLAR", 0]]}
+        self.track_list[95].beacon = {96 : [["CASTLE SHANNON", 0], ["CASTLE SHANNON", 0]]}
+        self.track_list[104].beacon = {105 : [["DORMONT", 1], ["DORMONT", 1]]}
+        self.track_list[113].beacon = {114 : [["GLENBURY", 1], ["GLENBURY", 1]]}
+        self.track_list[122].beacon = {123 : [["OVERBROOK", 1], ["OVERBROOK", 1]]}
+        self.track_list[131].beacon = {132 : [["INGLEWOOD", 0], ["INGLEWOOD", 0]]}
+        self.track_list[140].beacon = {141 : [["CENTRAL", 1], ["CENTRAL", 1]]}
+        self.track_list[155].beacon = {6 : [["SHADYSIDE", 0], ["SHADYSIDE", 1]]}
+        self.track_list[165].beacon = {16 : [["HERRON AVE", 0], ["HERRON AVE", 1]]}
+        self.track_list[170].beacon = {21 : [["SWISSVILLE", 0], ["SWISSVILLE", 1]]}
+        self.track_list[174].beacon = {25 : [["PENN STATION", 1], ["PENN STATION", 0]]}
+        self.track_list[184].beacon = {35 : [["STEEL PLAZA", 1], ["STEEL PLAZA", 0]]}
+        self.track_list[194].beacon = {45 : [["FIRST AVE", 1], ["FIRST AVE", 0]]}
+        self.track_list[197].beacon = {48 : [["STATION SQUARE", 1], ["STATION SQUARE", 0]]}
+        self.track_list[209].beacon = {60 : [["SOUTH HILLS JUNCTION", 0], ["SOUTH HILLS JUNCTION", 1]]}
     
         
         self.select_track_combo.addItem(self.track_list[0].get_line_name())
