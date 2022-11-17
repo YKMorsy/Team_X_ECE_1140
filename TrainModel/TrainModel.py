@@ -3,7 +3,7 @@ from math import sin, cos, pi
 class TrainModel:
     def __init__(self, handler, ID, mass = 40.9, crew_count = 2, passenger_capacity = 222, speed_limit = 43.50, acceleration_limit = 3.00, 
     service_deceleration = 3.94, emergency_deceleration = 8.96, max_engine_power = 480000, length = 106, height = 11.2, width = 8.69, 
-    car_count = 1, direction = True, line_name = "Red", track_model = None):
+    car_count = 1, line_name = "Red", track_model = None):
 
         #Copy all the inputs to the class, with all the necessary conversions
         self.handler = handler
@@ -20,6 +20,7 @@ class TrainModel:
         self.height = height * 0.3048
         self.width = width * 0.3048
         self.car_count = car_count
+        self.track_model = track_model
 
 
         self.velocity = 0.0
@@ -28,18 +29,20 @@ class TrainModel:
             self.event_distance_in_block = 75.0
             self.block_list = ["9"]
             self.most_recent_block = "9"
-            self.direction = direction
+            self.direction = False
             self.commanded_authority = "True"
             self.commanded_speed = 11.111
             self.current_grade = 0.0
+            self.track_model.set_red_line_occupancy(9)
         else:
             self.event_distance_in_block = 100.0
             self.block_list = ["63"]
             self.most_recent_block = "63"
-            self.direction = direction
+            self.direction = True
             self.commanded_authority = "True"
             self.commanded_speed = 19.444
             self.current_grade = 0.0
+            self.track_model.set_green_line_occupancy(63)
 
         self.beacon_data = {}
         self.line_name = line_name
@@ -55,7 +58,6 @@ class TrainModel:
         self.exterior_lights = False
         self.left_doors_opened = False
         self.right_doors_opened = False
-        self.track_model = track_model
 
         
     def modify_train(self, ID, mass, crew_count, passenger_capacity, speed_limit, acceleration_limit, 
@@ -157,4 +159,8 @@ class TrainModel:
         self.velocity = new_velocity
 
         #If we exceed the event distance, call the track model event update function
-        if self.current_distance_in_block > self.event_distance_in_block: self.track_model.set_train_status(self)
+        if self.current_distance_in_block > self.event_distance_in_block:
+            delete = self.track_model.set_train_status(self)
+            if delete == -1: return -1
+            
+        return 0

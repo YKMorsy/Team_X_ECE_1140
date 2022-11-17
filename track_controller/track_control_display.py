@@ -139,18 +139,18 @@ class track_control_display (QtWidgets.QMainWindow, Ui_MainWindow):
     def get_table_change (self, table_data, table):
         rowC = table.rowCount()
         for row in range(rowC):
-            table_data[row] = table.item(row, 1).data(0)
+            table_data[int(row)] = table.item(row, 1).data(0)
 
     def get_light_table_change (self, table_data, table):
         rowC = table.rowCount()
         for row in range(rowC):
             if str(block) == table.item(row, 0).data(0):
                 if(table.item(row, 1).data(0) =="Green"):
-                    table_data[row] = [True, True]
+                    table_data[int(row)] = [True, True]
                 elif(table.item(row, 1).data(0) =="Yellow"):
-                    table_data[row] = [False, True]
+                    table_data[int(row)] = [False, True]
                 elif(table.item(row, 1).data(0) =="Red"):
-                    table_data[row] = [False, False]
+                    table_data[int(row)] = [False, False]
                     
     def run_PLC(self):
         #self.track_data.ParsePLC()

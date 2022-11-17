@@ -1,7 +1,7 @@
-from PyQt6.QtWidgets import QApplication, QFrame, QGridLayout, QAbstractItemView
-from PyQt6.QtWidgets import QLabel, QPushButton, QRadioButton, QSlider, QSizePolicy, QTableWidget, QTableView, QAbstractItemView, QHeaderView
-from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QStandardItem
+from PyQt5.QtWidgets import QApplication, QFrame, QGridLayout, QAbstractItemView
+from PyQt5.QtWidgets import QLabel, QPushButton, QRadioButton, QSlider, QSizePolicy, QTableWidget, QTableView, QAbstractItemView, QHeaderView
+from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QStandardItem
 
 from TrainModel.Test import TestUI, ExpandedTableUI
 from TrainModel.Passenger import PassengerUI
@@ -108,7 +108,7 @@ class MurphyUI(QFrame):
         self.testing_button.setStyleSheet(gold_button_stylesheet)
         self.train_info_select_label.setStyleSheet(section_label_stylesheet)
         self.train_info_select_table.setStyleSheet(table_stylesheet)
-        self.train_info_select_table.setAlternatingRowColors(True);
+        self.train_info_select_table.setAlternatingRowColors(True)
         self.expand_table_button.setStyleSheet(yellow_button_stylesheet)
         self.failure_generation_label.setStyleSheet(section_label_stylesheet)
         self.engine_failure_button.setStyleSheet(red_button_stylesheet)
@@ -148,11 +148,11 @@ class MurphyUI(QFrame):
         self.random_brake_generation_slider.valueChanged.connect(self.random_brake_failure_update)
 
         #Make the buttons as small as possible
-        self.testing_button.setSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Maximum)
-        self.engine_failure_button.setSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Maximum)
-        self.signal_pickup_failure_button.setSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Maximum)
-        self.brake_failure_button.setSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Maximum)
-        self.passenger_UI_button.setSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Maximum)
+        self.testing_button.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
+        self.engine_failure_button.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
+        self.signal_pickup_failure_button.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
+        self.brake_failure_button.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
+        self.passenger_UI_button.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
 
         #Set the random train generation off by default
         self.radiobuttonOff.setChecked(True)
@@ -160,30 +160,30 @@ class MurphyUI(QFrame):
 
         #Declare the grid and add the necessary widgets to it
         murphy_grid = QGridLayout()
-        murphy_grid.addWidget(self.testing_button, 0, 0, 1, 4, alignment=Qt.AlignmentFlag.AlignCenter)
-        murphy_grid.addWidget(self.train_info_select_label, 1, 0, 1, 4, alignment=Qt.AlignmentFlag.AlignCenter)
+        murphy_grid.addWidget(self.testing_button, 0, 0, 1, 4, alignment=Qt.AlignCenter)
+        murphy_grid.addWidget(self.train_info_select_label, 1, 0, 1, 4, alignment=Qt.AlignCenter)
         murphy_grid.addWidget(self.train_info_select_table, 2, 0, 1, 3)
-        murphy_grid.addWidget(self.expand_table_button, 2, 3, alignment=Qt.AlignmentFlag.AlignBottom | Qt.AlignmentFlag.AlignLeft)
-        murphy_grid.addWidget(self.passenger_UI_button, 3, 0, 1, 4, alignment=Qt.AlignmentFlag.AlignCenter)
-        murphy_grid.addWidget(self.failure_generation_label, 4, 0, 1, 4, alignment=Qt.AlignmentFlag.AlignCenter)
-        murphy_grid.addWidget(self.engine_failure_button, 5, 0, 1, 4, alignment=Qt.AlignmentFlag.AlignCenter)
-        murphy_grid.addWidget(self.signal_pickup_failure_button, 6, 0, 1, 4, alignment=Qt.AlignmentFlag.AlignCenter)
-        murphy_grid.addWidget(self.brake_failure_button, 7, 0, 1, 4, alignment=Qt.AlignmentFlag.AlignCenter)
-        murphy_grid.addWidget(self.failure_removal_label, 8, 0, 1, 4, alignment=Qt.AlignmentFlag.AlignCenter)
-        murphy_grid.addWidget(self.train_failure_removal_button, 9, 0, 1, 4, alignment=Qt.AlignmentFlag.AlignCenter)
-        murphy_grid.addWidget(self.all_failure_removal_button, 10, 0, 1, 4, alignment=Qt.AlignmentFlag.AlignCenter)
-        murphy_grid.addWidget(self.random_failure_generation_label, 11, 0, 1, 4, alignment=Qt.AlignmentFlag.AlignCenter)
-        murphy_grid.addWidget(self.radiobuttonOff, 12, 0, 1, 1, alignment=Qt.AlignmentFlag.AlignRight)
-        murphy_grid.addWidget(self.radiobuttonOn, 12, 1, 1, 1, alignment=Qt.AlignmentFlag.AlignRight)
-        murphy_grid.addWidget(self.random_engine_generation_label, 13, 0, 1, 2, alignment=Qt.AlignmentFlag.AlignRight)
-        murphy_grid.addWidget(self.random_engine_generation_slider, 13, 2, 1, 1, alignment=Qt.AlignmentFlag.AlignCenter)
-        murphy_grid.addWidget(self.random_engine_generation_value, 13, 3, 1, 1, alignment=Qt.AlignmentFlag.AlignLeft)
-        murphy_grid.addWidget(self.random_signal_generation_label, 14, 0, 1, 2, alignment=Qt.AlignmentFlag.AlignRight)
-        murphy_grid.addWidget(self.random_signal_generation_slider, 14, 2, 1, 1, alignment=Qt.AlignmentFlag.AlignCenter)
-        murphy_grid.addWidget(self.random_signal_generation_value, 14, 3, 1, 1, alignment=Qt.AlignmentFlag.AlignLeft)
-        murphy_grid.addWidget(self.random_brake_generation_label, 15, 0, 1, 2, alignment=Qt.AlignmentFlag.AlignRight)
-        murphy_grid.addWidget(self.random_brake_generation_slider, 15, 2, 1, 1, alignment=Qt.AlignmentFlag.AlignCenter)
-        murphy_grid.addWidget(self.random_brake_generation_value, 15, 3, 1, 1, alignment=Qt.AlignmentFlag.AlignLeft)
+        murphy_grid.addWidget(self.expand_table_button, 2, 3, alignment=Qt.AlignBottom | Qt.AlignLeft)
+        murphy_grid.addWidget(self.passenger_UI_button, 3, 0, 1, 4, alignment=Qt.AlignCenter)
+        murphy_grid.addWidget(self.failure_generation_label, 4, 0, 1, 4, alignment=Qt.AlignCenter)
+        murphy_grid.addWidget(self.engine_failure_button, 5, 0, 1, 4, alignment=Qt.AlignCenter)
+        murphy_grid.addWidget(self.signal_pickup_failure_button, 6, 0, 1, 4, alignment=Qt.AlignCenter)
+        murphy_grid.addWidget(self.brake_failure_button, 7, 0, 1, 4, alignment=Qt.AlignCenter)
+        murphy_grid.addWidget(self.failure_removal_label, 8, 0, 1, 4, alignment=Qt.AlignCenter)
+        murphy_grid.addWidget(self.train_failure_removal_button, 9, 0, 1, 4, alignment=Qt.AlignCenter)
+        murphy_grid.addWidget(self.all_failure_removal_button, 10, 0, 1, 4, alignment=Qt.AlignCenter)
+        murphy_grid.addWidget(self.random_failure_generation_label, 11, 0, 1, 4, alignment=Qt.AlignCenter)
+        murphy_grid.addWidget(self.radiobuttonOff, 12, 0, 1, 1, alignment=Qt.AlignRight)
+        murphy_grid.addWidget(self.radiobuttonOn, 12, 1, 1, 1, alignment=Qt.AlignRight)
+        murphy_grid.addWidget(self.random_engine_generation_label, 13, 0, 1, 2, alignment=Qt.AlignRight)
+        murphy_grid.addWidget(self.random_engine_generation_slider, 13, 2, 1, 1, alignment=Qt.AlignCenter)
+        murphy_grid.addWidget(self.random_engine_generation_value, 13, 3, 1, 1, alignment=Qt.AlignLeft)
+        murphy_grid.addWidget(self.random_signal_generation_label, 14, 0, 1, 2, alignment=Qt.AlignRight)
+        murphy_grid.addWidget(self.random_signal_generation_slider, 14, 2, 1, 1, alignment=Qt.AlignCenter)
+        murphy_grid.addWidget(self.random_signal_generation_value, 14, 3, 1, 1, alignment=Qt.AlignLeft)
+        murphy_grid.addWidget(self.random_brake_generation_label, 15, 0, 1, 2, alignment=Qt.AlignRight)
+        murphy_grid.addWidget(self.random_brake_generation_slider, 15, 2, 1, 1, alignment=Qt.AlignCenter)
+        murphy_grid.addWidget(self.random_brake_generation_value, 15, 3, 1, 1, alignment=Qt.AlignLeft)
 
         #Disable widgets that should be disabled on startup
         self.random_engine_generation_label.setEnabled(False)
@@ -423,11 +423,11 @@ class MurphyUI(QFrame):
 #print(dlg.exec())
 
 #Set up the Qapp and murphy window
-# app = QApplication([])
-# murphy_window = MurphyUI()
+#app = QApplication([])
+#murphy_window = MurphyUI()
 
-# #Show the murphy window
-# murphy_window.show()
+#Show the murphy window
+#murphy_window.show()
 
-# #Start the event loop
-# app.exec()
+#Start the event loop
+#app.exec()

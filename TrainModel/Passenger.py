@@ -1,7 +1,7 @@
-from PyQt6.QtWidgets import QApplication, QWidget, QFrame, QDialog, QGridLayout, QAbstractItemView
-from PyQt6.QtWidgets import QLabel, QPushButton, QRadioButton, QSlider, QSizePolicy, QTableWidget, QTableView, QAbstractItemView, QHeaderView
-from PyQt6.QtCore import Qt, QRect, QTimer, QSortFilterProxyModel
-from PyQt6.QtGui import QFont, QStandardItemModel, QStandardItem
+from PyQt5.QtWidgets import QApplication, QWidget, QFrame, QDialog, QGridLayout, QAbstractItemView
+from PyQt5.QtWidgets import QLabel, QPushButton, QRadioButton, QSlider, QSizePolicy, QTableWidget, QTableView, QAbstractItemView, QHeaderView
+from PyQt5.QtCore import Qt, QRect, QTimer, QSortFilterProxyModel
+from PyQt5.QtGui import QFont, QStandardItemModel, QStandardItem
 
 from TrainModel.FontStyles import *
 from TrainModel.common import *
