@@ -30,7 +30,6 @@ window.show()
 
 timer = QTimer()
 timer.timeout.connect(window.Timer_TrackControl)
-timer.timeout.connect(SetTrackControlData)
 timer.setInterval(3000)  # 1000ms = 1s
 #timer.start()
 

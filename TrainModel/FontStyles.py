@@ -1,7 +1,7 @@
 #This file sets up the fonts and stylesheets that the widgets will use
-from PyQt6.QtGui import QFont 
+from PyQt5.QtGui import QFont 
 
-section_font = QFont("Helvetica", 23);
+section_font = QFont("Helvetica", 23)
 section_font.setUnderline(True)
 section_font.setBold(True)
 section_label_stylesheet = "QLabel { color : rgb(221, 221, 221); }"

@@ -43,11 +43,11 @@ class WaysideController ():
 
     def make_changes(self, change, table):
         (typeS, bl, val) = change
-        table[bl] = val == "True"
+        table[int(bl)] = val == "True"
     
     def make_speed_change(self, change, table):
         (typeS, bl, val) = change
-        table[bl] = int(val)
+        table[int(bl)] = int(val)
 
     def make_light_changes(self, change, table):
         t= len(table)
@@ -60,7 +60,7 @@ class WaysideController ():
             val2 = True
         else:
             val2 = False
-        table[bl] = [val1, val2]
+        table[int(bl)] = [val1, val2]
 
     #----setters----
     def set_wayside_id(self, wid):
@@ -100,6 +100,9 @@ class WaysideController ():
         testPLC.change_PLC_file(plc)
         issue = testPLC.parse_PLC(self.switch_positions, self.occupancy, self.authority,self.suggested_speed, self.statuses, self.speed_limit)
         if(isinstance(issue, str)):
+            if(self.PLC_info.get_PLC_file() ==""):
+                self.PLC_info.change_PLC_file("track_controller/blank.txt")
+                self.PLC_info2.change_PLC_file("track_controller/blank.txt")
             return issue
         self.PLC_info.change_PLC_file(plc)
         self.PLC_info2.change_PLC_file(plc)
