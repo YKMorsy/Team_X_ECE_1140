@@ -1,11 +1,16 @@
 def connect_train_model_train_controller(train_controller, train_model):
-    command_set_point = train_model.commanded_speed
+    command_set_point = train_model.commanded_speed * 0.277778
     authority = train_model.commanded_authority[0:4] == 'True'
     current_set_point = train_model.velocity
     brake_failure = train_model.brake_failure
     engine_failure = train_model.engine_failure
     signal_failure = train_model.signal_failure
-    station_name = "YARD"
+    
+    if len(train_model.beacon_data) > 0:
+        for station_data in train_model.beacon_data.values():
+            station_name = station_data[0][0]
+    else:
+        station_name = "N/A"
 
     train_controller.set_train_model_input(command_set_point, authority, current_set_point, brake_failure, signal_failure, engine_failure, station_name)
     train_controller.update()
