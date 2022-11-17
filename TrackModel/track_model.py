@@ -6,8 +6,9 @@ import TrackModel.track_builder as track_builder
 
 
 class track_model(object):
+    
     def __init__(self):
-        
+        #self.train_model = train_model_handler
         self.Track_Model = QtWidgets.QMainWindow() 
         self.ui = track_builder.Ui_Track_Model()
         self.ui.setupUi(self.Track_Model)
@@ -375,6 +376,7 @@ class track_model(object):
                     self.ui.track_list[temp - 1].set_authority()
                 else:
                     self.ui.track_list[temp - 1].reset_authority()
+       # self.train_model.set_authority(self.get_authority_dict())            
 
     def set_switch_position(self,sw_dic):
         for key in sw_dic:
@@ -416,6 +418,7 @@ class track_model(object):
             if temp > 1000 and temp < 2000:
                 temp -= 1000
                 self.ui.track_list[temp - 1].set_commanded_speed(com_dic[key])
+       # self.train_model.set_speed(self.get_commanded_speed_dict())
 
     def set_lights(self, lights_dic):
         for key in lights_dic:
@@ -473,7 +476,7 @@ class track_model(object):
                 train.block_list = list1
                 return 0
             else:
-                
+                train.current_distance_in_block -= train.event_distance_in_block
                 train.event_distance_in_block = 32
                 block_number = int(train.most_recent_block)
                 next_block = self.ui.track_list[block_number - 1].get_next_block_green(train,self.ui.track_list)
@@ -491,8 +494,8 @@ class track_model(object):
                     self.ui.track_list[new_block - 1].set_occupancy()
                 train.commanded_authority = self.get_green_line_authority(new_block)
                 train.commanded_speed = self.get_green_line_commanded_speed(new_block)
-                train.beacon_info = self.track_list[new_block -1].get_beacon()
-                return 0
+                train.beacon_info = self.ui.track_list[new_block -1].get_beacon()
+                
                 
         else:
             block_number = int(train.most_recent_block)
@@ -505,9 +508,9 @@ class track_model(object):
                 list1 = [] 
                 list1.append(train.most_recent_block)
                 train.block_list = list1
-                return 0
-            else:
                 
+            else:
+                train.current_distance_in_block -= train.event_distance_in_block
                 train.event_distance_in_block = 32
                 block_number = int(train.most_recent_block)
                 next_block = self.ui.track_list[block_number + 149].get_next_block_red(train,self.ui.track_list)
@@ -526,7 +529,7 @@ class track_model(object):
                 train.commanded_authority = self.get_red_line_authority(new_block)
                 train.commanded_speed = self.get_red_line_commanded_speed(new_block)
                 train.beacon_info = self.ui.track_list[new_block + 149].get_beacon()
-                return 0
+        return 0        
                 
             
         
