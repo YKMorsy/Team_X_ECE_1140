@@ -87,6 +87,7 @@ class Iteration3(QWidget):
 
             self.new_train.remove(train)
         
+        self.ctc_office.greenLine.setThroughput(self.track_model_var.stations.get_throughput())
         #Train deletion, wont do this for iteration 3 cause too hard
 
 
