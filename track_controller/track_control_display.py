@@ -94,7 +94,7 @@ class track_control_display (QtWidgets.QMainWindow, Ui_MainWindow):
         self.update_light_table(self.track_data.get_light_colors(), self.LightColorTable, False)
         self.update_light_table(self.track_data.get_light_colors(), self.maint_LightColorTable, self.maintenance_check_box.isChecked())
         self.update_table(self.track_data.get_railway_crossings(), self.maint_RailwayCrossingTable, self.maintenance_check_box.isChecked())
-        self.update_table(self.track_data.get_statuses(), self.maint_StatusTable, self.maintenance_check_box.isChecked())
+        self.update_table(self.track_data.get_statuses(), self.maint_StatusTable, True)
         self.update_table(self.track_data.get_statuses(), self.maint_StatusTable_2, False)
         self.unsaved_changes_label.setText("")
 
@@ -143,7 +143,7 @@ class track_control_display (QtWidgets.QMainWindow, Ui_MainWindow):
         self.get_light_table_change(self.track_data.get_light_colors(), self.maint_LightColorTable)
         self.get_table_change(self.track_data.get_railway_crossings(), self.maint_RailwayCrossingTable)
         self.get_table_change(self.track_data.get_statuses(), self.maint_StatusTable)
-        self.get_table_change(self.track_data.get_statuses(), self.maint_StatusTable_2)
+        #self.get_table_change(self.track_data.get_statuses(), self.maint_StatusTable_2)
         self.unsaved_changes_label.setText("")
         self.update_tables()
 
