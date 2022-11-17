@@ -376,6 +376,9 @@ class track_model(object):
                 else:
                     self.ui.track_list[temp - 1].reset_authority()
 
+        print(self.ui.track_list[62].get_authority())
+        # self.train_model.set_authority(self.get_authority_dict())            
+
     def set_switch_position(self,sw_dic):
         for key in sw_dic:
             temp = key

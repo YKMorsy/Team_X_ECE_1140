@@ -19,7 +19,7 @@ class block:
     fault_pow = 0
     commanded_speed = 0
     track_heater = 0
-    authority = 0
+    authority = False
     underground = 'n'
     lights = 0
     beacon = {}
