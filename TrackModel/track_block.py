@@ -207,7 +207,7 @@ class block:
                 return self.switch_forward_loc
             if self.name == "D13":
                 train.direction = True
-                return self.next_loc
+                return self.switch_forward_loc
             new_block = self.name
             get_rev = int(new_block[1:])-2
             return block_list[get_rev].name 
