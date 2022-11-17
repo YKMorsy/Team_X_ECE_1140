@@ -137,7 +137,7 @@ class track_control_display (QtWidgets.QMainWindow, Ui_MainWindow):
 
     def make_changes(self):
         self.get_table_change(self.track_data.get_switch_positions(), self.maint_SwitchPosTable)
-        self.get_table_change(self.track_data.get_authority(), self.maint_auth)
+        self.get_table_change(self.track_data.get_authority(), self.maint_Auth)
         self.get_table_change(self.track_data.get_commanded_speed(), self.maint_CS)
         self.get_table_change(self.track_data.get_occupancy(), self.maint_Occ_table)        
         self.get_light_table_change(self.track_data.get_light_colors(), self.maint_LightColorTable)
