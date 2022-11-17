@@ -7,7 +7,8 @@ import TrackModel.track_builder as track_builder
 
 class track_model(object):
     def __init__(self):
-        self.Track_Model = QtWidgets.QMainWindow()
+        
+        self.Track_Model = QtWidgets.QMainWindow() 
         self.ui = track_builder.Ui_Track_Model()
         self.ui.setupUi(self.Track_Model)
         self.stations = station.station()
@@ -477,9 +478,11 @@ class track_model(object):
                 block_number = int(train.most_recent_block)
                 next_block = self.ui.track_list[block_number - 1].get_next_block_green(train,self.ui.track_list)
                 if next_block.upper() == "YARD":
+                    self.ui.track_list[block_number-1].reset_occupancy()
                     return -1
                 curr_block = next_block[1:]
                 train.block_list.append(curr_block)
+                train.most_recent_block = curr_block
                 new_block = int(curr_block)
                 if train.direction:
                     train.current_grade = self.get_green_line_grade(new_block)
@@ -509,8 +512,10 @@ class track_model(object):
                 block_number = int(train.most_recent_block)
                 next_block = self.ui.track_list[block_number + 149].get_next_block_red(train,self.ui.track_list)
                 if next_block.upper() == "YARD":
+                    self.ui.track_list[block_number + 149].reset_occupancy()
                     return -1
                 curr_block = next_block[1:]
+                train.most_recent_block = curr_block
                 train.block_list.append(curr_block)
                 new_block = int(curr_block)
                 if train.direction:
