@@ -1,7 +1,7 @@
 import random
 
 def connect_train_model_train_controller(train_controller, train_model):
-    command_set_point = train_model.commanded_speed * 0.277778
+    command_set_point = float(train_model.commanded_speed) * 0.277778
     authority = train_model.commanded_authority[0:4] == 'True'
     current_set_point = train_model.velocity
     brake_failure = train_model.brake_failure
@@ -19,8 +19,7 @@ def connect_train_model_train_controller(train_controller, train_model):
     service_brake, engine_power, emergency_brake, left_side_doors, right_side_doors, announce_stop, inside_lights, outside_lights, activate_announcement = train_controller.get_train_model_output()
 
     if ((left_side_doors and not train_model.left_doors_opened) or (right_side_doors and not train_model.right_doors_opened)):
-        if(train_model.passenger_count > 0):
-            train_model.passenger_count -= random.randint(0,train_model.passenger_count)
+        train_model.passenger_count -= random.randint(0,train_model.passenger_count)
         passengers_to_add = train_model.track_model.get_passengers(train_model.passenger_capacity - train_model.passenger_count)
         train_model.passenger_count += passengers_to_add
 
