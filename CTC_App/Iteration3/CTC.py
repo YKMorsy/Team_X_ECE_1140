@@ -289,11 +289,12 @@ class CTCApp(QWidget):
             # clear destination table
             self.stationsTable.setRowCount(0)
 
-            # Order destinations correctly
-            order_list = []
-            for station in destination_stations:
-                order_list.append(self.greenLine.line_station_list.index(station))
-            destination_stations = [x for _, x in sorted(zip(order_list, destination_stations))]
+            # # Order destinations correctly
+            # order_list = []
+            # for station in destination_stations:
+            #     order_list.append(self.greenLine.line_station_list.index(station))
+
+            # destination_stations = [x for _, x in sorted(zip(order_list, destination_stations))]
 
             # Call dispatch function
             if self.current_line == "Green":
