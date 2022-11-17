@@ -210,8 +210,8 @@ p, li { white-space: pre-wrap; }
      <widget class="QTableWidget" name="maint_SwitchPosTable">
       <property name="geometry">
        <rect>
-        <x>50</x>
-        <y>110</y>
+        <x>40</x>
+        <y>120</y>
         <width>761</width>
         <height>371</height>
        </rect>
@@ -363,6 +363,58 @@ p, li { white-space: pre-wrap; }
        </property>
       </column>
      </widget>
+     <widget class="QTableWidget" name="maint_Auth">
+      <property name="geometry">
+       <rect>
+        <x>40</x>
+        <y>120</y>
+        <width>761</width>
+        <height>371</height>
+       </rect>
+      </property>
+      <property name="rowCount">
+       <number>0</number>
+      </property>
+      <property name="columnCount">
+       <number>2</number>
+      </property>
+      <column>
+       <property name="text">
+        <string>Block Number</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Auth</string>
+       </property>
+      </column>
+     </widget>
+     <widget class="QTableWidget" name="maint_CS">
+      <property name="geometry">
+       <rect>
+        <x>970</x>
+        <y>110</y>
+        <width>761</width>
+        <height>371</height>
+       </rect>
+      </property>
+      <property name="rowCount">
+       <number>0</number>
+      </property>
+      <property name="columnCount">
+       <number>2</number>
+      </property>
+      <column>
+       <property name="text">
+        <string>Block Number</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>CS</string>
+       </property>
+      </column>
+     </widget>
      <zorder>maint_LightColorTable</zorder>
      <zorder>maintenance_check_box</zorder>
      <zorder>maint_SwitchPosTable</zorder>
@@ -371,6 +423,8 @@ p, li { white-space: pre-wrap; }
      <zorder>maint_make_change</zorder>
      <zorder>unsaved_changes_label</zorder>
      <zorder>maint_Occ_table</zorder>
+     <zorder>maint_Auth</zorder>
+     <zorder>maint_CS</zorder>
     </widget>
    </widget>
   </widget>
