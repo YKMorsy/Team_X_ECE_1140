@@ -105,8 +105,13 @@ class CTCApp(QWidget):
         self.updateClosedBlocksTable()
         self.updateSwitchStateTable()
         self.updateCrossStatusTable()
+        self.updateThroughPutLabel()
 
         return output
+
+    def updateThroughPutLabel(self):
+        if self.current_line == "Green":
+            self.throughPutValue.setText(str(self.greenLine.throughput))
 
     # Function to update closed blocks table
     def updateClosedBlocksTable(self):
