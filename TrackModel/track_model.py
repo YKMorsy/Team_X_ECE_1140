@@ -495,6 +495,8 @@ class track_model(object):
                 self.ui.track_list[new_block - 1].set_occupancy()
                 train.commanded_authority = "True" if self.get_green_line_authority(new_block) else "False"
 
+                # train.commanded_speed = self.get_green_line_commanded_speed(new_block -1)
+
                 train.beacon_info = self.ui.track_list[new_block -1].get_beacon()
                 return 0
                 
