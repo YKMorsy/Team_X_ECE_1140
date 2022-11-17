@@ -32,6 +32,7 @@ class TrainModel:
             self.commanded_authority = "True"
             self.commanded_speed = 11.111
             self.current_grade = 0.0
+            self.track_model.set_red_line_occupancy(9)
         else:
             self.event_distance_in_block = 100.0
             self.block_list = ["63"]
@@ -40,6 +41,7 @@ class TrainModel:
             self.commanded_authority = "True"
             self.commanded_speed = 19.444
             self.current_grade = 0.0
+            self.track_model.set_green_line_occupancy(63)
 
         self.beacon_data = {}
         self.line_name = line_name
