@@ -96,8 +96,9 @@ class CTCApp(QWidget):
             self.greenLine.block_list[0].block_authority = True
             self.greenLine.block_list[0].block_suggested_speed = self.greenLine.block_list[0].block_speed_limit
 
-            output.append((self.CTCDispatcher.trains[self.train_list_length]))
-            self.train_list_length += 1
+            if self.train_list_length <= len(self.CTCDispatcher.trains): 
+                output.append((self.CTCDispatcher.trains[self.train_list_length]))
+                self.train_list_length += 1
 
         # Table updates
         self.updateTrainTable()
@@ -151,26 +152,49 @@ class CTCApp(QWidget):
     # Function to update train Table
     def updateTrainTable(self):
         if self.current_line == "Green":
-            rowPosition = self.greenTrainTable.rowCount()
 
-            for row in range(0, rowPosition):
-                cur_train_id = self.greenTrainTable.item(row,0).text()
-                cur_train = self.CTCDispatcher.trains[int(cur_train_id)-1]
-                # selected_block = self.greenChooseMaintenanceCombo.currentText()
-                # # Set block status to True in line object and update choose block list
-                # greenLine.setBlockStatus(int(selected_block), True)
-                # self.greenChooseMaintenanceCombo.removeItem(self.greenChooseMaintenanceCombo.currentIndex())
+            self.greenTrainTable.setRowCount(0)
+            trains = self.CTCDispatcher.trains
 
-                current_position = cur_train.current_position
+            
 
-                if len(cur_train.station_list) > 0:
-                    next_station = cur_train.station_list[0]
+            for train in trains:
+                if train.line.line_color == "Green" and len(train.route) > 2:
+                    rowPosition = self.greenTrainTable.rowCount()
+                    self.greenTrainTable.insertRow(rowPosition)
+                    cur_train_id = train.train_id
+                    self.greenTrainTable.setItem(rowPosition, 0, QTableWidgetItem(str(cur_train_id)))
+                    if len(train.station_list) > 0:
+                        next_station = train.station_list[0]
+                        self.greenTrainTable.setItem(rowPosition, 1, QTableWidgetItem(str(train.current_position)))
+                        self.greenTrainTable.setItem(rowPosition, 2, QTableWidgetItem(str(next_station)))
+                    else:
+                        self.greenTrainTable.setItem(rowPosition, 1, QTableWidgetItem(str(train.current_position)))
+                        self.greenTrainTable.setItem(rowPosition, 2, QTableWidgetItem("YARD"))
 
-                    self.greenTrainTable.setItem(row, 1, QTableWidgetItem(str(current_position)))
-                    self.greenTrainTable.setItem(row, 2, QTableWidgetItem(str(next_station)))
-                else:
-                    self.greenTrainTable.setItem(row, 1, QTableWidgetItem(str(current_position)))
-                    self.greenTrainTable.setItem(row, 2, QTableWidgetItem("YARD"))
+
+
+
+            # rowPosition = self.greenTrainTable.rowCount()
+
+            # for row in range(0, rowPosition):
+            #     cur_train_id = self.greenTrainTable.item(row,0).text()
+            #     cur_train = self.CTCDispatcher.trains[int(cur_train_id)-1]
+            #     # selected_block = self.greenChooseMaintenanceCombo.currentText()
+            #     # # Set block status to True in line object and update choose block list
+            #     # greenLine.setBlockStatus(int(selected_block), True)
+            #     # self.greenChooseMaintenanceCombo.removeItem(self.greenChooseMaintenanceCombo.currentIndex())
+
+            #     current_position = cur_train.current_position
+
+            #     if len(cur_train.station_list) > 0:
+            #         next_station = cur_train.station_list[0]
+
+            #         self.greenTrainTable.setItem(row, 1, QTableWidgetItem(str(current_position)))
+            #         self.greenTrainTable.setItem(row, 2, QTableWidgetItem(str(next_station)))
+            #     else:
+            #         self.greenTrainTable.setItem(row, 1, QTableWidgetItem(str(current_position)))
+            #         self.greenTrainTable.setItem(row, 2, QTableWidgetItem("YARD"))
 
         elif self.current_line == "Red":
            pass

@@ -27,6 +27,14 @@ class Train:
 
             # # Set suggested speed of previous block to speed limit
             # self.line.block_list[self.route[0]].block_suggested_speed = self.line.block_list[self.route[0]].block_speed_limit
+            next_block_2_station = None
+            next_block_2_status = None
+            next_block_1_status = None
+            next_block_1_station = None
+            current_status = None
+            current_station = None
+
+
 
             self.route.pop(0)
             if len(self.route) >= 1:
