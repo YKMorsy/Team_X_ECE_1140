@@ -137,7 +137,7 @@ class TrainController:
 
         if self.__last_station != self.__train_model_input.station_name and self.__train_model_input.station_name != "N/A":
             self.beaconCall(self.__train_model_input.station_name)
-            if self.__train_model_input.command_set_point < 2:
+            if self.__train_model_input.command_set_point < 2 and self.__train_model_input.command_set_point > 0:
                 self.__stopping_at_station = True
                 self.__begin_slow_down = False
             else:
@@ -200,6 +200,9 @@ class TrainController:
             self.__service_brakes = self.__train_driver_input.service_brake
 
         if self.__service_brakes or self.__emergency_brakes:
+            self.__power = 0.0
+        
+        if self.__command_set_point == 0:
             self.__power = 0.0
             
     def __calculate_power(self):
