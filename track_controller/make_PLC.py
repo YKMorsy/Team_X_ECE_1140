@@ -29,28 +29,45 @@ with open("track_controller/RedLineBottom_yellow.txt", "w") as f:
     #write lights and rail way crossing logic
 
 with open("track_controller/GreenLineTop_Red.txt", "w") as f:
-    for i in range(1002, 1013):
-        f.write("IF ( ( A-"+str(i-1)+" & F-"+str(i-1)+" ) & O-"+str(i)+" ) {\n")
+    for i in range(1001, 1013):
+        past = i-1
+        if(i==1001):
+            past = 1013
+        f.write("IF ( ( A-"+str(past)+" & F-"+str(past)+" ) & O-"+str(i)+" ) {\n")
         f.write("C-"+str(i)+" = D-"+str(i)+"\n")
+        f.write("C-"+str(past)+" = D-"+str(past)+"\n")
         f.write("}\n")
         f.write("ELSE\n")
         f.write("{\n")
         f.write("C-"+str(i)+" = 0\n")
         f.write("}\n")
     for i in range(1013, 1021):
-        f.write("IF ( ( ( A-"+str(i-1)+" & F-"+str(i-1)+" ) | ( A-"+str(i+1)+" & F-"+str(i+1)+" ) ) & O-"+str(i)+" ) {\n")
+        f.write("IF ( ( A-"+str(i+1)+" & ! O-"+str(i+1)+" ) & O-"+str(i)+" ) {\n")
+        if(i != 1020):
+            f.write("C-"+str(i+1)+" = D-"+str(i+1)+"\n")
         f.write("C-"+str(i)+" = D-"+str(i)+"\n")
         f.write("}\n")
         f.write("ELSE\n")
         f.write("{\n")
         f.write("C-"+str(i)+" = 0\n")
+        if(i != 1020):
+            f.write("C-"+str(i+1)+" = 0\n")
+        f.write("}\n")
+        f.write("IF ( ( A-"+str(i-1)+" & ! O-"+str(i-1)+" ) & O-"+str(i)+" ) {\n")
+        f.write("C-"+str(i-1)+" = D-"+str(i-1)+"\n")
+        f.write("C-"+str(i)+" = D-"+str(i)+"\n")
+        f.write("}\n")
+        f.write("ELSE\n")
+        f.write("{\n")
+        f.write("C-"+str(i)+" = 0\n")
+        f.write("C-"+str(i-1)+" = 0\n")
         f.write("}\n")
     switches = [1013]
     lower = [1001]
     higher = [1012]
     for s in range(len(switches)):
-        f.write("S-"+str(switches[s])+" = 1\n")
-        f.write("IF ( O-"+str(lower[s])+" | ( O-"+str(switches[s])+" & A-"+str(lower[s])+" ) ) {\n")
+        #f.write("S-"+str(switches[s])+" = 1\n")
+        f.write("IF ( O-"+str(lower[s])+" ) {\n")
         f.write("S-"+str(switches[s])+" = 0\n")
         f.write("}\n")
         f.write("IF ( O-"+str(higher[s])+" | ( O-"+str(switches[s])+" & A-"+str(higher[s])+" ) ) {\n")
@@ -93,32 +110,53 @@ with open("track_controller/GreenLineMiddle_Yellow.txt", "w") as f:
     for i in range(1029, 1036):
         f.write("IF ( ( A-"+str(i+1)+" & F-"+str(i+1)+" ) & O-"+str(i)+" ) {\n")
         f.write("C-"+str(i)+" = D-"+str(i)+"\n")
+        if(i != 1035):
+            f.write("C-"+str(i)+" = D-"+str(i+1)+"\n")
         f.write("}\n")
         f.write("ELSE\n")
         f.write("{\n")
         f.write("C-"+str(i)+" = 0\n")
+        if(i != 1035):
+            f.write("C-"+str(i+1)+" = 0\n")
         f.write("}\n")
-    for i in range(1105, 1150):
-        f.write("IF ( ( A-"+str(i+1)+" & F-"+str(i+1)+" ) & O-"+str(i)+" ) {\n")
+    for i in range(1105, 1151):
+        fut = i+1
+        if(i == 1150):
+            fut=1029
+        f.write("IF ( ( A-"+str(fut)+" & F-"+str(fut)+" ) & O-"+str(i)+" ) {\n")
         f.write("C-"+str(i)+" = D-"+str(i)+"\n")
+        f.write("C-"+str(fut)+" = D-"+str(fut)+"\n")
         f.write("}\n")
         f.write("ELSE\n")
         f.write("{\n")
         f.write("C-"+str(i)+" = 0\n")
         f.write("}\n")
     for i in range(1021, 1029):
-        f.write("IF ( ( ( A-"+str(i-1)+" & F-"+str(i-1)+" ) | ( A-"+str(i+1)+" & F-"+str(i+1)+" ) ) & O-"+str(i)+" ) {\n")
+        f.write("IF ( ( A-"+str(i-1)+" & F-"+str(i-1)+" ) & O-"+str(i)+" ) {\n")
         f.write("C-"+str(i)+" = D-"+str(i)+"\n")
+        if(i!=1021):
+            f.write("C-"+str(i-1)+" = D-"+str(i-1)+"\n")
         f.write("}\n")
         f.write("ELSE\n")
         f.write("{\n")
         f.write("C-"+str(i)+" = 0\n")
+        if(i!=1021):
+            f.write("C-"+str(i-1)+" = 0\n")
+        f.write("}\n")
+        f.write("IF ( ( A-"+str(i+1)+" & F-"+str(i+1)+" ) & O-"+str(i)+" ) {\n")
+        f.write("C-"+str(i)+" = D-"+str(i)+"\n")
+        f.write("C-"+str(i+1)+" = D-"+str(i+1)+"\n")
+        f.write("}\n")
+        f.write("ELSE\n")
+        f.write("{\n")
+        f.write("C-"+str(i)+" = 0\n")
+        f.write("C-"+str(i+1)+" = 0\n")
         f.write("}\n")
     switches = [1029]
     lower = [1030]
     higher = [1150]
     for s in range(len(switches)):
-        f.write("S-"+str(switches[s])+" = 1\n")
+        #f.write("S-"+str(switches[s])+" = 1\n")
         f.write("IF ( O-"+str(lower[s])+" | ( O-"+str(switches[s])+" & A-"+str(lower[s])+" ) ) {\n")
         f.write("S-"+str(switches[s])+" = 0\n")
         f.write("}\n")
@@ -157,30 +195,53 @@ with open("track_controller/GreenLineBottom_Blue.txt", "w") as f:
     for i in range(1036, 1077):
         f.write("IF ( ( A-"+str(i+1)+" & F-"+str(i+1)+" ) & O-"+str(i)+" ) {\n")
         f.write("C-"+str(i)+" = D-"+str(i)+"\n")
+        f.write("C-"+str(i+1)+" = D-"+str(i+1)+"\n")
         f.write("}\n")
         f.write("ELSE\n")
         f.write("{\n")
         f.write("C-"+str(i)+" = 0\n")
+        f.write("C-"+str(i+1)+" = 0\n")
         f.write("}\n")
     for i in range(1086, 1105):
-        f.write("IF ( ( A-"+str(i+1)+" & F-"+str(i+1)+" ) & O-"+str(i)+" ) {\n")
+        fut = i+1
+        if(i==1100):
+            fut = 1085
+        f.write("IF ( ( A-"+str(fut)+" & F-"+str(fut)+" ) & O-"+str(i)+" ) {\n")
         f.write("C-"+str(i)+" = D-"+str(i)+"\n")
+        if(i!=1104):
+            f.write("C-"+str(fut)+" = D-"+str(fut)+"\n")
         f.write("}\n")
         f.write("ELSE\n")
         f.write("{\n")
         f.write("C-"+str(i)+" = 0\n")
+        if(i!=1104):
+            f.write("C-"+str(fut)+" = 0\n")
         f.write("}\n")
     for i in range(1077, 1086):
-        f.write("IF ( ( ( A-"+str(i-1)+" & F-"+str(i-1)+" ) | ( A-"+str(i+1)+" & F-"+str(i+1)+" ) ) & O-"+str(i)+" ) {\n")
+        past = i-1
+        if(i == 1077):
+            past = 1101
+        f.write("IF ( ( A-"+str(past)+" & F-"+str(past)+" ) & O-"+str(i)+" ) {\n")
         f.write("C-"+str(i)+" = D-"+str(i)+"\n")
+        f.write("C-"+str(past)+" = D-"+str(past)+"\n")
         f.write("}\n")
         f.write("ELSE\n")
         f.write("{\n")
         f.write("C-"+str(i)+" = 0\n")
+        f.write("C-"+str(past)+" = 0\n")
+        f.write("}\n")
+        f.write("IF ( ( A-"+str(i+1)+" & F-"+str(i+1)+" ) & O-"+str(i)+" ) {\n")
+        f.write("C-"+str(i)+" = D-"+str(i)+"\n")
+        f.write("C-"+str(i+1)+" = D-"+str(i+1)+"\n")
+        f.write("}\n")
+        f.write("ELSE\n")
+        f.write("{\n")
+        f.write("C-"+str(i)+" = 0\n")
+        f.write("C-"+str(i+1)+" = 0\n")
         f.write("}\n")
     #switches
     for s in range(len(switches)):
-        f.write("S-"+str(switches[s])+" = 1\n")
+        #f.write("S-"+str(switches[s])+" = 1\n")
         f.write("IF ( O-"+str(lower[s])+" | ( O-"+str(switches[s])+" & A-"+str(lower[s])+" ) ) {\n")
         f.write("S-"+str(switches[s])+" = 0\n")
         f.write("}\n")

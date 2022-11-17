@@ -75,7 +75,12 @@ class track_control_controller():
             if(i!= 1021):
                 sug.update({i: 0b00100000})
                 com.update({i: 0b00000000})
-                lim.update({i: 0b00100100})
+                if(i>=1001 and i<=1012):
+                    lim.update({i: 0b00101101})
+                elif(i>=1013 and i<=1016):
+                    lim.update({i: 0b01000110})
+                elif(i>=1017 and i<=1020):
+                    lim.update({i: 0b00111100})
         self.track_controller_list[3].set_authority(auth)
         self.track_controller_list[3].set_switch_positions({1013:False})
         self.track_controller_list[3].set_occupancy(occ)
@@ -101,7 +106,10 @@ class track_control_controller():
             if(i!= 1020 or i!= 1036):
                 sug.update({i: 0b00100000})
                 com.update({i: 0b00000000})
-                lim.update({i: 0b00100100})
+                if(i>=1021 and i<=1026):
+                    lim.update({i: 0b01000110})
+                elif(i>=1026 and i<=1035):
+                    lim.update({i: 0b0011110})
         for i in range(1104, 1151):
             auth.update({i:False})
             occ.update({i:False})
@@ -109,7 +117,14 @@ class track_control_controller():
             if(i!= 1104):
                 sug.update({i: 0b00100000})
                 com.update({i: 0b00000000})
-                lim.update({i: 0b00100100})
+                if(i>=1105 and i<=1109):
+                    lim.update({i: 0b00011100})
+                elif(i>=1110 and i<=1116):
+                    lim.update({i: 0b00011110})
+                elif(i>=1117 and i<=1121):
+                    lim.update({i: 0b00001111})
+                elif(i>=1122):
+                    lim.update({i: 0b00001111})
         self.track_controller_list[4].set_authority(auth)
         self.track_controller_list[4].set_switch_positions({1029:False})
         self.track_controller_list[4].set_occupancy(occ)
@@ -135,7 +150,20 @@ class track_control_controller():
             if(i!= 1035 or i!= 1105):
                 sug.update({i: 0b00100000})
                 com.update({i: 0b00000000})
-                lim.update({i: 0b00100100})
+                if(i>=1036 and i<=1062):
+                    lim.update({i: 0b00011110})
+                elif(i>=1063 and i<=1066):
+                    lim.update({i: 0b01000110})
+                elif(i>=1067 and i<=1076):
+                    lim.update({i: 0b00101000})
+                elif(i>=1077 and i<=1085):
+                    lim.update({i: 0b00001111})
+                elif(i>=1086 and i<=1100):
+                    lim.update({i: 0b00011001})
+                elif(i==1101):
+                    lim.update({i: 0b0011010})
+                elif(i>=1102 and i<=1104):
+                    lim.update({i: 0b0011100})
         self.track_controller_list[5].set_authority(auth)
         self.track_controller_list[5].set_switch_positions({1057:False,  1063:False, 1077:False,1085:False})
         self.track_controller_list[5].set_occupancy(occ)
