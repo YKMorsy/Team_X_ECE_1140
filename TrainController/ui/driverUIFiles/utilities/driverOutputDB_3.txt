@@ -1,10 +1,10 @@
-0.01
-60
+17.029876562317103
+19.444
 70
-0.0
+19.444
 False
 False
 False
 False
-False
-WHITED
+True
+GLENBURY

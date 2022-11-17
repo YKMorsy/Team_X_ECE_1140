@@ -37,4 +37,4 @@ class Dispatcher:
                     cur_key = key - 2000
 
                 for train in self.trains:
-                    train.setPosition(self, line_color, cur_key, True)
+                    train.setPosition(line_color, cur_key, True)
