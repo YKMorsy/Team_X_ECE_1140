@@ -29,9 +29,12 @@ class track_control_display (QtWidgets.QMainWindow, Ui_MainWindow):
         self.maintenance_check_box.stateChanged.connect(self.maintence_box_checked)
 
         self.maint_SwitchPosTable.itemChanged.connect(self.item_changed)
+        self.maint_Auth.itemChanged.connect(self.item_changed)
+        self.maint_Occ_table.itemChanged.connect(self.item_changed)
         self.maint_LightColorTable.itemChanged.connect(self.light_item_changed)
         self.maint_RailwayCrossingTable.itemChanged.connect(self.item_changed)
         self.maint_StatusTable.itemChanged.connect(self.item_changed)
+        self.maint_StatusTable_2.itemChanged.connect(self.item_changed)
 
         self.update_tables()
 
@@ -84,11 +87,15 @@ class track_control_display (QtWidgets.QMainWindow, Ui_MainWindow):
     def update_tables(self):
         self.update_table(self.track_data.get_switch_positions(), self.SwitchPosTable, False)
         self.update_table(self.track_data.get_switch_positions(), self.maint_SwitchPosTable, self.maintenance_check_box.isChecked())
+        self.update_table(self.track_data.get_authority(), self.maint_Auth, False)
+        self.update_table(self.track_data.get_commanded_speed(), self.maint_CS, False)
+        self.update_table(self.track_data.get_occupancy(), self.maint_Occ_table, False)
         self.update_table(self.track_data.get_railway_crossings(), self.RailwayCrossingTable, False)
         self.update_light_table(self.track_data.get_light_colors(), self.LightColorTable, False)
         self.update_light_table(self.track_data.get_light_colors(), self.maint_LightColorTable, self.maintenance_check_box.isChecked())
         self.update_table(self.track_data.get_railway_crossings(), self.maint_RailwayCrossingTable, self.maintenance_check_box.isChecked())
         self.update_table(self.track_data.get_statuses(), self.maint_StatusTable, self.maintenance_check_box.isChecked())
+        self.update_table(self.track_data.get_statuses(), self.maint_StatusTable_2, False)
         self.unsaved_changes_label.setText("")
 
     def update_table(self, data, table, changable):
@@ -130,9 +137,13 @@ class track_control_display (QtWidgets.QMainWindow, Ui_MainWindow):
 
     def make_changes(self):
         self.get_table_change(self.track_data.get_switch_positions(), self.maint_SwitchPosTable)
+        self.get_table_change(self.track_data.get_authority(), self.maint_auth)
+        self.get_table_change(self.track_data.get_commanded_speed(), self.maint_CS)
+        self.get_table_change(self.track_data.get_occupancy(), self.maint_Occ_table)        
         self.get_light_table_change(self.track_data.get_light_colors(), self.maint_LightColorTable)
         self.get_table_change(self.track_data.get_railway_crossings(), self.maint_RailwayCrossingTable)
         self.get_table_change(self.track_data.get_statuses(), self.maint_StatusTable)
+        self.get_table_change(self.track_data.get_statuses(), self.maint_StatusTable_2)
         self.unsaved_changes_label.setText("")
         self.update_tables()
 
@@ -155,4 +166,4 @@ class track_control_display (QtWidgets.QMainWindow, Ui_MainWindow):
     def run_PLC(self):
         #self.track_data.ParsePLC()
         self.update_tables()
-        print("RUN PLC")
+        #print("RUN PLC")

@@ -62,6 +62,7 @@ class Iteration3(QWidget):
         #Yassers update
         new_trains = self.ctc_office.updateTimer()
         #Sierra call your update here
+        self.wayside_sign_in.Timer_TrackControl()
 
         #Peter call your update here
 
@@ -92,7 +93,7 @@ if __name__ == '__main__':
 
     god_help_us = Iteration3()
 
-    fps = 10
+    fps = 5
     timer = QTimer()
     timer.timeout.connect(god_help_us.update_everything)
     handler.update(1)

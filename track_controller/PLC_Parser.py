@@ -6,8 +6,11 @@ class PLC_Parser ():
 		self.PLC_file = ""
 
 	def get_table_value(self, table_data, block_value):
+		#try:
 		return table_data[int(block_value)]
-
+		#except:
+		#	print(block_value)
+		#	print(table_data)
 	def parse_PLC (self, switchPos, Occupancy, Authority, sugSpeed, status, speedLim):
 		logic_queue = queue.LifoQueue()
 		if(self.PLC_file == ""):

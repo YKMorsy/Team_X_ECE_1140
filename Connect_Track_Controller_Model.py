@@ -7,7 +7,7 @@ def Connect_Track_Control_And_Model(trcControl, model):
     #authority
     auth = trcControl[0].get_authority() | trcControl[1].get_authority() | trcControl[2].get_authority() | trcControl[3].get_authority() | trcControl[4].get_authority() | trcControl[5].get_authority()
     model.set_total_authority(auth)
-
+    # print(auth)
     #commanded speed
     cs = trcControl[0].get_commanded_speed() | trcControl[1].get_commanded_speed() | trcControl[2].get_commanded_speed() | trcControl[3].get_commanded_speed() | trcControl[4].get_commanded_speed() | trcControl[5].get_commanded_speed()
     model.set_commanded_speed(cs)
