@@ -376,7 +376,7 @@ class track_model(object):
                 else:
                     self.ui.track_list[temp - 1].reset_authority()
 
-        print(self.ui.track_list[62].get_authority())
+        # print(self.ui.track_list[62].get_authority())
         # self.train_model.set_authority(self.get_authority_dict())            
 
     def set_switch_position(self,sw_dic):
@@ -462,6 +462,7 @@ class track_model(object):
                 
     
     def set_train_status(self, train):
+
         line = train.line_name
         if line.upper() == "GREEN":
             block_number = int(train.most_recent_block)
@@ -530,6 +531,8 @@ class track_model(object):
                 train.commanded_speed = self.get_red_line_commanded_speed(new_block)
                 train.beacon_info = self.ui.track_list[new_block + 149].get_beacon()
                 return 0
+
+        
                 
             
         
