@@ -898,7 +898,7 @@ class Ui_Track_Model(object):
                         self.block_status_table.setItem(0,5,QtWidgets.QTableWidgetItem("Above"))
                     else :
                         self.block_status_table.setItem(0,5,QtWidgets.QTableWidgetItem("Underground"))
-                    if self.track_list[i].get_occupancy() == 1 :
+                    if self.track_list[i].get_occupancy() == True :
                         self.block_status_table.setItem(0,6,QtWidgets.QTableWidgetItem("Occupied"))
                     else :
                         self.block_status_table.setItem(0,6,QtWidgets.QTableWidgetItem("Not Occupied"))
