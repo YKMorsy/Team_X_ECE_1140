@@ -29,8 +29,16 @@ with open("track_controller/RedLineBottom_yellow.txt", "w") as f:
     #write lights and rail way crossing logic
 
 with open("track_controller/GreenLineTop_Red.txt", "w") as f:
-    for i in range(1002, 1013):
-        f.write("IF ( ( A-"+str(i-1)+" & F-"+str(i-1)+" ) & O-"+str(i)+" ) {\n")
+    switches = [1013]
+    lower = [1001]
+    higher = [1012]
+
+    #command speed -- occupancy and authority
+    for i in range(1001, 1013):
+        past = i-1
+        if (i == 1001):
+            past  = 1013
+        f.write("IF ( ( A-"+str(past)+" & ! O-"+str(past)+" ) & O-"+str(i)+" ) {\n")
         f.write("C-"+str(i)+" = D-"+str(i)+"\n")
         f.write("}\n")
         f.write("ELSE\n")
@@ -38,19 +46,43 @@ with open("track_controller/GreenLineTop_Red.txt", "w") as f:
         f.write("C-"+str(i)+" = 0\n")
         f.write("}\n")
     for i in range(1013, 1021):
-        f.write("IF ( ( ( A-"+str(i-1)+" & F-"+str(i-1)+" ) | ( A-"+str(i+1)+" & F-"+str(i+1)+" ) ) & O-"+str(i)+" ) {\n")
+        f.write("IF ( ( ( A-"+str(i-1)+" & ! O-"+str(i-1)+" ) | ( A-"+str(i+1)+" & ! O-"+str(i+1)+" ) ) & O-"+str(i)+" ) {\n")
         f.write("C-"+str(i)+" = D-"+str(i)+"\n")
         f.write("}\n")
         f.write("ELSE\n")
         f.write("{\n")
         f.write("C-"+str(i)+" = 0\n")
         f.write("}\n")
-    switches = [1013]
-    lower = [1001]
-    higher = [1012]
+
+    #command speed -- faults
+    #fault on E/D
+    f.write("IF (")
+    for i in range(1013, 1022):
+        f.write(" ! F-"+str(i)+" ")
+        if(i != 1021):
+            f.write("|")
+    f.write(") {\n")
+    for i in range(1013, 1021):
+        f.write("C-"+str(i)+" = 0\n")
+    for i in range(1001, 1007):
+        f.write("C-"+str(i)+" = 0\n")
+    f.write("}\n")
+    #fault on A/B/C
+    f.write("IF (")
+    for i in range(1001, 1013):
+        f.write(" ! F-"+str(i)+" ")
+        if(i != 1012):
+            f.write("|")
+    f.write(") {\n")
+    for i in range(1001, 1017):
+        f.write("C-"+str(i)+" = 0\n")
+    f.write("}\n")
+    
+
+    #switches 
     for s in range(len(switches)):
         f.write("S-"+str(switches[s])+" = 1\n")
-        f.write("IF ( O-"+str(lower[s])+" | ( O-"+str(switches[s])+" & A-"+str(lower[s])+" ) ) {\n")
+        f.write("IF ( O-"+str(lower[s])+" ) {\n")
         f.write("S-"+str(switches[s])+" = 0\n")
         f.write("}\n")
         f.write("IF ( O-"+str(higher[s])+" | ( O-"+str(switches[s])+" & A-"+str(higher[s])+" ) ) {\n")
@@ -59,7 +91,7 @@ with open("track_controller/GreenLineTop_Red.txt", "w") as f:
 
     #write lights and rail way crossing logic
     #Railway
-    f.write("R-1 = 0\n")
+    f.write("R-1001 = 0\n")
     f.write("IF ( ( O-1018 & A-1019 ) | ( O-1017 & A-1018 ) ) {\n")
     f.write("R-1001 = 1\n")
     f.write("}\n")
@@ -68,7 +100,7 @@ with open("track_controller/GreenLineTop_Red.txt", "w") as f:
     f.write("}\n")
 
     #Lights
-    stations = [1002, 1009, 1016 ,1019]
+    stations = [1002, 1009, 1012, 1013, 1016 ,1019] #TODO: Fix Logic Probably
     for l in stations:
         f.write("IF ( O-"+str(l-1)+" & A-"+str(l)+" ) {\n")
         f.write("L-"+str(l-1)+" = 11\n")
@@ -77,10 +109,6 @@ with open("track_controller/GreenLineTop_Red.txt", "w") as f:
         f.write("IF ( O-"+str(l+1)+" & A-"+str(l)+" ) {\n")
         f.write("L-"+str(l+1)+" = 11\n")
         f.write("L-"+str(l-1)+" = 00\n")
-        f.write("}\n")
-    for i in range(1001, 1021):
-        f.write("IF ( ! F-"+str(l)+" ) {\n")
-        f.write("A-"+str(l+1)+" = 0\n")
         f.write("}\n")
 
     #Authority
@@ -91,7 +119,7 @@ with open("track_controller/GreenLineTop_Red.txt", "w") as f:
 
 with open("track_controller/GreenLineMiddle_Yellow.txt", "w") as f:
     for i in range(1029, 1036):
-        f.write("IF ( ( A-"+str(i+1)+" & F-"+str(i+1)+" ) & O-"+str(i)+" ) {\n")
+        f.write("IF ( ( A-"+str(i+1)+" & ! O-"+str(i+1)+" ) & O-"+str(i)+" ) {\n")
         f.write("C-"+str(i)+" = D-"+str(i)+"\n")
         f.write("}\n")
         f.write("ELSE\n")

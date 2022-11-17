@@ -115,5 +115,5 @@ class test_window (QtWidgets.QMainWindow, Ui_TestingWindow):
     def get_table_change (self, table_data, table):
         rowC = table.rowCount()
         for row in range(rowC):
-            table_data[row] = table.item(row, 1).data(0)
+            table_data.update({int(table.item(row, 0).data(0)): table.item(row, 1).data(0) })
 

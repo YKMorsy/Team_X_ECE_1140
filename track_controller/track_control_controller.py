@@ -15,7 +15,7 @@ class track_control_controller():
         self.track_controller_list[0].set_suggested_speed({1:0b00011010, 2:0b00100111, 3:0b00010101})
         self.track_controller_list[0].set_commanded_speed({1:0b000000000, 2:0b000000000, 3:0b000000000})
         self.track_controller_list[0].set_speed_limit({1:0b000000000, 2:0b000000000, 3:0b000000000})
-        self.track_controller_list[0].set_PLC("track_controller/testPLCfile.txt")
+        self.track_controller_list[0].set_PLC("track_controller/blank.txt")
 
         self.track_controller_list[2].set_authority({1:True, 2:False, 3:False, 4:False, 5:False})
         self.track_controller_list[2].set_switch_positions({1:True})
@@ -26,7 +26,7 @@ class track_control_controller():
         self.track_controller_list[2].set_suggested_speed({1:0b00011010, 2:0b00100111, 3:0b00010101, 4:0b00010101, 5:0b00010101})
         self.track_controller_list[2].set_commanded_speed({1:0b000000000, 2:0b000000000, 3:0b000000000, 4:0b00010101, 5:0b00010101})
         self.track_controller_list[2].set_speed_limit({1:0b000100000, 2:0b00000100, 3:0b00100000, 4:0b00000101, 5:0b100000001})
-        self.track_controller_list[2].set_PLC("track_controller/testPLCfile.txt")
+        self.track_controller_list[2].set_PLC("track_controller/blank.txt")
 
         #temp redline
         auth = {}
