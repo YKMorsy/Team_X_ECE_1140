@@ -482,7 +482,7 @@ class Ui_Track_Model(object):
         self.track_holder[9] = track_block.block("Green","C10",-4.5,7.5,45,"none",100,"C9","C9",'n','n')
         self.track_holder[10] = track_block.block("Green","C11",-4,3.5,45,"none",100,"C10","C10",'n','n')
         self.track_holder[11] = track_block.block("Green","C12",3,0.5,45,"none",100,"C11","C11",'n','n')
-        self.track_holder[12] = track_block.block("Green","D13",0,0.5,70,"none",100,"C12","A1",'n','n')
+        self.track_holder[12] = track_block.block("Green","D13",0,0.5,70,"none",100,"D14","A1",'n','n')
         self.track_holder[13] = track_block.block("Green","D14",0,0.5,70,"none",150,"D15","D15",'n','n')
         self.track_holder[14] = track_block.block("Green","D15",0,0.5,70,"none",150,"D16","D16",'n','n')
         self.track_holder[15] = track_block.block("Green","D16",0,0.5,70,"Station",150,"E17","E16",'n','n')
