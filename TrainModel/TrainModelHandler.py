@@ -1,6 +1,6 @@
 from TrainModel.TrainModel import TrainModel
 
-from PyQt6.QtGui import QStandardItem
+from PyQt5.QtGui import QStandardItem
 
 class TrainModelHandler:
 	def __init__(self, train_info_model, track_model):
@@ -22,9 +22,10 @@ class TrainModelHandler:
 		
 		#Build the list of lists
 		for T in self.train_list.values():
-			T.update(time_step)
-			list_of_lists.append(self.UI_train_row(T))
-		
+			delete = T.update(time_step)
+			if delete != -1: list_of_lists.append(self.UI_train_row(T))
+			else: self.delete_train(T.ID)
+
 		#Check that no trains have crashed into each other
 		blocks_occupied = {}
 		for T in self.train_list.values():
@@ -41,15 +42,23 @@ class TrainModelHandler:
 
 	def set_authority(self, Authority):
 		for T in self.train_list.values:
-			if T.most_recent_block in Authority.keys:
-				if Authority[T.most_recent_block]: T.commanded_authority = "True"
-				else: T.commanded_authority = "False"
+			if ((T.most_recent_block.replace("G", "") in Authority.keys and T.line_name == "Green") 
+			or (T.most_recent_block.replace("R", "") in Authority.keys and T.line_name == "Red")):
+				if not T.signal_failure:
+					if Authority[T.most_recent_block]: T.commanded_authority = "True"
+					else: T.commanded_authority = "False"
+				else:
+					T.commanded_authority = "False"
 
 
 	def set_speed(self, Speed):
 		for T in self.train_list.values:
-			if T.most_recent_block in Speed.keys:
-				T.commanded_speed = Speed[T.most_recent_block]
+			if ((T.most_recent_block.replace("G", "") in Speed.keys and T.line_name == "Green") 
+			or (T.most_recent_block.replace("R", "") in Speed.keys and T.line_name == "Red")):
+				if not T.signal_failure:
+					T.commanded_speed = Speed[T.most_recent_block]
+				else:
+					T.commanded_speed = 0
 
 
 	def reset_time(self, time_step = 0):
@@ -111,12 +120,12 @@ class TrainModelHandler:
 	
 	def create_train(self, ID, mass = 40.9, crew_count = 2, passenger_capacity = 222, speed_limit = 43.50, acceleration_limit = 3.00, 
     service_deceleration = 3.94, emergency_deceleration = 8.96, max_engine_power = 480000, length = 106, height = 11.2, width = 8.69, 
-    car_count = 1, direction = True, line_name = "Red"):
+    car_count = 1, line_name = "Red"):
 						 
 		#Create an instance of TrainModel and add it to the dictionary
 		self.train_list[ID] =  TrainModel(self, ID, mass, crew_count, passenger_capacity, speed_limit, acceleration_limit, 
                                           service_deceleration, emergency_deceleration, max_engine_power, length, height, 
-										  width, car_count, direction, line_name, self.track_model)
+										  width, car_count, line_name, self.track_model)
 
 		#Put the train in the UI table
 		self.train_info_model.insertRow(self.train_info_model.rowCount())

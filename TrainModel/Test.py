@@ -1,9 +1,9 @@
-from PyQt6.QtWidgets import QApplication, QWidget, QFrame, QDialog, QGridLayout
-from PyQt6.QtWidgets import QLabel, QPushButton, QRadioButton, QSlider, QLineEdit, QSizePolicy, QTableView, QAbstractItemView, QHeaderView, QToolTip
-from PyQt6.QtCore import Qt, QRect, QTimer, QSortFilterProxyModel, QThread
-from PyQt6.QtGui import QFont, QStandardItemModel, QStandardItem
-from TrainModel.FontStyles import *
-from TrainModel.common import *
+from PyQt5.QtWidgets import QApplication, QWidget, QFrame, QDialog, QGridLayout
+from PyQt5.QtWidgets import QLabel, QPushButton, QRadioButton, QSlider, QLineEdit, QSizePolicy, QTableView, QAbstractItemView, QHeaderView, QToolTip
+from PyQt5.QtCore import Qt, QRect, QTimer, QSortFilterProxyModel, QThread
+from PyQt5.QtGui import QFont, QStandardItemModel, QStandardItem
+from FontStyles import *
+from common import *
 from TrainModel.TrainModelHandler import TrainModelHandler
 
 class TestUICreatorModifier(QFrame):
@@ -1567,8 +1567,11 @@ class TestUI(QFrame):
 		self.time_label.setText("Current Time: " + "{:.3f}".format(self.current_time) + " s")
 		
 		#Create and run the thread that updates train and table values
-		self.update_thread = UpdateThreadClass(self.time_resolution, self)
-		self.update_thread.start()
+		#self.update_thread = UpdateThreadClass(self.time_resolution, self)
+		#self.update_thread.start()
+
+		handler.update(self.time_resolution)
+
 
 	def simulate_to(self):
 		if not my_warning(msg = "Are you sure you want to simulate to t = " + "{:.3f}".format(float(self.simulate_to_entry.text())) + " s?", title = "Simulate To Confirmation", parent = self).exec(): return			
