@@ -37,7 +37,7 @@ class Dispatcher:
                     cur_key = key - 2000
 
                 for train in self.trains:
-                    if train.route == 1:
+                    if train.route == 2:
                         self.trains.remove(train)
                     else:
                         train.setPosition(line_color, cur_key, True)

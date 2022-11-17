@@ -1,4 +1,4 @@
-6.80942023315535
+0.0
 0.0
 70
 0.0
@@ -7,4 +7,4 @@ False
 False
 False
 True
-DORMONT
+GLENBURY

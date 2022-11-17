@@ -19,7 +19,7 @@ class Train:
         self.station_list = station_list
 
     def setPosition(self, line_color, block_number, occupancy):
-        print(self.station_list)
+        # print(self.station_lists)
         if (block_number == self.route[1] and self.line.line_color == line_color and occupancy == True):
 
             # Set previous authority to False
