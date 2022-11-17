@@ -10,7 +10,7 @@ class Block:
         # Defined attributes
         self.block_number = block_number
         self.blocK_length = block_length
-        self.block_speed_limit = block_speed_limit*3.6
+        self.block_speed_limit = block_speed_limit
         self.block_railway = block_railway
 
         self.block_authority = False
