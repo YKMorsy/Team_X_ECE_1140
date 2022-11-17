@@ -29,6 +29,10 @@ def connect_ctc_track_controller(dispatcherCTC, greenLineCTC, redLineCTC, trcCon
     # Setters of Wayside (CTC -> WAYSIDE)
     # Authority - Green
     green_authority_total = greenLineCTC.getBlockAuthority()
+    print("Auth 1063 " + str(green_authority_total[1063]))
+    print("Auth 1064 " + str(green_authority_total[1064]))
+    print("Auth 1065 " + str(green_authority_total[1065]))
+    print("Auth 1066 " + str(green_authority_total[1066]))
     for_ws_3 = {}
     for_ws_5 = {}
     for_ws_4 = {}

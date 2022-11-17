@@ -406,6 +406,7 @@ class track_model(object):
                     self.ui.track_list[temp - 1].reset_switch()
 
     def set_commanded_speed(self,com_dic):
+        print("hi************************************************************")
         for key in com_dic:
             temp = key
             if temp == 1000:
