@@ -491,7 +491,7 @@ class track_model(object):
                     train.current_grade = self.get_green_line_grade(new_block)
                 else: 
                     train.current_grade = 0 - self.get_green_line_grade(new_block)
-                    self.ui.track_list[new_block - 1].set_occupancy()
+                self.ui.track_list[new_block - 1].set_occupancy()
                 train.commanded_authority = "True" if self.get_green_line_authority(new_block) else "False"
                 train.commanded_speed = self.get_green_line_commanded_speed(new_block)
                 train.beacon_info = self.ui.track_list[new_block -1].get_beacon()
@@ -525,7 +525,7 @@ class track_model(object):
                     train.current_grade = self.get_red_line_grade(new_block)
                 else: 
                     train.current_grade = 0 - self.get_red_line_grade(new_block)
-                    self.ui.track_list[new_block + 149 ].set_occupancy()
+                self.ui.track_list[new_block + 149 ].set_occupancy()
                 train.commanded_authority = "True" if self.get_red_line_authority(new_block) else "False"
                 train.commanded_speed = self.get_red_line_commanded_speed(new_block)
                 train.beacon_info = self.ui.track_list[new_block + 149].get_beacon()
