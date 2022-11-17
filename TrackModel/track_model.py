@@ -472,6 +472,7 @@ class track_model(object):
                 train.event_distance_in_block = self.get_green_line_block_len(block_number) 
                 last_block = int(train.block_list[0])
                 self.reset_green_line_occupancy(last_block)
+                train.commanded_speed = self.get_green_line_commanded_speed(last_block )
                 list1 = [] 
                 list1.append(train.most_recent_block)
                 train.block_list = list1
