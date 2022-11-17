@@ -191,7 +191,10 @@ with open("track_controller/GreenLineBottom_Blue.txt", "w") as f:
         f.write("C-"+str(i)+" = 0\n")
         f.write("}\n")
     for i in range(1086, 1105):
-        f.write("IF ( ( A-"+str(i+1)+" & F-"+str(i+1)+" ) & O-"+str(i)+" ) {\n")
+        fut = i+1
+        if(i==1100):
+            fut = 1086
+        f.write("IF ( ( A-"+str(fut)+" & F-"+str(fut)+" ) & O-"+str(i)+" ) {\n")
         f.write("C-"+str(i)+" = D-"+str(i)+"\n")
         f.write("}\n")
         f.write("ELSE\n")
@@ -199,7 +202,10 @@ with open("track_controller/GreenLineBottom_Blue.txt", "w") as f:
         f.write("C-"+str(i)+" = 0\n")
         f.write("}\n")
     for i in range(1077, 1086):
-        f.write("IF ( ( ( A-"+str(i-1)+" & F-"+str(i-1)+" ) | ( A-"+str(i+1)+" & F-"+str(i+1)+" ) ) & O-"+str(i)+" ) {\n")
+        past = i-1
+        if(i == 1077):
+            past = 1101
+        f.write("IF ( ( ( A-"+str(past)+" & F-"+str(past)+" ) | ( A-"+str(i+1)+" & F-"+str(i+1)+" ) ) & O-"+str(i)+" ) {\n")
         f.write("C-"+str(i)+" = D-"+str(i)+"\n")
         f.write("}\n")
         f.write("ELSE\n")

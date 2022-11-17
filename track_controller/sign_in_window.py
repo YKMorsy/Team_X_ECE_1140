@@ -28,7 +28,6 @@ class sign_in_window (QtWidgets.QMainWindow, Ui_sign_in_window):
         self.main_wind = track_control_display(self.all_tracks.get_track_control_instance(self.Track_comboBox.currentText()))
 
     def Timer_TrackControl(self):
-        print("1 sign in sec") 
         self.all_tracks.Run_All_Track_Controllers_PLC()
         self.main_wind.run_PLC()
 
