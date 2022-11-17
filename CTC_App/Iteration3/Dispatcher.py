@@ -26,9 +26,6 @@ class Dispatcher:
     # Called by CTC (wayside to CTC)
 
     def setOccupancy(self, occ_dict):
-        print("63: " + str(occ_dict[1063]))
-        print("64: " + str(occ_dict[1064]))
-        print("65: " + str(occ_dict[1065]))
         for key in occ_dict:
             if occ_dict[key] == True:
 

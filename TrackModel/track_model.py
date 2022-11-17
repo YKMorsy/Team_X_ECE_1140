@@ -369,7 +369,7 @@ class track_model(object):
                     self.ui.track_list[149 + temp].set_authority()
                 else:
                     self.ui.track_list[149 + temp].reset_authority()
-            if temp > 1000 and temp < 2000:
+            if (temp > 1000) and (temp < 2000):
                 temp -= 1000
                 if auth_dic[key] == True:
                     self.ui.track_list[temp - 1].set_authority()
@@ -398,7 +398,7 @@ class track_model(object):
                     self.ui.track_list[149 + temp].set_switch()
                 else:
                     self.ui.track_list[149 + temp].reset_switch()
-            if temp > 1000 and temp < 2000:
+            if (temp > 1000) and (temp < 2000):
                 temp -= 1000
                 if sw_dic[key] == True:
                     self.ui.track_list[temp - 1].set_switch()
@@ -416,9 +416,10 @@ class track_model(object):
             if temp > 2000:
                 temp -= 2000
                 self.ui.track_list[149 + temp].set_commanded_speed(com_dic[key])
-            if temp > 1000 and temp < 2000:
+            if (temp > 1000) and (temp < 2000):
                 temp -= 1000
                 self.ui.track_list[temp - 1].set_commanded_speed(com_dic[key])
+
 
     def set_lights(self, lights_dic):
         for key in lights_dic:
@@ -471,6 +472,7 @@ class track_model(object):
                 curr_block = store_curr[1:]
                 train.event_distance_in_block = self.get_green_line_block_len(block_number)
                 last_block = int(train.block_list[0])
+                train.commanded_speed = self.get_green_line_commanded_speed(block_number-1)
                 self.reset_green_line_occupancy(last_block)
                 list1 = [] 
                 list1.append(train.most_recent_block)
@@ -494,7 +496,7 @@ class track_model(object):
                     train.current_grade = 0 - self.get_green_line_grade(new_block)
                 self.ui.track_list[new_block - 1].set_occupancy()
                 train.commanded_authority = "True" if self.get_green_line_authority(new_block) else "False"
-                train.commanded_speed = self.get_green_line_commanded_speed(new_block)
+                train.commanded_speed = self.get_green_line_commanded_speed(new_block - 1)
                 train.beacon_info = self.ui.track_list[new_block -1].get_beacon()
                 return 0
                 
