@@ -62,6 +62,7 @@ class Iteration3(QWidget):
         #Yassers update
         new_trains = self.ctc_office.updateTimer()
         #Sierra call your update here
+        self.wayside_sign_in.Timer_TrackControl()
 
         #Peter call your update here
 

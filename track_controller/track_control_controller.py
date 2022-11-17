@@ -59,7 +59,7 @@ class track_control_controller():
         self.track_controller_list[1].set_suggested_speed(sug)
         self.track_controller_list[1].set_commanded_speed(com)
         self.track_controller_list[1].set_speed_limit(lim)
-        self.track_controller_list[1].set_PLC("track_controller/RedLine_Middle_blue_PLC.txt")
+        self.track_controller_list[1].set_PLC("track_controller/blank.txt")
 
         #temp green line
         auth = {}

@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="ProgrammerTab">
      <attribute name="title">
@@ -181,7 +181,7 @@ p, li { white-space: pre-wrap; }
        </rect>
       </property>
       <property name="text">
-       <string> </string>
+       <string/>
       </property>
      </widget>
     </widget>
@@ -337,6 +337,40 @@ p, li { white-space: pre-wrap; }
        <string/>
       </property>
      </widget>
+     <widget class="QTableWidget" name="maint_Occ_table">
+      <property name="geometry">
+       <rect>
+        <x>50</x>
+        <y>530</y>
+        <width>761</width>
+        <height>371</height>
+       </rect>
+      </property>
+      <property name="rowCount">
+       <number>0</number>
+      </property>
+      <property name="columnCount">
+       <number>2</number>
+      </property>
+      <column>
+       <property name="text">
+        <string>Block Number</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Occ</string>
+       </property>
+      </column>
+     </widget>
+     <zorder>maint_LightColorTable</zorder>
+     <zorder>maintenance_check_box</zorder>
+     <zorder>maint_SwitchPosTable</zorder>
+     <zorder>maint_RailwayCrossingTable</zorder>
+     <zorder>maint_StatusTable</zorder>
+     <zorder>maint_make_change</zorder>
+     <zorder>unsaved_changes_label</zorder>
+     <zorder>maint_Occ_table</zorder>
     </widget>
    </widget>
   </widget>
