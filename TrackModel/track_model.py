@@ -406,7 +406,6 @@ class track_model(object):
                     self.ui.track_list[temp - 1].reset_switch()
 
     def set_commanded_speed(self,com_dic):
-        print("hi************************************************************")
         for key in com_dic:
             temp = key
             if temp == 1000:
@@ -421,7 +420,6 @@ class track_model(object):
                 temp -= 1000
                 self.ui.track_list[temp - 1].set_commanded_speed(com_dic[key])
 
-        print(self.ui.track_list[63].get_commanded_speed())
 
     def set_lights(self, lights_dic):
         for key in lights_dic:
@@ -474,7 +472,7 @@ class track_model(object):
                 curr_block = store_curr[1:]
                 train.event_distance_in_block = self.get_green_line_block_len(block_number)
                 last_block = int(train.block_list[0])
-                train.commanded_speed = self.get_green_line_commanded_speed(block_number + 1)
+                train.commanded_speed = self.get_green_line_commanded_speed(block_number-1)
                 self.reset_green_line_occupancy(last_block)
                 list1 = [] 
                 list1.append(train.most_recent_block)
@@ -498,7 +496,7 @@ class track_model(object):
                     train.current_grade = 0 - self.get_green_line_grade(new_block)
                 self.ui.track_list[new_block - 1].set_occupancy()
                 train.commanded_authority = "True" if self.get_green_line_authority(new_block) else "False"
-                #train.commanded_speed = self.get_green_line_commanded_speed(new_block)
+                train.commanded_speed = self.get_green_line_commanded_speed(new_block - 1)
                 train.beacon_info = self.ui.track_list[new_block -1].get_beacon()
                 return 0
                 
