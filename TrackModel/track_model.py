@@ -421,6 +421,8 @@ class track_model(object):
                 temp -= 1000
                 self.ui.track_list[temp - 1].set_commanded_speed(com_dic[key])
 
+        print(self.ui.track_list[63].get_commanded_speed())
+
     def set_lights(self, lights_dic):
         for key in lights_dic:
             temp = key
