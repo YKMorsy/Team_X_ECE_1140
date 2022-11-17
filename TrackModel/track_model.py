@@ -470,7 +470,7 @@ class track_model(object):
                 curr_block = store_curr[1:]
                 train.event_distance_in_block = self.get_green_line_block_len(block_number) 
                 last_block = int(train.block_list[0])
-                if
+                
                 train.commanded_speed = self.get_green_line_commanded_speed(block_number - 1)
                 self.reset_green_line_occupancy(last_block)
                 list1 = [] 
