@@ -469,7 +469,7 @@ class track_model(object):
             if train.current_distance_in_block >=  32 and train.current_distance_in_block < self.get_green_line_block_len(block_number) : 
                 store_curr = self.ui.track_list[block_number - 1].name
                 curr_block = store_curr[1:]
-                train.event_distance_in_block = self.get_green_line_block_len(block_number)
+                train.event_distance_in_block = self.get_green_line_block_len(block_number) 
                 last_block = int(train.block_list[0])
                 self.reset_green_line_occupancy(last_block)
                 list1 = [] 
@@ -494,6 +494,7 @@ class track_model(object):
                     train.current_grade = 0 - self.get_green_line_grade(new_block)
                 self.ui.track_list[new_block - 1].set_occupancy()
                 train.commanded_authority = "True" if self.get_green_line_authority(new_block) else "False"
+
                 train.beacon_info = self.ui.track_list[new_block -1].get_beacon()
                 return 0
                 
