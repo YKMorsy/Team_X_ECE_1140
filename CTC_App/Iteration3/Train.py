@@ -81,9 +81,4 @@ class Train:
 
             # Set suggested speed
             self.line.block_list[self.route[0]].block_suggested_speed = suggested_speed
-
-            print("sugg speed on current block " + str(self.route[0]) + " is " + str(self.line.block_list[self.route[0]].block_suggested_speed))
-            print("sugg speed on next block " + str(self.route[1]) + " is " + str(self.line.block_list[self.route[1]].block_suggested_speed))
-            print("Authority on current block " + str(self.route[0]) + " is " + str(self.line.block_list[self.route[0]].block_authority))
-            print("Authority on next block " + str(self.route[1]) + " is " + str(self.line.block_list[self.route[1]].block_authority))
             

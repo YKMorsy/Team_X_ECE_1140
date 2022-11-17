@@ -22,7 +22,6 @@ class block:
     authority = False
     underground = 'n'
     lights = 0
-    beacon = {}
     
     #default constructor
     def __init__(self,ln, n, g, e, s, st, len, nl, sw,cr,u):
@@ -37,6 +36,7 @@ class block:
         self.next_loc = nl
         self.switch_forward_loc = sw
         self.underground = u
+        self.beacon = {}
         
     def toggle_fault_rail(self):
         if self.fault_rail == 0:
