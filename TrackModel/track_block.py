@@ -7,7 +7,7 @@ class block:
     grade = 0.0
     elevation = 0.0
     speed = 0
-    occupancy = 0
+    occupancy = False
     station = "none"
     crossing = 'n'
     crossing_status = 0
@@ -63,11 +63,11 @@ class block:
             return 0
     
     def set_occupancy(self):
-        self.occupancy = 1
+        self.occupancy = True
         return self.occupancy
     
     def reset_occupancy(self):
-        self.occupancy = 0
+        self.occupancy = False
         return self.occupancy
     
     def toggle_occupancy(self):
