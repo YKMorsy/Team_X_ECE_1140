@@ -1,8 +1,9 @@
 import random
 
 class station(object):
-    throughput = 0
-    passengers = 0
+    def __init__(self):
+        self.throughput = 0
+        self.passengers = 0
     
     def get_passengers(self, cap):
         rand = random.randint(1,15)
@@ -10,7 +11,7 @@ class station(object):
         self.throughput += rand
         
         ret = 0
-        while self.passengers > 0 & cap > 0:
+        while self.passengers > 0 and cap > 0:
             ret += 1
             self.passengers -= 1
             cap -= 1
