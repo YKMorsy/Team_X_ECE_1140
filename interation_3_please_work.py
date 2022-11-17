@@ -29,6 +29,7 @@ class Iteration3(QWidget):
         #Create track model
         self.track_model_var = track_model()
         self.track_model_var.show()
+        handler.track_model = self.track_model_var
 
         #Create CTC
         self.green_line = Line("./CTC_App/Iteration3/Track_Layout_Green.xlsx")
