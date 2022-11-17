@@ -79,8 +79,6 @@ class PLC_Parser ():
 								val = self.get_table_value(switchPos, var[1])
 								expression.put(val == "True" or val == True)
 						elif (var[0] == "O"):
-							if(var[1] == "1065"):
-								adf= 10
 							state = self.get_state(logic_queue)
 							if ( state == "{" or state == " "):
 								return "You can't set Occupancy"
