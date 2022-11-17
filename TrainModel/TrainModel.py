@@ -20,6 +20,7 @@ class TrainModel:
         self.height = height * 0.3048
         self.width = width * 0.3048
         self.car_count = car_count
+        self.track_model = track_model
 
 
         self.velocity = 0.0
@@ -57,7 +58,6 @@ class TrainModel:
         self.exterior_lights = False
         self.left_doors_opened = False
         self.right_doors_opened = False
-        self.track_model = track_model
 
         
     def modify_train(self, ID, mass, crew_count, passenger_capacity, speed_limit, acceleration_limit, 
