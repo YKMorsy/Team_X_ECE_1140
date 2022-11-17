@@ -67,7 +67,7 @@ class Iteration3(QWidget):
         #Peter call your update here
 
         #Ryans update
-        handler.update(self.time_step)
+        handler.update(self.time_step, self.track_model_var)
 
         #New train creation, Ryan can you add in the coded needed to create your train
         for train in new_trains:

@@ -80,7 +80,7 @@ class PLC_Parser ():
 								expression.put(val == "True" or val == True)
 						elif (var[0] == "O"):
 							if(var[1] == "1065"):
-								print("sup")
+								adf= 10
 							state = self.get_state(logic_queue)
 							if ( state == "{" or state == " "):
 								return "You can't set Occupancy"
