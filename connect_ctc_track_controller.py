@@ -29,6 +29,10 @@ def connect_ctc_track_controller(dispatcherCTC, greenLineCTC, redLineCTC, trcCon
     # Setters of Wayside (CTC -> WAYSIDE)
     # Authority - Green
     green_authority_total = greenLineCTC.getBlockAuthority()
+    print("Auth 1063 " + str(green_authority_total[1063]))
+    print("Auth 1064 " + str(green_authority_total[1064]))
+    print("Auth 1065 " + str(green_authority_total[1065]))
+    print("Auth 1066 " + str(green_authority_total[1066]))
     for_ws_3 = {}
     for_ws_5 = {}
     for_ws_4 = {}
@@ -36,9 +40,9 @@ def connect_ctc_track_controller(dispatcherCTC, greenLineCTC, redLineCTC, trcCon
     for key in green_authority_total:
         if ((key-1000) >= 1) and ((key-1000) <= 21):
             for_ws_3[key] = green_authority_total[key]
-        elif (((key-1000) >= 35) and ((key-1000) <= 105)) or (key-1000) == 0:
+        if (((key-1000) >= 35) and ((key-1000) <= 105)) or (key-1000) == 0:
             for_ws_5[key] = green_authority_total[key]
-        elif (((key-1000) >= 20) and ((key-1000) <= 36)) or (((key-1000) >= 104) and ((key-1000) <= 150)):
+        if (((key-1000) >= 20) and ((key-1000) <= 36)) or (((key-1000) >= 104) and ((key-1000) <= 150)):
             for_ws_4[key] = green_authority_total[key]
 
 
@@ -55,9 +59,9 @@ def connect_ctc_track_controller(dispatcherCTC, greenLineCTC, redLineCTC, trcCon
     # for key in red_authority_total:
     #     if (((key-2000) >= 1) and ((key-2000) <= 24)) or (key-2000) == 0:
     #         for_ws_0[key] = red_authority_total[key]
-    #     elif (((key-2000) >= 23) and ((key-2000) <= 46)) or (((key-2000) >= 67) and ((key-1000) <= 76)):
+    #     if (((key-2000) >= 23) and ((key-2000) <= 46)) or (((key-2000) >= 67) and ((key-1000) <= 76)):
     #         for_ws_1[key] = red_authority_total[key]
-    #     elif (((key-2000) >= 45) and ((key-2000) <= 66)):
+    #     if (((key-2000) >= 45) and ((key-2000) <= 66)):
     #         for_ws_2[key] = red_authority_total[key]
 
 

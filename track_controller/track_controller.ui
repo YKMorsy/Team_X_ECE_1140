@@ -181,7 +181,7 @@ p, li { white-space: pre-wrap; }
        </rect>
       </property>
       <property name="text">
-       <string> </string>
+       <string/>
       </property>
      </widget>
     </widget>
@@ -210,8 +210,8 @@ p, li { white-space: pre-wrap; }
      <widget class="QTableWidget" name="maint_SwitchPosTable">
       <property name="geometry">
        <rect>
-        <x>50</x>
-        <y>110</y>
+        <x>40</x>
+        <y>120</y>
         <width>761</width>
         <height>371</height>
        </rect>
@@ -336,6 +336,122 @@ p, li { white-space: pre-wrap; }
       <property name="text">
        <string/>
       </property>
+     </widget>
+     <zorder>maint_LightColorTable</zorder>
+     <zorder>maintenance_check_box</zorder>
+     <zorder>maint_SwitchPosTable</zorder>
+     <zorder>maint_RailwayCrossingTable</zorder>
+     <zorder>maint_StatusTable</zorder>
+     <zorder>maint_make_change</zorder>
+     <zorder>unsaved_changes_label</zorder>
+    </widget>
+    <widget class="QWidget" name="tab">
+     <attribute name="title">
+      <string>Debug</string>
+     </attribute>
+     <widget class="QTableWidget" name="maint_Auth">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>40</y>
+        <width>761</width>
+        <height>371</height>
+       </rect>
+      </property>
+      <property name="rowCount">
+       <number>0</number>
+      </property>
+      <property name="columnCount">
+       <number>2</number>
+      </property>
+      <column>
+       <property name="text">
+        <string>Block Number</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Auth</string>
+       </property>
+      </column>
+     </widget>
+     <widget class="QTableWidget" name="maint_Occ_table">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>450</y>
+        <width>761</width>
+        <height>371</height>
+       </rect>
+      </property>
+      <property name="rowCount">
+       <number>0</number>
+      </property>
+      <property name="columnCount">
+       <number>2</number>
+      </property>
+      <column>
+       <property name="text">
+        <string>Block Number</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Occ</string>
+       </property>
+      </column>
+     </widget>
+     <widget class="QTableWidget" name="maint_CS">
+      <property name="geometry">
+       <rect>
+        <x>1000</x>
+        <y>30</y>
+        <width>761</width>
+        <height>371</height>
+       </rect>
+      </property>
+      <property name="rowCount">
+       <number>0</number>
+      </property>
+      <property name="columnCount">
+       <number>2</number>
+      </property>
+      <column>
+       <property name="text">
+        <string>Block Number</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>CS</string>
+       </property>
+      </column>
+     </widget>
+     <widget class="QTableWidget" name="maint_StatusTable_2">
+      <property name="geometry">
+       <rect>
+        <x>1000</x>
+        <y>450</y>
+        <width>761</width>
+        <height>371</height>
+       </rect>
+      </property>
+      <property name="rowCount">
+       <number>0</number>
+      </property>
+      <property name="columnCount">
+       <number>2</number>
+      </property>
+      <column>
+       <property name="text">
+        <string>Block Number</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Status</string>
+       </property>
+      </column>
      </widget>
     </widget>
    </widget>
