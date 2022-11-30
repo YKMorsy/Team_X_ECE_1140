@@ -30,7 +30,7 @@ class TrainModelHandler:
 		blocks_occupied = {}
 		for T in self.train_list.values():
 			for B in T.block_list:
-				if B in blocks_occupied.keys():
+				if (B in blocks_occupied.keys()) and (B!="YARD"):
 					#The dictionary consists of blocks for the keys and IDs for the values, so if the block is already in the dicionary, a crash is assumed
 					print("TRAIN " + str(blocks_occupied[B]) + " AND TRAIN " + str(T.ID) + " HAVE BOTH ENTERED BLOCK " + str(B) + ".\nA CRASH HAS BEEN ASSUMED.")
 				else:
