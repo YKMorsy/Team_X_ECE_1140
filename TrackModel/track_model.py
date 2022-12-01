@@ -550,7 +550,7 @@ class track_model(object):
                 block_number = 228
             else:
                 block_number = int(train.most_recent_block)
-        train.commanded_speed = self.get_green_line_commanded_speed(block_number)
+            train.commanded_speed = self.get_green_line_commanded_speed(block_number)
         else:
             line = train.line_name
             mr_block = train.most_recent_block
