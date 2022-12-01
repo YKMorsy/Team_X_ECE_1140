@@ -472,6 +472,7 @@ class track_model(object):
                 train.event_distance_in_block = self.get_green_line_block_len(block_number) 
                 last_block = int(train.block_list[0])
                 self.reset_green_line_occupancy(last_block)
+                train.commanded_speed = self.get_green_line_commanded_speed(last_block )
                 list1 = [] 
                 list1.append(train.most_recent_block)
                 train.block_list = list1
@@ -494,7 +495,10 @@ class track_model(object):
                     train.current_grade = 0 - self.get_green_line_grade(new_block)
                 self.ui.track_list[new_block - 1].set_occupancy()
                 train.commanded_authority = "True" if self.get_green_line_authority(new_block) else "False"
-                train.beacon_data = self.ui.track_list[new_block -1].get_beacon()
+
+                train.commanded_speed = self.get_green_line_commanded_speed(new_block -1 )
+                train.beacon_info = self.ui.track_list[new_block -1].get_beacon()
+
                 return 0
                 
         else:
