@@ -465,7 +465,11 @@ class track_model(object):
     def set_train_status(self, train):
         line = train.line_name
         if line.upper() == "GREEN":
-            block_number = int(train.most_recent_block)
+            mr_block = train.most_recent_block
+            if mr_block == "YARD":
+                block_number = 228
+            else:
+                block_number = int(train.most_recent_block)
             if train.current_distance_in_block >=  32 and train.current_distance_in_block < self.get_green_line_block_len(block_number) : 
                 store_curr = self.ui.track_list[block_number - 1].name
                 curr_block = store_curr[1:]
@@ -502,7 +506,11 @@ class track_model(object):
                 return 0
                 
         else:
-            block_number = int(train.most_recent_block)
+            mr_block = train.most_recent_block
+            if mr_block == "YARD":
+                block_number = 77
+            else:
+                block_number = int(train.most_recent_block)
             if train.current_distance_in_block >=  32 and train.current_distance_in_block < self.get_red_line_block_len(block_number) : 
                 store_curr = self.ui.track_list[block_number + 149].name
                 curr_block = store_curr[1:]
@@ -535,9 +543,22 @@ class track_model(object):
                 return 0
 
     def get_speed(self, train):
-        block_number = int(train.most_recent_block)
+        if line.upper() == "GREEN":
+            line = train.line_name
+            mr_block = train.most_recent_block
+            if mr_block == "YARD":
+                block_number = 228
+            else:
+                block_number = int(train.most_recent_block)
         train.commanded_speed = self.get_green_line_commanded_speed(block_number)
-                
+        else:
+            line = train.line_name
+            mr_block = train.most_recent_block
+            if mr_block == "YARD":
+                block_number = 77
+            else:
+                block_number = int(train.most_recent_block)
+            train.commanded_speed = self.get_red_line_commanded_speed(block_number)
             
         
   
