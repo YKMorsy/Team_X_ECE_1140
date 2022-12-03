@@ -16,7 +16,7 @@ class TrainModelHandler:
 				#q.setToolTip(row_tool_tip)
 				self.train_info_model.setItem(i, j, q)
 
-	def update(self, time_step = 0, train_model_var= None):
+	def update(self, time_step = 0):
 		#This function will build a list of all the train rows, and return it back to the thread that called it
 		list_of_lists = []
 		
@@ -30,7 +30,7 @@ class TrainModelHandler:
 		blocks_occupied = {}
 		for T in self.train_list.values():
 			for B in T.block_list:
-				if (B in blocks_occupied.keys()) and (B!="YARD"):
+				if B in blocks_occupied.keys():
 					#The dictionary consists of blocks for the keys and IDs for the values, so if the block is already in the dicionary, a crash is assumed
 					print("TRAIN " + str(blocks_occupied[B]) + " AND TRAIN " + str(T.ID) + " HAVE BOTH ENTERED BLOCK " + str(B) + ".\nA CRASH HAS BEEN ASSUMED.")
 				else:
@@ -39,9 +39,6 @@ class TrainModelHandler:
 		#Update the UI
 
 		self.UI_update(list_of_lists)
-
-		for train in self.train_list.values():
-			train_model_var.get_speed(train)
 
 	def set_authority(self, Authority):
 		for T in self.train_list.values:

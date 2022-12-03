@@ -66,7 +66,7 @@ class MurphyUI(QFrame):
         self.train_info_model.setHorizontalHeaderLabels(['Train ID', 'Velocity\n(MPH)', 'Distance\n(Feet)', 'Commanded Engine Power\n(Watts)', 'Total Mass\n(Tons)', 'Braking', 
                                                                 'Track Grade\n(°)', 'Passenger Count', 'Fault(s)', 'Interior Temperature\n(Fahrenheit)',
                                                                 'Interior Lights\n(On/Off)', 'Exterior Lights\n(On/Off)', 'Left Doors\n(Open/Closed)', 
-                                                                'Right Doors\n(Open/Closed)','Commanded Authority\n(True/False)', 'Commanded Setpoint Speed\n(MPH)'])
+                                                                'Right Doors\n(Open/Closed)','Commanded Authority\n(Binary String)', 'Commanded Setpoint Speed\n(MPH)'])
 
         self.train_info_select_table.verticalHeader().hide()
         self.train_info_select_table.setSortingEnabled(True)
@@ -78,9 +78,6 @@ class MurphyUI(QFrame):
         
         #Rearrange table s.t. faults are the first column
         self.train_info_select_table.horizontalHeader().moveSection(8,1)
-	
-	#Hide Distance Column
-        self.train_info_select_table.setColumnHidden(2, True)
 
         #Set label fonts & buttons
         self.testing_button.setFont(small_font)
