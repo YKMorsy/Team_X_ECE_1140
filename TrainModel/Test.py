@@ -2,8 +2,8 @@ from PyQt5.QtWidgets import QApplication, QWidget, QFrame, QDialog, QGridLayout
 from PyQt5.QtWidgets import QLabel, QPushButton, QRadioButton, QSlider, QLineEdit, QSizePolicy, QTableView, QAbstractItemView, QHeaderView, QToolTip
 from PyQt5.QtCore import Qt, QRect, QTimer, QSortFilterProxyModel, QThread
 from PyQt5.QtGui import QFont, QStandardItemModel, QStandardItem
-from FontStyles import *
-from common import *
+from TrainModel.FontStyles import *
+from TrainModel.common import *
 from TrainModel.TrainModelHandler import TrainModelHandler
 
 class TestUICreatorModifier(QFrame):

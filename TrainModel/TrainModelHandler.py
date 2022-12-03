@@ -16,21 +16,30 @@ class TrainModelHandler:
 				#q.setToolTip(row_tool_tip)
 				self.train_info_model.setItem(i, j, q)
 
-	def update(self, time_step = 0):
+	def update(self, time_step = 0, train_model_var= None):
 		#This function will build a list of all the train rows, and return it back to the thread that called it
 		list_of_lists = []
 		
-		#Build the list of lists
+		#Build the list of lists, and keep a list of IDs that should be deleted
+		delete_IDs = []
 		for T in self.train_list.values():
 			delete = T.update(time_step)
 			if delete != -1: list_of_lists.append(self.UI_train_row(T))
-			else: self.delete_train(T.ID)
+			else: delete_IDs.append(T.ID)
+				
+		for i in delete_IDs:
+			self.delete_train(i)
+
+		for i in range(0, self.train_info_model.rowCount()):
+			model_ID = int(self.train_info_model.item(i, 0).text())
+			if model_ID in delete_IDs:
+				self.train_info_model.removeRow(i)
 
 		#Check that no trains have crashed into each other
 		blocks_occupied = {}
 		for T in self.train_list.values():
 			for B in T.block_list:
-				if B in blocks_occupied.keys():
+				if (B in blocks_occupied.keys()) and (B!="YARD"):
 					#The dictionary consists of blocks for the keys and IDs for the values, so if the block is already in the dicionary, a crash is assumed
 					print("TRAIN " + str(blocks_occupied[B]) + " AND TRAIN " + str(T.ID) + " HAVE BOTH ENTERED BLOCK " + str(B) + ".\nA CRASH HAS BEEN ASSUMED.")
 				else:
@@ -39,6 +48,9 @@ class TrainModelHandler:
 		#Update the UI
 
 		self.UI_update(list_of_lists)
+
+		for train in self.train_list.values():
+			train_model_var.get_speed(train)
 
 	def set_authority(self, Authority):
 		for T in self.train_list.values:

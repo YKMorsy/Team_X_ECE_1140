@@ -27,22 +27,22 @@ class TrainModel:
         self.current_distance_in_block = 0.0
         if line_name == "Red":
             self.event_distance_in_block = 75.0
-            self.block_list = ["9"]
-            self.most_recent_block = "9"
+            self.block_list = ["YARD"]
+            self.most_recent_block = "YARD"
             self.direction = False
             self.commanded_authority = "True"
-            self.commanded_speed = 11.111
+            self.commanded_speed = 8.33333
             self.current_grade = 0.0
-            self.track_model.set_red_line_occupancy(9)
+            self.track_model.set_red_line_occupancy(77)
         else:
-            self.event_distance_in_block = 100.0
-            self.block_list = ["63"]
-            self.most_recent_block = "63"
+            self.event_distance_in_block = 75.0
+            self.block_list = ["YARD"]
+            self.most_recent_block = "YARD"
             self.direction = True
             self.commanded_authority = "True"
-            self.commanded_speed = 19.444
+            self.commanded_speed = 8.33333
             self.current_grade = 0.0
-            self.track_model.set_green_line_occupancy(63)
+            self.track_model.set_green_line_occupancy(228)
 
         self.beacon_data = {}
         self.line_name = line_name
