@@ -214,23 +214,71 @@ class block:
         
         #this function will not work properly currently
     def get_next_block_red(self,train,block_list):
-        if train.direction == True :
-            if self.name == "Q100":
-                train.direction = False
-            if self.name == "Z150" :
-                train.direction = False
+        if self.name == "YARD":
+            train.direction = False
+            return self.next_loc
+        if self.name == "C9" and train.direction == True:
+            if self.switch == 0:
+                return self.next_loc
+            else :
+                return self.switch_forward_loc
+        if self.name == "A1" and train.direction == False:
+            train.direction = True
+            return self.switch_forward_loc
+        if self.name == "F16" and train.direction == False:
+            if self.switch == 0:
+                return "E15"
+            else:
+                train.direction = True
+                return self.switch_forward_loc
+        if self.name == "H27" and train.direction == True:
             if self.switch == 0:
                 return self.next_loc
             else:
+                train.direction = False
                 return self.switch_forward_loc
-        else:
-            if self.name == "N77":
+        if self.name == "T76" and train.direction == True:
+            train.direction = False
+            return self.next_loc
+        if self.name == "R72" and train.direction == False:
+            train.direction = True
+            return self.switch_forward_loc
+        if self.name == "H33" and train.direction == False:
+            if self.switch == 0:
+                return "H32"
+            else :
                 train.direction = True
                 return self.switch_forward_loc
-            if self.name == "D13":
-                train.direction = True
+        if self.name == "H38" and train.direction == True:
+            if self.switch == 0:
                 return self.next_loc
+            else:
+                train.direction = False
+                return self.switch_forward_loc
+        if self.name == "Q71" and train.direction == True:
+            train.direction = False
+            return self.switch_forward_loc
+        if self.name == "H44" and train.direction == False:
+            if self.switch == 0:
+                return "H43"
+            else:
+                train.direction = True
+                return self.switch_forward_loc
+        if self.name == "O67" and train.direction == False:
+            train.direction = True
+            return self.switch_forward_loc
+        if self.name == "J52" and train.direction == True:
+            if self.switch == 0:
+                return self.next_loc
+            else:
+                train.direction = False
+                return self.switch_forward_loc
+        if self.name == "N66" and train.direction == True:
+            train.direction = False
+            return self.switch_forward_loc
+        if train.direction == True:
+            return self.next_loc
+        else:
             new_block = self.name
-            get_rev = int(new_block[1:])-2
-            return block_list[get_rev].name 
-            
+            get_rev = int(new_block[1:]) + 148
+            return block_list[get_rev].name
