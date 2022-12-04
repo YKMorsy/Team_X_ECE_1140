@@ -49,7 +49,7 @@ class track_control_controller():
         self.track_controller_list[2].set_authority(auth)
         self.track_controller_list[2].set_switch_positions({2052:False})
         self.track_controller_list[2].set_occupancy(occ)
-        self.track_controller_list[2].set_railway_crossings({})
+        self.track_controller_list[2].set_railway_crossings({2001: False})
         self.track_controller_list[2].set_light_colors({1:[True,True]})
         self.track_controller_list[2].set_statuses(stat)
         self.track_controller_list[2].set_suggested_speed(sug)

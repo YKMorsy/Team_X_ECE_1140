@@ -1,19 +1,34 @@
+def switchIf(f, past, fut, other):
+    f.write("IF ( ( ( A-"+str(past)+" & F-"+str(past)+" & ! O-"+str(past)+" ) | ( A-"+str(fut)+" & F-"+str(fut)+" & ! O-"+str(fut)+" ) | ( A-"+str(other)+" & F-"+str(other)+" & ! O-"+str(other)+" ) ) & O-"+str(i)+" ) {\n")
 
 
-with open("track_controller/RedLineBottom_yellow.txt", "w") as f:
-    for i in range(2046, 2067):
-        f.write("IF ( ( ( A-"+str(i-1)+" & F-"+str(i-1)+" & ! O-"+str(i-1)+" ) | ( A-"+str(i+1)+" & F-"+str(i+1)+" & ! O-"+str(i+1)+" ) ) & O-"+str(i)+" ) {\n")
+with open("track_controller/RedLineTop_Red.txt", "w") as f:
+    for i in range(2001, 2024):
+        past = i-1
+        fut = i+1
+        if (i == 2001):
+            past =  2016
+        if(i == 2016):
+            other = 2001
+            f.write("IF ( ( ( A-"+str(past)+" & F-"+str(past)+" & ! O-"+str(past)+" ) | ( A-"+str(fut)+" & F-"+str(fut)+" & ! O-"+str(fut)+" ) | ( A-"+str(other)+" & F-"+str(other)+" & ! O-"+str(other)+" ) ) & O-"+str(i)+" ) {\n")
+        elif(i == 2009):
+            other = 2000
+            f.write("IF ( ( ( A-"+str(past)+" & F-"+str(past)+" & ! O-"+str(past)+" ) | ( A-"+str(fut)+" & F-"+str(fut)+" & ! O-"+str(fut)+" ) | ( A-"+str(other)+" & F-"+str(other)+" & ! O-"+str(other)+" ) ) & O-"+str(i)+" ) {\n")
+        else:
+            f.write("IF ( ( ( A-"+str(past)+" & F-"+str(past)+" & ! O-"+str(past)+" ) | ( A-"+str(fut)+" & F-"+str(fut)+" & ! O-"+str(fut)+" ) ) & O-"+str(i)+" ) {\n")
         f.write("C-"+str(i)+" = D-"+str(i)+"\n")
         f.write("}\n")
         f.write("ELSE\n")
         f.write("{\n")
         f.write("C-"+str(i)+" = 0\n")
         f.write("}\n")
-    switches = [2052]
-    lower = [2053]
-    higher = [2066]
+
+
+    switches = [2009, 2016]
+    lower = [2000, 2001]
+    higher = [2010, 2015]
     for s in range(len(switches)):
-        f.write("S-"+str(switches[s])+" = 1\n")
+        #f.write("S-"+str(switches[s])+" = 1\n")
         f.write("IF ( O-"+str(switches[s])+" & A-"+str(lower[s])+" & ! A-"+str(higher[s])+" ) {\n")
         f.write("S-"+str(switches[s])+" = 0\n")
         f.write("}\n")
@@ -26,7 +41,94 @@ with open("track_controller/RedLineBottom_yellow.txt", "w") as f:
         f.write("IF ( O-"+str(higher[s])+" & A-"+str(switches[s])+" ) {\n")
         f.write("S-"+str(switches[s])+" = 1\n")
         f.write("}\n")
-    #write lights and rail way crossing logic
+
+    #write lights logic
+
+with open("track_controller/RedLineMiddle_Blue.txt", "w") as f:
+    for i in range(2024, 2046):
+        past = i-1
+        fut = i+1
+        if(i == 2027):
+            switchIf(f, past, fut, 2076)
+        elif(i == 2033):
+            switchIf(f, past, fut, 2072)
+        elif(i == 2038):
+            switchIf(f, past, fut, 2071)
+        elif(i == 2044):
+            switchIf(f, past, fut, 2067)
+        else:
+            f.write("IF ( ( ( A-"+str(past)+" & F-"+str(past)+" & ! O-"+str(past)+" ) | ( A-"+str(fut)+" & F-"+str(fut)+" & ! O-"+str(fut)+" ) ) & O-"+str(i)+" ) {\n")
+        f.write("C-"+str(i)+" = D-"+str(i)+"\n")
+        f.write("}\n")
+        f.write("ELSE\n")
+        f.write("{\n")
+        f.write("C-"+str(i)+" = 0\n")
+        f.write("}\n")
+
+
+    switches = [2027, 2033, 2038, 2044]
+    lower = [2028, 2032, 2039, 2043]
+    higher = [2076, 2072, 2071, 2067]
+    for s in range(len(switches)):
+        #f.write("S-"+str(switches[s])+" = 1\n")
+        f.write("IF ( O-"+str(switches[s])+" & A-"+str(lower[s])+" & ! A-"+str(higher[s])+" ) {\n")
+        f.write("S-"+str(switches[s])+" = 0\n")
+        f.write("}\n")
+        f.write("IF ( O-"+str(switches[s])+" & ! A-"+str(lower[s])+" & A-"+str(higher[s])+" ) {\n")
+        f.write("S-"+str(switches[s])+" = 1\n")
+        f.write("}\n")
+        f.write("IF ( O-"+str(lower[s])+" & A-"+str(switches[s])+" ) {\n")
+        f.write("S-"+str(switches[s])+" = 0\n")
+        f.write("}\n")
+        f.write("IF ( O-"+str(higher[s])+" & A-"+str(switches[s])+" ) {\n")
+        f.write("S-"+str(switches[s])+" = 1\n")
+        f.write("}\n")
+
+    #write lights logic
+
+with open("track_controller/RedLineBottom_Yellow.txt", "w") as f:
+    for i in range(2046, 2067):
+        if(i == 2052):
+            other = 2066
+            f.write("IF ( ( ( A-"+str(i-1)+" & F-"+str(i-1)+" & ! O-"+str(i-1)+" ) | ( A-"+str(i+1)+" & F-"+str(i+1)+" & ! O-"+str(i+1)+" ) | ( A-"+str(other)+" & F-"+str(other)+" & ! O-"+str(other)+" ) ) & O-"+str(i)+" ) {\n")
+        else:
+            f.write("IF ( ( ( A-"+str(i-1)+" & F-"+str(i-1)+" & ! O-"+str(i-1)+" ) | ( A-"+str(i+1)+" & F-"+str(i+1)+" & ! O-"+str(i+1)+" ) ) & O-"+str(i)+" ) {\n")
+        f.write("C-"+str(i)+" = D-"+str(i)+"\n")
+        f.write("}\n")
+        f.write("ELSE\n")
+        f.write("{\n")
+        f.write("C-"+str(i)+" = 0\n")
+        f.write("}\n")
+
+
+    switches = [2052]
+    lower = [2053]
+    higher = [2066]
+    for s in range(len(switches)):
+        #f.write("S-"+str(switches[s])+" = 1\n")
+        f.write("IF ( O-"+str(switches[s])+" & A-"+str(lower[s])+" & ! A-"+str(higher[s])+" ) {\n")
+        f.write("S-"+str(switches[s])+" = 0\n")
+        f.write("}\n")
+        f.write("IF ( O-"+str(switches[s])+" & ! A-"+str(lower[s])+" & A-"+str(higher[s])+" ) {\n")
+        f.write("S-"+str(switches[s])+" = 1\n")
+        f.write("}\n")
+        f.write("IF ( O-"+str(lower[s])+" & A-"+str(switches[s])+" ) {\n")
+        f.write("S-"+str(switches[s])+" = 0\n")
+        f.write("}\n")
+        f.write("IF ( O-"+str(higher[s])+" & A-"+str(switches[s])+" ) {\n")
+        f.write("S-"+str(switches[s])+" = 1\n")
+        f.write("}\n")
+
+    #Railway 47
+    f.write("R-2001 = 0\n")
+    f.write("IF ( ( O-2046 & A-2047 ) | ( O-1045 & A-1046 ) ) {\n")
+    f.write("R-2001 = 1\n")
+    f.write("}\n")
+    f.write("IF ( ( O-1048 & A-1047 ) | ( O-1049 & A-1048 ) ) {\n")
+    f.write("R-2001 = 1\n")
+    f.write("}\n")
+
+    #write lights logic
 
 with open("track_controller/GreenLineTop_Red.txt", "w") as f:
     switches = [1013]
