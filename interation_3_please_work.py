@@ -46,6 +46,7 @@ class Iteration3(QWidget):
 
         self.train_id_list = []
         self.train_controller = {}
+        self.new_train = []
 
     def update_everything(self):
 
@@ -61,6 +62,8 @@ class Iteration3(QWidget):
         #Update all modules
         #Yassers update
         new_trains = self.ctc_office.updateTimer()
+        for train in new_trains:
+            self.new_train.append(train)
         #Sierra call your update here
         self.wayside_sign_in.Timer_TrackControl()
 
@@ -70,7 +73,7 @@ class Iteration3(QWidget):
         handler.update(self.time_step, self.track_model_var)
 
         #New train creation, Ryan can you add in the coded needed to create your train
-        for train in new_trains:
+        for train in self.new_train:
             train_id = train.train_id
             train_line = train.line.line_color
             self.train_id_list.append(train_id)
@@ -81,7 +84,10 @@ class Iteration3(QWidget):
                 self.train_controller[train_id] = TrainController(train_id, 1)
                 handler.create_train(ID=train_id, line_name='Green')
             self.train_controller[train_id].start_driver_ui()
+
+            self.new_train.remove(train)
         
+        self.ctc_office.greenLine.setThroughput(self.track_model_var.stations.get_throughput())
         #Train deletion, wont do this for iteration 3 cause too hard
 
 
@@ -93,7 +99,7 @@ if __name__ == '__main__':
 
     god_help_us = Iteration3()
 
-    fps = 5
+    fps = 100
     timer = QTimer()
     timer.timeout.connect(god_help_us.update_everything)
     handler.update(1)

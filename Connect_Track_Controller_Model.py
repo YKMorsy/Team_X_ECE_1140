@@ -22,6 +22,9 @@ def Connect_Track_Control_And_Model(trcControl, model):
 
     #Track Model - > Track Control
     #occupancy
+    if trcControl[0].get_maintenance_mode() or trcControl[1].get_maintenance_mode() or trcControl[2].get_maintenance_mode() or trcControl[3].get_maintenance_mode() or trcControl[4].get_maintenance_mode() or trcControl[5].get_maintenance_mode():
+        model.clear_failures()
+
     trcControl[0].set_occupancy(model.get_occupancy_0())
     trcControl[1].set_occupancy(model.get_occupancy_1())
     trcControl[2].set_occupancy(model.get_occupancy_2())

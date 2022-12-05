@@ -115,7 +115,7 @@ class Line:
     
     # Function to update throughput (Track Model to CTC)
     def setThroughput(self, throughput):
-        self.throughput = throughput
+        self.throughput = self.throughput + throughput
 
     # Function to update switch position
     def setSwitchPosition(self, switch_dict):

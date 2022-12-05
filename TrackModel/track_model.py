@@ -518,11 +518,13 @@ class track_model(object):
                 store_curr = self.ui.track_list[block_number + 149].name
                 curr_block = store_curr[1:]
                 train.event_distance_in_block = self.get_red_line_block_len(block_number)
+
                 last_block = int(train.block_list[0])
                 if mr_block == "YARD":
                     train.commanded_speed = 30 * 0.277778
                 else:
                     train.commanded_speed = self.get_red_line_commanded_speed(last_block )
+
                 self.reset_red_line_occupancy(last_block)
                 list1 = [] 
                 list1.append(train.most_recent_block)
@@ -531,7 +533,6 @@ class track_model(object):
             else:
                 train.current_distance_in_block -= train.event_distance_in_block
                 train.event_distance_in_block = 32
-                block_number = int(train.most_recent_block)
                 next_block = self.ui.track_list[block_number + 149].get_next_block_red(train,self.ui.track_list)
                 if next_block.upper() == "YARD":
                     self.ui.track_list[block_number + 149].reset_occupancy()
@@ -552,7 +553,6 @@ class track_model(object):
     def get_speed(self, train):
         line = train.line_name
         if line.upper() == "GREEN":
-            
             mr_block = train.most_recent_block
             if mr_block == "YARD":
                 block_number = 228
@@ -560,7 +560,6 @@ class track_model(object):
                 block_number = int(train.most_recent_block)
             train.commanded_speed = self.get_green_line_commanded_speed(block_number)
         else:
-            line = train.line_name
             mr_block = train.most_recent_block
             if mr_block == "YARD":
                 block_number = 77

@@ -94,7 +94,7 @@ class track_control_display (QtWidgets.QMainWindow, Ui_MainWindow):
         self.update_light_table(self.track_data.get_light_colors(), self.LightColorTable, False)
         self.update_light_table(self.track_data.get_light_colors(), self.maint_LightColorTable, self.maintenance_check_box.isChecked())
         self.update_table(self.track_data.get_railway_crossings(), self.maint_RailwayCrossingTable, self.maintenance_check_box.isChecked())
-        self.update_table(self.track_data.get_statuses(), self.maint_StatusTable, self.maintenance_check_box.isChecked())
+        self.update_table(self.track_data.get_statuses(), self.maint_StatusTable, True)
         self.update_table(self.track_data.get_statuses(), self.maint_StatusTable_2, False)
         self.unsaved_changes_label.setText("")
 
@@ -137,31 +137,30 @@ class track_control_display (QtWidgets.QMainWindow, Ui_MainWindow):
 
     def make_changes(self):
         self.get_table_change(self.track_data.get_switch_positions(), self.maint_SwitchPosTable)
-        self.get_table_change(self.track_data.get_authority(), self.maint_auth)
+        self.get_table_change(self.track_data.get_authority(), self.maint_Auth)
         self.get_table_change(self.track_data.get_commanded_speed(), self.maint_CS)
         self.get_table_change(self.track_data.get_occupancy(), self.maint_Occ_table)        
         self.get_light_table_change(self.track_data.get_light_colors(), self.maint_LightColorTable)
         self.get_table_change(self.track_data.get_railway_crossings(), self.maint_RailwayCrossingTable)
         self.get_table_change(self.track_data.get_statuses(), self.maint_StatusTable)
-        self.get_table_change(self.track_data.get_statuses(), self.maint_StatusTable_2)
+        #self.get_table_change(self.track_data.get_statuses(), self.maint_StatusTable_2)
         self.unsaved_changes_label.setText("")
         self.update_tables()
 
     def get_table_change (self, table_data, table):
         rowC = table.rowCount()
         for row in range(rowC):
-            table_data[int(row)] = table.item(row, 1).data(0)
+            table_data[int(table.item(row, 0).data(0))] = table.item(row, 1).data(0)
 
     def get_light_table_change (self, table_data, table):
         rowC = table.rowCount()
         for row in range(rowC):
-            if str(block) == table.item(row, 0).data(0):
-                if(table.item(row, 1).data(0) =="Green"):
-                    table_data[int(row)] = [True, True]
-                elif(table.item(row, 1).data(0) =="Yellow"):
-                    table_data[int(row)] = [False, True]
-                elif(table.item(row, 1).data(0) =="Red"):
-                    table_data[int(row)] = [False, False]
+            if(table.item(row, 1).data(0) =="Green"):
+                table_data[int(table.item(row, 0).data(0))] = [True, True]
+            elif(table.item(row, 1).data(0) =="Yellow"):
+                table_data[int(table.item(row, 0).data(0))] = [False, True]
+            elif(table.item(row, 1).data(0) =="Red"):
+                table_data[int(table.item(row, 0).data(0))] = [False, False]
                     
     def run_PLC(self):
         #self.track_data.ParsePLC()
