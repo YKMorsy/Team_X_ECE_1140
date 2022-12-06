@@ -22,6 +22,8 @@ from PyQt5.QtWidgets import QApplication as q5App
 from PyQt5.QtWidgets import QWidget
 from PyQt5.QtCore import QTimer
 
+
+
 class Iteration3(QWidget):
     def __init__(self):
         super().__init__()
@@ -34,6 +36,7 @@ class Iteration3(QWidget):
         #Create CTC
         self.green_line = Line("./CTC_App/Iteration3/Track_Layout_Green.xlsx")
         self.dispatcher = Dispatcher()
+        self.dispatcher.updateTime(time.time())
         self.ctc_office = CTCApp(self.green_line, self.dispatcher)
         self.ctc_office.show()
         #Place waysides
@@ -49,6 +52,9 @@ class Iteration3(QWidget):
         self.new_train = []
 
     def update_everything(self):
+
+        # Update time in dispatcher
+        self.dispatcher.updateTime(time.time())
 
         connect_ctc_track_controller(self.dispatcher, self.green_line, self.green_line, self.wayside_sign_in.get_all_track_controllers())
 

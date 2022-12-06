@@ -4,11 +4,12 @@ class Dispatcher:
 
     def __init__(self):
         self.trains = []
+        self.cur_time = 0
 
     # Function to schedule single train
-    def scheduleSingle(self, station_list, line, depart_time):
+    def scheduleSingle(self, station_list, line):
         train_id = len(self.trains) + 1
-        self.trains.append(Train(train_id, station_list, line, depart_time))
+        self.trains.append(Train(train_id, station_list, line))
 
     def scheduleMultiple(self, filepath):
         pass
@@ -23,8 +24,11 @@ class Dispatcher:
                 # Create train
                 pass
 
-    # Called by CTC (wayside to CTC)
+    # Function to update time in dispatcher
+    def updateTime(self, cur_time):
+        self.cur_time = cur_time
 
+    # Called by CTC (wayside to CTC)
     def setOccupancy(self, occ_dict):
         for key in occ_dict:
             if occ_dict[key] == True:

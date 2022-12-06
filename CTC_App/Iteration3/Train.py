@@ -3,14 +3,13 @@ from CTC_App.Iteration3.Line import Line
 
 class Train:
 
-    def __init__(self, train_id, station_list, line, depart_time):
+    def __init__(self, train_id, station_list, line):
 
         # Initialize variables
         self.train_id = train_id
         self.station_list = station_list
         self.line = line
         self.current_position = 0
-        self.depart_time = depart_time
 
         # Intialize route using arrival stations
         self.route = line.getRoute()

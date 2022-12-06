@@ -327,7 +327,7 @@ class CTCApp(QWidget):
 
             # Call dispatch function
             if self.current_line == "Green":
-                self.CTCDispatcher.scheduleSingle(destination_stations, self.greenLine, self.cur_time)
+                self.CTCDispatcher.scheduleSingle(destination_stations, self.greenLine)
 
             # Update table with train
             cur_train = self.CTCDispatcher.trains[-1]
