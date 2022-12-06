@@ -98,7 +98,7 @@ class track_control_controller():
             auth.update({i:False})
             occ.update({i:False})
             stat.update({i:True})
-            if(i!= 1020 or i!= 1036):
+            if(i!= 1020 and i!= 1036):
                 sug.update({i: 0b00100000})
                 com.update({i: 0b00000000})
                 lim.update({i: 0b00100100})
@@ -132,7 +132,7 @@ class track_control_controller():
             auth.update({i:False})
             occ.update({i:False})
             stat.update({i:True})
-            if(i!= 1035 or i!= 1105):
+            if(i!= 1035 and i!= 1105):
                 sug.update({i: 0b00100000})
                 com.update({i: 0b00000000})
                 lim.update({i: 0b00100100})

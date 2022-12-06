@@ -92,7 +92,7 @@ class WaysideController ():
         if(m):
             self.temp_statuses = self.statuses.copy()
             for i in self.statuses.keys():
-                self.statuses[i] = (i, False)
+                self.statuses[i] = False
         else:
             self.statuses = self.temp_statuses.copy()
     def set_PLC (self, plc):

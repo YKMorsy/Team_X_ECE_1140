@@ -92,43 +92,43 @@ def get_speed_limit_green(last_stop, direction, distance):
         case "YARD":
             next_stop = "GLENBURY"
             direction = 0
-            distance_to_station = 100
+            distance_to_station = 0
         case "GLENBURY":
             if direction == 1:
                 next_stop = "OVERBROOK"
-                distance_to_station = 25
+                distance_to_station = 81
                 if distance > 572:
                     outside_lights = True
                 door_side = 1
             else:
                 next_stop = "DORMONT"
-                distance_to_station = 50
+                distance_to_station = 100
                 door_side = 1
         case "DORMONT":
             if direction == 1:
                 next_stop = "GLENBURY"
-                distance_to_station = 81
+                distance_to_station = 50
                 door_side = 1
             else:
                 next_stop = "MT LEBANON"
-                distance_to_station = 150
+                distance_to_station = 50
                 door_side = 1
         case "MT LEBANON":
             if direction == 1:
                 next_stop = "DORMONT"
-                distance_to_station = 50
+                distance_to_station = 150
                 door_side = 0
             else:
                 next_stop = "POPLAR"
-                distance_to_station = 50
+                distance_to_station = 150
                 door_side = 1
         case "POPLAR":
             next_stop = "CASTLE SHANNON"
-            distance_to_station = 37.5
+            distance_to_station = 50
             door_side = 0
         case "CASTLE SHANNON":
             next_stop = "MT LEBANON"
-            distance_to_station = 150
+            distance_to_station = 37.5
             direction = 1
             door_side = 0
         case "OVERBROOK":
@@ -141,7 +141,7 @@ def get_speed_limit_green(last_stop, direction, distance):
                 if distance <= 100:
                     outside_lights = True
                 next_stop = "GLENBURY"
-                distance_to_station = 100
+                distance_to_station = 25
                 door_side = 1
         case "INGLEWOOD":
             if direction == 1:
@@ -157,7 +157,7 @@ def get_speed_limit_green(last_stop, direction, distance):
         case "CENTRAL":
             if direction == 1:
                 next_stop = "WHITED"
-                distance_to_station = 150
+                distance_to_station = 25
                 if distance <= 150:
                     outside_lights = True
                 door_side = 1
@@ -169,11 +169,11 @@ def get_speed_limit_green(last_stop, direction, distance):
         case "WHITED":
             if direction == 1:
                 next_stop = "STATION"
-                distance_to_station = 75
+                distance_to_station = 150
                 door_side = 1
             else:
                 next_stop = "SOUTH BANK"
-                distance_to_station = 25
+                distance_to_station = 150
                 door_side = 0
         case "SOUTH BANK":
             next_stop = "CENTRAL"
@@ -185,11 +185,11 @@ def get_speed_limit_green(last_stop, direction, distance):
         case "STATION":
             if direction == 1:
                 next_stop = "EDGEBROOK"
-                distance_to_station = 50
+                distance_to_station = 75
                 door_side = 1
             else:
                 next_stop = "WHITED"
-                distance_to_station = 150
+                distance_to_station = 75
                 door_side = 0
         case "EDGEBROOK":
             next_stop = "PIONEER"
@@ -197,7 +197,7 @@ def get_speed_limit_green(last_stop, direction, distance):
             door_side = 0
         case "PIONEER":
             next_stop = "STATION"
-            distance_to_station = 75
+            distance_to_station = 50
             direction = 0
             door_side = 0
     insideLights = outside_lights

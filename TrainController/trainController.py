@@ -56,6 +56,7 @@ class TrainController:
         self.__past_time = 0
         self.__begin_wait = False
         self.__acceleration = 0.0
+        self.__completed_stop = False
 
         self.__train_driver_input = TrainDriverInput()
         self.__train_model_input = TrainModelInput()
@@ -125,8 +126,12 @@ class TrainController:
         self.__train_model_output.service_brake = self.__train_driver_input.service_brake or self.__service_brakes
         self.__train_model_output.emergency_brake = self.__train_driver_input.emergency_brake or self.__emergency_brakes
         self.__train_model_output.engine_power = self.__power * 2500
-        self.__train_model_output.left_side_doors = self.__train_driver_input.left_side_doors or self.__left_side_doors                                
-        self.__train_model_output.right_side_doors = self.__train_driver_input.right_side_doors or self.__right_side_doors
+        if self.__train_model_input.current_set_point == 0:
+            self.__train_model_output.left_side_doors = self.__train_driver_input.left_side_doors or self.__left_side_doors                                
+            self.__train_model_output.right_side_doors = self.__train_driver_input.right_side_doors or self.__right_side_doors
+        else:
+            self.__train_model_output.left_side_doors = False                           
+            self.__train_model_output.right_side_doors = False
         self.__train_model_output.announce_stop = self.__announce_stop
         self.__train_model_output.inside_lights = self.__inside_lights or self.__train_driver_input.inside_lights
         self.__train_model_output.outside_lights = self.__outside_lights or self.__train_driver_input.outside_lights
@@ -137,11 +142,16 @@ class TrainController:
 
         if self.__last_station != self.__train_model_input.station_name and self.__train_model_input.station_name != "N/A":
             self.beaconCall(self.__train_model_input.station_name)
-            if self.__train_model_input.command_set_point < 2:
-                self.__stopping_at_station = True
-                self.__begin_slow_down = False
-            else:
-                self.__stopping_at_station = False
+            self.__completed_stop = False
+            # if self.__train_model_input.command_set_point < 2 and self.__train_model_input.command_set_point > 0:
+            #     self.__stopping_at_station = True
+            #     self.__begin_slow_down = False
+            # else:
+            #     self.__stopping_at_station = False
+        if self.__train_model_input.command_set_point < 2 and self.__train_model_input.command_set_point > 0 and not self.__completed_stop:
+            self.__stopping_at_station = True
+            self.__begin_slow_down = False
+            self.__completed_stop = True
 
         self.__get_speed_limit()
 
@@ -168,9 +178,8 @@ class TrainController:
             if self.__command_set_point > self.__speed_limit:
                 self.__command_set_point = self.__speed_limit
         else:
-            if self.__train_model_input.current_set_point != 0:
-                self.__approaching_station()
-            else:
+            self.__approaching_station()
+            if self.__command_set_point == 0 and self.__train_model_input.current_set_point == 0:
                 self.__begin_wait = True
                 if self.__door_side:
                     self.__right_side_doors = True
@@ -193,13 +202,16 @@ class TrainController:
         if self.__power > self.__max_power:
             self.__power = self.__max_power
             
-        if (self.__train_model_input.current_set_point + self.__acceleration * self.__time_step) > self.__speed_limit:
+        if (self.__train_model_input.current_set_point + self.__acceleration * self.__time_step) > self.__speed_limit or (self.__train_model_input.current_set_point + self.__acceleration * self.__time_step) > self.__command_set_point:
             self.__power = 0.0
             self.__service_brakes = True
         elif self.__authority:
             self.__service_brakes = self.__train_driver_input.service_brake
 
         if self.__service_brakes or self.__emergency_brakes:
+            self.__power = 0.0
+
+        if self.__command_set_point == 0:
             self.__power = 0.0
             
     def __calculate_power(self):
@@ -253,9 +265,9 @@ class TrainController:
     def __approaching_station(self):
         if not self.__begin_slow_down:
             self.__begin_slow_down = True
-            deceleration = self.__train_model_input.current_set_point ** 2 / (2 * (self.__distance_to_station + (32.2 / 2))) * self.__time_step
+            deceleration = 2 ** 2 / (2 * (self.__distance_to_station + 16.1)) * self.__time_step
             self.__command_set_point_list = []
-            current_speed = self.__train_model_input.current_set_point - deceleration
+            current_speed = 2
             while(current_speed > 0):
                 self.__command_set_point_list.append(current_speed)
                 current_speed -= deceleration
