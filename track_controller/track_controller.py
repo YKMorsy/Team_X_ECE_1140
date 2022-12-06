@@ -20,9 +20,11 @@ class WaysideController ():
 
     def parse_plc(self):
         changes = self.PLC_info.parse_PLC(self.switch_positions, self.occupancy, self.authority,self.suggested_speed, self.statuses, self.speed_limit)
-        changes2 = 2#changes2 = self.PLC_info2.parse_PLC(self.switch_positions, self.occupancy, self.authority,self.suggested_speed, self.statuses, self.speed_limit)
-        #if(changes != changes2):
-            #print("  ")
+        changes2 = self.PLC_info2.parse_PLC(self.switch_positions, self.occupancy, self.authority,self.suggested_speed, self.statuses, self.speed_limit)
+        any_changes = (set(changes) - set(changes2))
+        if(len(any_changes)!=0):
+            print("difference in plc parsing")
+            return
         if isinstance(changes, str):
             print("Error " + changes)
             return False

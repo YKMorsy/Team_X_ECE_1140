@@ -243,7 +243,7 @@ with open("track_controller/GreenLineMiddle_Yellow.txt", "w") as f:
         f.write("C-"+str(i)+" = 0\n")
         f.write("}\n")
     for i in range(1021, 1030):
-        f.write("IF ( ( ( A-"+str(i-1)+" & ! O-"+str(i-1)+" ) | ( A-"+str(i+1)+" & ! OS-"+str(i+1)+" ) ) & O-"+str(i)+" ) {\n")
+        f.write("IF ( ( ( A-"+str(i-1)+" & ! O-"+str(i-1)+" ) | ( A-"+str(i+1)+" & ! O-"+str(i+1)+" ) ) & O-"+str(i)+" ) {\n")
         f.write("C-"+str(i)+" = D-"+str(i)+"\n")
         f.write("}\n")
         f.write("ELSE\n")
