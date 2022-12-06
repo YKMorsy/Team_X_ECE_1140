@@ -106,8 +106,8 @@ class track_control_display (QtWidgets.QMainWindow, Ui_MainWindow):
             for column in range(2):
                 item = QTableWidgetItem(str(val))
                 if column ==0:
-                    #block = key - trc.get_line_index()
-                    item = QTableWidgetItem(str(key))
+                    block = key - self.track_data.get_line_index()
+                    item = QTableWidgetItem(str(block))
                 if not(changable) or column==0 :
                     item.setFlags(QtCore.Qt.ItemIsEditable)
                 table.setItem(row, column, item)
@@ -130,7 +130,8 @@ class track_control_display (QtWidgets.QMainWindow, Ui_MainWindow):
                     item = QTableWidgetItem(str(val))
 
                 if column ==0:
-                    item = QTableWidgetItem(str(key))
+                    block = key - self.track_data.get_line_index()
+                    item = QTableWidgetItem(str(block))
                 if not(changable) or column==0 :
                     item.setFlags(QtCore.Qt.ItemIsEditable)
                 table.setItem(row, column, item)
@@ -151,17 +152,17 @@ class track_control_display (QtWidgets.QMainWindow, Ui_MainWindow):
     def get_table_change (self, table_data, table):
         rowC = table.rowCount()
         for row in range(rowC):
-            table_data[int(table.item(row, 0).data(0))] = table.item(row, 1).data(0)
+            table_data[int(table.item(row, 0).data(0))+ self.track_data.get_line_index()] = table.item(row, 1).data(0)
 
     def get_light_table_change (self, table_data, table):
         rowC = table.rowCount()
         for row in range(rowC):
             if(table.item(row, 1).data(0) =="Green"):
-                table_data[int(table.item(row, 0).data(0))] = [True, True]
+                table_data[int(table.item(row, 0).data(0))+ self.track_data.get_line_index()] = [True, True]
             elif(table.item(row, 1).data(0) =="Yellow"):
-                table_data[int(table.item(row, 0).data(0))] = [False, True]
+                table_data[int(table.item(row, 0).data(0))+ self.track_data.get_line_index()] = [False, True]
             elif(table.item(row, 1).data(0) =="Red"):
-                table_data[int(table.item(row, 0).data(0))] = [False, False]
+                table_data[int(table.item(row, 0).data(0))+ self.track_data.get_line_index()] = [False, False]
                     
     def run_PLC(self):
         #self.track_data.ParsePLC()
