@@ -487,7 +487,10 @@ class track_model(object):
             else:
                 train.current_distance_in_block -= train.event_distance_in_block
                 train.event_distance_in_block = 32
-                block_number = int(train.most_recent_block)
+                if mr_block == "YARD":
+                    block_number = 228
+                else:
+                    block_number = int(train.most_recent_block)
                 next_block = self.ui.track_list[block_number - 1].get_next_block_green(train,self.ui.track_list)
                 if next_block.upper() == "YARD":
                     self.ui.track_list[block_number-1].reset_occupancy()
@@ -533,6 +536,11 @@ class track_model(object):
             else:
                 train.current_distance_in_block -= train.event_distance_in_block
                 train.event_distance_in_block = 32
+
+                if mr_block == "YARD":
+                    block_number = 77 
+                else:
+                    block_number = int(train.most_recent_block)
                 next_block = self.ui.track_list[block_number + 149].get_next_block_red(train,self.ui.track_list)
                 if next_block.upper() == "YARD":
                     self.ui.track_list[block_number + 149].reset_occupancy()
