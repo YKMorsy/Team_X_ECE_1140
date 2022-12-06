@@ -1,9 +1,12 @@
 from CTC_App.Iteration3.Train import Train
+import pandas as pd
+from datetime import datetime
 
 class Dispatcher:
 
     def __init__(self):
         self.trains = []
+        self.train_schedule = []
         self.cur_time = 0
 
     # Function to schedule single train
@@ -12,17 +15,25 @@ class Dispatcher:
         self.trains.append(Train(train_id, station_list, line))
 
     def scheduleMultiple(self, filepath):
-        pass
+        schedule = pd.read_excel(filepath)
+        schedule = schedule.loc[:,"Time, Line, and Stations"]
+        schedule_time = datetime.timestamp(schedule[0])
+        schedule_list = []
+        for i in range(1, len(schedule)):
+            schedule_list.append(schedule[i])
+
+        self.train_schedule.append([schedule_time, schedule_list])
 
     def updateStations(self, idx, station_list):
         self.trains[idx].updateStations(station_list)
 
     # Function to check if train object needs to be created
-    def dispatchTrain(self, cur_time):
-        for train in self.trains:
-            if(train.depart_time) == cur_time:
+    def checkDispatch(self, line):
+        for train in self.train_schedule.copy():
+            if(train[0]) == self.cur_time:
                 # Create train
-                pass
+                self.scheduleSingle(train[1], line)
+                self.train_schedule.remove(train)
 
     # Function to update time in dispatcher
     def updateTime(self, cur_time):

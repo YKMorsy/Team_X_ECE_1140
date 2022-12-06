@@ -28,6 +28,7 @@ class Iteration3(QWidget):
     def __init__(self):
         super().__init__()
         self.time_step = 1
+        
         #Create track model
         self.track_model_var = track_model()
         self.track_model_var.show()
@@ -52,9 +53,6 @@ class Iteration3(QWidget):
         self.new_train = []
 
     def update_everything(self):
-
-        # Update time in dispatcher
-        self.dispatcher.updateTime(time.time())
 
         connect_ctc_track_controller(self.dispatcher, self.green_line, self.green_line, self.wayside_sign_in.get_all_track_controllers())
 
