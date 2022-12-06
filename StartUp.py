@@ -29,7 +29,7 @@ window = sign_in_window()
 window.show()
 
 timer = QTimer()
-timer.timeout.connect(window.Timer_TrackControl)
+timer.timeout.connect(window.timer_track_control)
 timer.setInterval(3000)  # 1000ms = 1s
 #timer.start()
 

@@ -290,6 +290,14 @@ with open("track_controller/GreenLineBottom_Blue.txt", "w") as f:
     lower = [1000, 1000, 1076, 1086]
     higher = [1058, 1062, 1101, 1100]
 
+    f.write("IF ( ( A-"+str(1063)+" & ! O-"+str(1063)+" ) & O-"+str(1000)+" ) {\n")
+    f.write("C-"+str(1000)+" = D-"+str(1000)+"\n")
+    f.write("}\n")
+    f.write("ELSE\n")
+    f.write("{\n")
+    f.write("C-"+str(1000)+" = 0\n")
+    f.write("}\n")
+
     for i in range(1036, 1077):
         f.write("IF ( ( A-"+str(i+1)+" & ! O-"+str(i+1)+" ) & O-"+str(i)+" ) {\n")
         f.write("C-"+str(i)+" = D-"+str(i)+"\n")

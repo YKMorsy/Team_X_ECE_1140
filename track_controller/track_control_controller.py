@@ -154,9 +154,9 @@ class track_control_controller():
         auth = {1000:False}
         occ = {1000:False}
         stat={1000:False}
-        sug = {}
-        com = {}
-        lim = {}
+        sug = {1000: 0b00100000}
+        com = {1000: 0b00000000}
+        lim = {1000: 0b00100100}
         for i in range(1035, 1106):
             auth.update({i:False})
             occ.update({i:False})
