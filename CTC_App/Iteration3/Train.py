@@ -25,9 +25,6 @@ class Train:
     def setPosition(self, line_color, block_number, occupancy):
         # print(self.station_lists)
         if (block_number == self.route[1] and self.line.line_color == line_color and occupancy == True):
-
-            print("tracking train")
-
             # Set previous authority to False
             self.line.block_list[self.route[0]].block_authority = False
 
