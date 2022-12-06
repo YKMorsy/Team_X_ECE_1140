@@ -1,4 +1,4 @@
-def switchIf(f, past, fut, other):
+def switch_if(f, past, fut, other):
     f.write("IF ( ( ( A-"+str(past)+" & F-"+str(past)+" & ! O-"+str(past)+" ) | ( A-"+str(fut)+" & F-"+str(fut)+" & ! O-"+str(fut)+" ) | ( A-"+str(other)+" & F-"+str(other)+" & ! O-"+str(other)+" ) ) & O-"+str(i)+" ) {\n")
 
 
@@ -49,13 +49,13 @@ with open("track_controller/RedLineMiddle_Blue.txt", "w") as f:
         past = i-1
         fut = i+1
         if(i == 2027):
-            switchIf(f, past, fut, 2076)
+            switch_if(f, past, fut, 2076)
         elif(i == 2033):
-            switchIf(f, past, fut, 2072)
+            switch_if(f, past, fut, 2072)
         elif(i == 2038):
-            switchIf(f, past, fut, 2071)
+            switch_if(f, past, fut, 2071)
         elif(i == 2044):
-            switchIf(f, past, fut, 2067)
+            switch_if(f, past, fut, 2067)
         else:
             f.write("IF ( ( ( A-"+str(past)+" & F-"+str(past)+" & ! O-"+str(past)+" ) | ( A-"+str(fut)+" & F-"+str(fut)+" & ! O-"+str(fut)+" ) ) & O-"+str(i)+" ) {\n")
         f.write("C-"+str(i)+" = D-"+str(i)+"\n")
@@ -91,6 +91,9 @@ with open("track_controller/RedLineBottom_Yellow.txt", "w") as f:
         if(i == 2052):
             other = 2066
             f.write("IF ( ( ( A-"+str(i-1)+" & F-"+str(i-1)+" & ! O-"+str(i-1)+" ) | ( A-"+str(i+1)+" & F-"+str(i+1)+" & ! O-"+str(i+1)+" ) | ( A-"+str(other)+" & F-"+str(other)+" & ! O-"+str(other)+" ) ) & O-"+str(i)+" ) {\n")
+        elif(i == 2066):
+            other = 2052
+            f.write("IF ( ( ( A-"+str(i-1)+" & F-"+str(i-1)+" & ! O-"+str(i-1)+" ) | ( A-"+str(other)+" & F-"+str(other)+" & ! O-"+str(other)+" ) ) & O-"+str(i)+" ) {\n")
         else:
             f.write("IF ( ( ( A-"+str(i-1)+" & F-"+str(i-1)+" & ! O-"+str(i-1)+" ) | ( A-"+str(i+1)+" & F-"+str(i+1)+" & ! O-"+str(i+1)+" ) ) & O-"+str(i)+" ) {\n")
         f.write("C-"+str(i)+" = D-"+str(i)+"\n")
@@ -121,10 +124,10 @@ with open("track_controller/RedLineBottom_Yellow.txt", "w") as f:
 
     #Railway 47
     f.write("R-2001 = 0\n")
-    f.write("IF ( ( O-2046 & A-2047 ) | ( O-1045 & A-1046 ) ) {\n")
+    f.write("IF ( ( O-2046 & A-2047 ) | ( O-2045 & A-2046 ) ) {\n")
     f.write("R-2001 = 1\n")
     f.write("}\n")
-    f.write("IF ( ( O-1048 & A-1047 ) | ( O-1049 & A-1048 ) ) {\n")
+    f.write("IF ( ( O-2048 & A-2047 ) | ( O-2049 & A-2048 ) ) {\n")
     f.write("R-2001 = 1\n")
     f.write("}\n")
 
