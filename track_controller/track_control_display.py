@@ -106,6 +106,7 @@ class track_control_display (QtWidgets.QMainWindow, Ui_MainWindow):
             for column in range(2):
                 item = QTableWidgetItem(str(val))
                 if column ==0:
+                    #block = key - trc.get_line_index()
                     item = QTableWidgetItem(str(key))
                 if not(changable) or column==0 :
                     item.setFlags(QtCore.Qt.ItemIsEditable)
