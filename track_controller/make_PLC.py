@@ -2,7 +2,7 @@ def switch_if(f, past, fut, other):
     f.write("IF ( ( ( A-"+str(past)+" & F-"+str(past)+" & ! O-"+str(past)+" ) | ( A-"+str(fut)+" & F-"+str(fut)+" & ! O-"+str(fut)+" ) | ( A-"+str(other)+" & F-"+str(other)+" & ! O-"+str(other)+" ) ) & O-"+str(i)+" ) {\n")
 
 
-with open("track_controller/RedLineTop_Red.txt", "w") as f:
+with open("track_controller/PLCs/RedLineTop_Red.txt", "w") as f:
     for i in range(2001, 2024):
         past = i-1
         fut = i+1
@@ -44,7 +44,7 @@ with open("track_controller/RedLineTop_Red.txt", "w") as f:
 
     #write lights logic
 
-with open("track_controller/RedLineMiddle_Blue.txt", "w") as f:
+with open("track_controller/PLCs/RedLineMiddle_Blue.txt", "w") as f:
     for i in range(2024, 2046):
         past = i-1
         fut = i+1
@@ -86,7 +86,7 @@ with open("track_controller/RedLineMiddle_Blue.txt", "w") as f:
 
     #write lights logic
 
-with open("track_controller/RedLineBottom_Yellow.txt", "w") as f:
+with open("track_controller/PLCs/RedLineBottom_Yellow.txt", "w") as f:
     for i in range(2046, 2067):
         if(i == 2052):
             other = 2066
@@ -133,7 +133,7 @@ with open("track_controller/RedLineBottom_Yellow.txt", "w") as f:
 
     #write lights logic
 
-with open("track_controller/GreenLineTop_Red.txt", "w") as f:
+with open("track_controller/PLCs/GreenLineTop_Red.txt", "w") as f:
     switches = [1013]
     lower = [1001]
     higher = [1012]
@@ -222,7 +222,7 @@ with open("track_controller/GreenLineTop_Red.txt", "w") as f:
     #    f.write("A-"+str(i)+" = 0\n")
     #    f.write("}\n")
 
-with open("track_controller/GreenLineMiddle_Yellow.txt", "w") as f:
+with open("track_controller/PLCs/GreenLineMiddle_Yellow.txt", "w") as f:
     for i in range(1030, 1036):
         f.write("IF ( ( A-"+str(i+1)+" & ! O-"+str(i+1)+" ) & O-"+str(i)+" ) {\n")
         f.write("C-"+str(i)+" = D-"+str(i)+"\n")
@@ -285,7 +285,7 @@ with open("track_controller/GreenLineMiddle_Yellow.txt", "w") as f:
     #    f.write("A-"+str(i)+" = 0\n")
     #    f.write("}\n")
 
-with open("track_controller/GreenLineBottom_Blue.txt", "w") as f:
+with open("track_controller/PLCs/GreenLineBottom_Blue.txt", "w") as f:
     switches = [1057, 1063, 1077, 1085]
     lower = [1000, 1000, 1076, 1086]
     higher = [1058, 1062, 1101, 1100]

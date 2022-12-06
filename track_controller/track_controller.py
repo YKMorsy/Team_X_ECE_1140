@@ -104,8 +104,8 @@ class WaysideController ():
         issue = testPLC.parse_PLC(self.switch_positions, self.occupancy, self.authority,self.suggested_speed, self.statuses, self.speed_limit)
         if(isinstance(issue, str)):
             if(self.PLC_info.get_PLC_file() ==""):
-                self.PLC_info.change_PLC_file("track_controller/blank.txt")
-                self.PLC_info2.change_PLC_file("track_controller/blank.txt")
+                self.PLC_info.change_PLC_file("track_controller/PLCs/blank.txt")
+                self.PLC_info2.change_PLC_file("track_controller/PLCs/blank.txt")
             return issue
         self.PLC_info.change_PLC_file(plc)
         self.PLC_info2.change_PLC_file(plc)

@@ -8,7 +8,7 @@ import copy
 from track_controller.test_window import test_window
 
 qt_creator_file = "track_controller.ui"
-Ui_MainWindow, QtBaseClass = uic.loadUiType("track_controller/"+qt_creator_file)
+Ui_MainWindow, QtBaseClass = uic.loadUiType("track_controller/UIs/"+qt_creator_file)
 
 class track_control_display (QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self, trc):

@@ -30,7 +30,7 @@ class track_control_controller():
         self.track_controller_list[0].set_commanded_speed(com)
         self.track_controller_list[0].set_speed_limit(lim)
         self.track_controller_list[0].set_line_index(2000)
-        self.track_controller_list[0].set_PLC("track_controller/RedLineTop_Red.txt")
+        self.track_controller_list[0].set_PLC("track_controller/PLCs/RedLineTop_Red.txt")
 
         #Bottom Yellow
         auth = {}
@@ -57,7 +57,7 @@ class track_control_controller():
         self.track_controller_list[2].set_commanded_speed(com)
         self.track_controller_list[2].set_speed_limit(lim)
         self.track_controller_list[2].set_line_index(2000)
-        self.track_controller_list[2].set_PLC("track_controller/RedLineBottom_Yellow.txt")
+        self.track_controller_list[2].set_PLC("track_controller/PLCs/RedLineBottom_Yellow.txt")
 
         #temp redline middle blue
         auth = {}
@@ -91,7 +91,7 @@ class track_control_controller():
         self.track_controller_list[1].set_commanded_speed(com)
         self.track_controller_list[1].set_speed_limit(lim)
         self.track_controller_list[1].set_line_index(2000)
-        self.track_controller_list[1].set_PLC("track_controller/RedLineMiddle_Blue.txt")
+        self.track_controller_list[1].set_PLC("track_controller/PLCs/RedLineMiddle_Blue.txt")
 
         #temp green line
         auth = {}
@@ -118,7 +118,7 @@ class track_control_controller():
         self.track_controller_list[3].set_commanded_speed(com)
         self.track_controller_list[3].set_speed_limit(lim)
         self.track_controller_list[3].set_line_index(1000)
-        self.track_controller_list[3].set_PLC("track_controller/GreenLineTop_Red.txt")
+        self.track_controller_list[3].set_PLC("track_controller/PLCs/GreenLineTop_Red.txt")
 
         #temp green line
         auth = {}
@@ -153,7 +153,7 @@ class track_control_controller():
         self.track_controller_list[4].set_commanded_speed(com)
         self.track_controller_list[4].set_speed_limit(lim)
         self.track_controller_list[4].set_line_index(1000)
-        self.track_controller_list[4].set_PLC("track_controller/GreenLineMiddle_Yellow.txt")
+        self.track_controller_list[4].set_PLC("track_controller/PLCs/GreenLineMiddle_Yellow.txt")
 
         #temp green line Bottom Blue
         auth = {1000:False}
@@ -185,7 +185,7 @@ class track_control_controller():
         self.track_controller_list[5].set_commanded_speed(com)
         self.track_controller_list[5].set_speed_limit(lim)
         self.track_controller_list[5].set_line_index(1000)
-        self.track_controller_list[5].set_PLC("track_controller/GreenLineBottom_Blue.txt")
+        self.track_controller_list[5].set_PLC("track_controller/PLCs/GreenLineBottom_Blue.txt")
 
         self.track_controller_list[0].set_wayside_id("RedLine Top Red")
         self.track_controller_list[1].set_wayside_id("RedLine Middle Blue")

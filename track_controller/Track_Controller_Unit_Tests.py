@@ -18,7 +18,7 @@ class TestTrackController(unittest.TestCase):
         way.set_suggested_speed([(1,0b00011010), (2, 0b00100111), (3, 0b00010101)])
         way.set_commanded_speed([(1,0b000001000), (2, 0b01000000), (3, 0b00001000)])
         way.set_speed_limit([(1,0b000100000), (2, 0b00010000), (3, 0b00010000)])
-        way.set_PLC("track_controller/TestingPLC.txt")
+        way.set_PLC("track_controller/PLCs/TestingPLC.txt")
 
         way.parse_plc()
         self.assertEqual(way.get_switch_positions(), [(1,False)])
@@ -34,7 +34,7 @@ class TestTrackController(unittest.TestCase):
         way.set_suggested_speed([(1,0b00011010), (2, 0b00100111), (3, 0b00010101)])
         way.set_commanded_speed([(1,0b000001000), (2, 0b01000000), (3, 0b00001000)])
         way.set_speed_limit([(1,0b000100000), (2, 0b00010000), (3, 0b00010000)])
-        way.set_PLC("track_controller/TestingPLC.txt")
+        way.set_PLC("track_controller/PLCs/TestingPLC.txt")
 
         way.parse_plc()
         self.assertEqual(way.get_switch_positions(), [(1,True)])
@@ -50,7 +50,7 @@ class TestTrackController(unittest.TestCase):
         way.set_suggested_speed([(1,0b00011010), (2, 0b00100111), (3, 0b00010101)])
         way.set_commanded_speed([(1,0b000001000), (2, 0b01000000), (3, 0b00001000)])
         way.set_speed_limit([(1,0b000100000), (2, 0b00010000), (3, 0b00010000)])
-        way.set_PLC("track_controller/TestingPLC.txt")
+        way.set_PLC("track_controller/PLCs/TestingPLC.txt")
 
         way.parse_plc()
         self.assertEqual(way.get_commanded_speed(), [(1,0b000001000), (2, 0b0), (3, 0b00001000)])
@@ -66,7 +66,7 @@ class TestTrackController(unittest.TestCase):
         way.set_suggested_speed([(1,0b00011010), (2, 0b00100111), (3, 0b00010101)])
         way.set_commanded_speed([(1,0b000000000), (2, 0b00000000), (3, 0b00000000)])
         way.set_speed_limit([(1,0b000100000), (2, 0b00010000), (3, 0b00010000)])
-        issue = way.set_PLC("track_controller/ParentheseTest.txt")
+        issue = way.set_PLC("track_controller/PLCs/ParentheseTest.txt")
 
         way.parse_plc()
         self.assertEqual(way.get_commanded_speed(), [(1,0b000000000), (2, 0b000000000), (3, 0b00000011)])
@@ -82,7 +82,7 @@ class TestTrackController(unittest.TestCase):
         way.set_suggested_speed([(1,0b00011010), (2, 0b00100111), (3, 0b00010101)])
         way.set_commanded_speed([(1,0b000000000), (2, 0b00000000), (3, 0b00000000)])
         way.set_speed_limit([(1,0b000100000), (2, 0b00010000), (3, 0b00010000)])
-        issue = way.set_PLC("track_controller/ParentheseTest.txt")
+        issue = way.set_PLC("track_controller/PLCs/ParentheseTest.txt")
 
         way.parse_plc()
         self.assertEqual(way.get_commanded_speed(), [(1,0b000000000), (2, 0b000000000), (3, 0b00000011)])
@@ -98,7 +98,7 @@ class TestTrackController(unittest.TestCase):
         way.set_suggested_speed([(1,0b00011010), (2, 0b00100111), (3, 0b00010101)])
         way.set_commanded_speed([(1,0b000000000), (2, 0b00000000), (3, 0b00000000)])
         way.set_speed_limit([(1,0b000100000), (2, 0b00010000), (3, 0b00010000)])
-        issue = way.set_PLC("track_controller/ParentheseTest.txt")
+        issue = way.set_PLC("track_controller/PLCs/ParentheseTest.txt")
 
         way.parse_plc()
         self.assertEqual(way.get_commanded_speed(), [(1,0b000000000), (2, 0b000000000), (3, 0b00000011)])
@@ -114,7 +114,7 @@ class TestTrackController(unittest.TestCase):
         way.set_suggested_speed([(1,0b00011010), (2, 0b00100111), (3, 0b00010101)])
         way.set_commanded_speed([(1,0b000000000), (2, 0b00000000), (3, 0b00000000)])
         way.set_speed_limit([(1,0b000100000), (2, 0b00010000), (3, 0b00010000)])
-        issue = way.set_PLC("track_controller/ParentheseTest.txt")
+        issue = way.set_PLC("track_controller/PLCs/ParentheseTest.txt")
 
         way.parse_plc()
         self.assertEqual(way.get_commanded_speed(), [(1,0b000000000), (2, 0b000000000), (3, 0b00010000)])
@@ -131,7 +131,7 @@ class TestTrackController(unittest.TestCase):
         way.set_suggested_speed([(1,0b00011010), (2, 0b00100111), (3, 0b00010101)])
         way.set_commanded_speed([(1,0b000000000), (2, 0b00000000), (3, 0b00000000)])
         way.set_speed_limit([(1,0b000100000), (2, 0b00010000), (3, 0b00010000)])
-        issue = way.set_PLC("track_controller/ParentheseTest.txt")
+        issue = way.set_PLC("track_controller/PLCs/ParentheseTest.txt")
 
         way.parse_plc()
         self.assertEqual(way.get_commanded_speed(), [(1,0b000000000), (2, 0b000000000), (3, 0b00010000)])
@@ -147,7 +147,7 @@ class TestTrackController(unittest.TestCase):
         way.set_suggested_speed([(1,0b00011010), (2, 0b00100111), (3, 0b00010101)])
         way.set_commanded_speed([(1,0b000000000), (2, 0b00000000), (3, 0b00000000)])
         way.set_speed_limit([(1,0b000100000), (2, 0b00010000), (3, 0b00010000)])
-        issue = way.set_PLC("track_controller/ParentheseTest.txt")
+        issue = way.set_PLC("track_controller/PLCs/ParentheseTest.txt")
 
         way.parse_plc()
         self.assertEqual(way.get_commanded_speed(), [(1,0b000000000), (2, 0b000000000), (3, 0b00000011)])
