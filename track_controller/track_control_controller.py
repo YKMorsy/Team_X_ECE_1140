@@ -1,49 +1,78 @@
-from track_controller.track_controller import WaysideController
 import threading
+from track_controller.track_controller import WaysideController
 
 class track_control_controller():
     def __init__(self):
-        self.track_controller_list = [WaysideController(), WaysideController(), WaysideController(), WaysideController(), WaysideController(), WaysideController()] 
+        self.track_controller_list = [WaysideController(), WaysideController(), WaysideController(), WaysideController(), WaysideController(), WaysideController()]
 
-        #toy data  
-        self.track_controller_list[0].set_authority({1:True, 2:False, 3:False})
-        self.track_controller_list[0].set_switch_positions({1:True, 2:False, 3:False})
-        self.track_controller_list[0].set_occupancy({1:True, 2:False, 3:False})
-        self.track_controller_list[0].set_railway_crossings({1:True, 2:False, 3:False})
-        self.track_controller_list[0].set_light_colors({1:[True, True], 2:[False, False], 3:[False, False]})
-        self.track_controller_list[0].set_statuses({1:True, 2:False, 3:False})
-        self.track_controller_list[0].set_suggested_speed({1:0b00011010, 2:0b00100111, 3:0b00010101})
-        self.track_controller_list[0].set_commanded_speed({1:0b000000000, 2:0b000000000, 3:0b000000000})
-        self.track_controller_list[0].set_speed_limit({1:0b000000000, 2:0b000000000, 3:0b000000000})
-        self.track_controller_list[0].set_PLC("track_controller/blank.txt")
-
-        self.track_controller_list[2].set_authority({1:True, 2:False, 3:False, 4:False, 5:False})
-        self.track_controller_list[2].set_switch_positions({1:True})
-        self.track_controller_list[2].set_occupancy({1:True, 2:False, 3:False, 4:False, 5:False})
-        self.track_controller_list[2].set_railway_crossings({1:True})
-        self.track_controller_list[2].set_light_colors({1:[True, True]})
-        self.track_controller_list[2].set_statuses({1:True, 2:False, 3:False, 4:False, 5:False})
-        self.track_controller_list[2].set_suggested_speed({1:0b00011010, 2:0b00100111, 3:0b00010101, 4:0b00010101, 5:0b00010101})
-        self.track_controller_list[2].set_commanded_speed({1:0b000000000, 2:0b000000000, 3:0b000000000, 4:0b00010101, 5:0b00010101})
-        self.track_controller_list[2].set_speed_limit({1:0b000100000, 2:0b00000100, 3:0b00100000, 4:0b00000101, 5:0b100000001})
-        self.track_controller_list[2].set_PLC("track_controller/blank.txt")
-
-        #temp redline
+        #red top red
         auth = {}
-        occ = {} 
+        occ = {}
         stat={}
-        sug = {} 
+        sug = {}
         com = {}
         lim = {}
-        for i in range(23, 47):
+        for i in range(2000, 2025):
             auth.update({i: False})
             occ.update({i: False})
             stat.update({i: True})
-            if(i !=23 and i!= 46):
+            if i !=2024 :
                 sug.update({i: 0b00100000})
                 com.update({i: 0b00000000})
                 lim.update({i: 0b00100100})
-        for i in range(67, 77):
+        self.track_controller_list[0].set_authority(auth)
+        self.track_controller_list[0].set_switch_positions({2009:False, 2016:False})
+        self.track_controller_list[0].set_occupancy(occ)
+        self.track_controller_list[0].set_railway_crossings({})
+        self.track_controller_list[0].set_light_colors({1:[True,True]})
+        self.track_controller_list[0].set_statuses(stat)
+        self.track_controller_list[0].set_suggested_speed(sug)
+        self.track_controller_list[0].set_commanded_speed(com)
+        self.track_controller_list[0].set_speed_limit(lim)
+        self.track_controller_list[0].set_PLC("track_controller/RedLineTop_Red.txt")
+
+        #Bottom Yellow
+        auth = {}
+        occ = {}
+        stat={}
+        sug = {}
+        com = {}
+        lim = {}
+        for i in range(2045, 2067):
+            auth.update({i: False})
+            occ.update({i: False})
+            stat.update({i: True})
+            if(i !=2045):
+                sug.update({i: 0b00100000})
+                com.update({i: 0b00000000})
+                lim.update({i: 0b00100100})
+        self.track_controller_list[2].set_authority(auth)
+        self.track_controller_list[2].set_switch_positions({2052:False})
+        self.track_controller_list[2].set_occupancy(occ)
+        self.track_controller_list[2].set_railway_crossings({2001: False})
+        self.track_controller_list[2].set_light_colors({1:[True,True]})
+        self.track_controller_list[2].set_statuses(stat)
+        self.track_controller_list[2].set_suggested_speed(sug)
+        self.track_controller_list[2].set_commanded_speed(com)
+        self.track_controller_list[2].set_speed_limit(lim)
+        self.track_controller_list[2].set_PLC("track_controller/RedLineBottom_Yellow.txt")
+
+        #temp redline middle blue
+        auth = {}
+        occ = {}
+        stat={}
+        sug = {}
+        com = {}
+        lim = {}
+        for i in range(2023, 2047):
+            auth.update({i: False})
+            occ.update({i: False})
+            stat.update({i: True})
+            if(i !=2023 and i!= 2046):
+                sug.update({i: 0b00100000})
+                com.update({i: 0b00000000})
+                lim.update({i: 0b00100100})
+        for i in range(2067, 2077):
             auth.update({i: False})
             occ.update({i: False})
             stat.update({i: True})
@@ -59,20 +88,20 @@ class track_control_controller():
         self.track_controller_list[1].set_suggested_speed(sug)
         self.track_controller_list[1].set_commanded_speed(com)
         self.track_controller_list[1].set_speed_limit(lim)
-        self.track_controller_list[1].set_PLC("track_controller/blank.txt")
+        self.track_controller_list[1].set_PLC("track_controller/RedLineMiddle_Blue.txt")
 
         #temp green line
         auth = {}
-        occ = {} 
+        occ = {}
         stat={}
-        sug = {} 
+        sug = {}
         com = {}
         lim = {}
         for i in range(1001, 1022):
             auth.update({i: False})
             occ.update({i:False})
             stat.update({i:True})
-            if(i!= 1021):
+            if i!= 1021 :
                 sug.update({i: 0b00100000})
                 com.update({i: 0b00000000})
                 lim.update({i: 0b00100100})
@@ -89,9 +118,9 @@ class track_control_controller():
 
         #temp green line
         auth = {}
-        occ = {} 
+        occ = {}
         stat={}
-        sug = {} 
+        sug = {}
         com = {}
         lim = {}
         for i in range(1020, 1037):
@@ -106,7 +135,7 @@ class track_control_controller():
             auth.update({i:False})
             occ.update({i:False})
             stat.update({i: True})
-            if(i!= 1104):
+            if i!= 1104 :
                 sug.update({i: 0b00100000})
                 com.update({i: 0b00000000})
                 lim.update({i: 0b00100100})
@@ -123,11 +152,11 @@ class track_control_controller():
 
         #temp green line Bottom Blue
         auth = {1000:False}
-        occ = {1000:False} 
+        occ = {1000:False}
         stat={1000:False}
-        sug = {} 
-        com = {}
-        lim = {}
+        sug = {1000: 0b00100000}
+        com = {1000: 0b00000000}
+        lim = {1000: 0b00100100}
         for i in range(1035, 1106):
             auth.update({i:False})
             occ.update({i:False})
@@ -137,22 +166,27 @@ class track_control_controller():
                 com.update({i: 0b00000000})
                 lim.update({i: 0b00100100})
         self.track_controller_list[5].set_authority(auth)
-        self.track_controller_list[5].set_switch_positions({1057:False,  1063:False, 1077:False,1085:False})
+        self.track_controller_list[5].set_switch_positions(
+            {1057:False,  1063:False, 1077:False,1085:False})
         self.track_controller_list[5].set_occupancy(occ)
         self.track_controller_list[5].set_railway_crossings({})
-        self.track_controller_list[5].set_light_colors({1038:[True,True], 1040:[True,True], 1047:[True,True], 1049:[True,True], 1056:[True,True], 1058:[True,True], 1064:[True,True], 1066:[True,True],1072:[True,True],1074:[True,True], 1076:[True,True], 1078:[True,True], 1087:[True,True], 1089:[True,True], 1095:[True,True], 1097:[True,True]})
+        self.track_controller_list[5].set_light_colors(
+            {1038:[True,True], 1040:[True,True], 1047:[True,True],1049:[True,True],1056:[True,True],
+            1058:[True,True], 1064:[True,True], 1066:[True,True],1072:[True,True],1074:[True,True],
+            1076:[True,True], 1078:[True,True], 1087:[True,True], 1089:[True,True],1095:[True,True],
+            1097:[True,True]})
         self.track_controller_list[5].set_statuses(stat)
         self.track_controller_list[5].set_suggested_speed(sug)
         self.track_controller_list[5].set_commanded_speed(com)
         self.track_controller_list[5].set_speed_limit(lim)
         self.track_controller_list[5].set_PLC("track_controller/GreenLineBottom_Blue.txt")
 
-        self.track_controller_list[0].set_wayside_id("RedLine A")
-        self.track_controller_list[1].set_wayside_id("RedLine B")
-        self.track_controller_list[2].set_wayside_id("RedLine Blue")
-        self.track_controller_list[3].set_wayside_id("GreenLine Red")
-        self.track_controller_list[4].set_wayside_id("GreenLine Yellow")
-        self.track_controller_list[5].set_wayside_id("GreenLine Blue")
+        self.track_controller_list[0].set_wayside_id("RedLine Top Red")
+        self.track_controller_list[1].set_wayside_id("RedLine Middle Blue")
+        self.track_controller_list[2].set_wayside_id("RedLine Bottom Yellow")
+        self.track_controller_list[3].set_wayside_id("GreenLine Top Red")
+        self.track_controller_list[4].set_wayside_id("GreenLine Middle Yellow")
+        self.track_controller_list[5].set_wayside_id("GreenLine Bottom Blue")
 
     def get_track_control_instance(self, wid):
         for wayside in self.track_controller_list:
@@ -168,12 +202,12 @@ class track_control_controller():
     def add_new_wayside_controller(self, wayside):
         self.track_controller_list.append(wayside)
 
-    def Run_All_Track_Controllers_PLC(self):
+    def run_all_track_controllers_plc(self):
         t = list()
         for wayside in self.track_controller_list:
             if(not(wayside.get_maintenance_mode())):
-                #wayside.ParsePLC()
-                x =threading.Thread(target=wayside.ParsePLC)
+                #wayside.parse_plc()
+                x =threading.Thread(target=wayside.parse_plc)
                 t.append(x)
                 x.start()
         for index, thread in enumerate(t):

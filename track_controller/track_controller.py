@@ -16,8 +16,9 @@ class WaysideController ():
         self.commanded_speed = {}#0b00010100 #20 in binary
         self.speed_limit = {}#0b00010100 #20 in binary
         self.maintencMode = False
+        self.line_index = 0
 
-    def ParsePLC(self):
+    def parse_plc(self):
         changes = self.PLC_info.parse_PLC(self.switch_positions, self.occupancy, self.authority,self.suggested_speed, self.statuses, self.speed_limit)
         changes2 = 2#changes2 = self.PLC_info2.parse_PLC(self.switch_positions, self.occupancy, self.authority,self.suggested_speed, self.statuses, self.speed_limit)
         #if(changes != changes2):
@@ -107,6 +108,8 @@ class WaysideController ():
         self.PLC_info.change_PLC_file(plc)
         self.PLC_info2.change_PLC_file(plc)
         return True
+    def set_line_index(self, lineIn):
+        self.line_index = lineIn
 
     #----getters----
     def get_wayside_id(self):
@@ -133,3 +136,5 @@ class WaysideController ():
         return self.speed_limit
     def get_maintenance_mode (self):
         return self.maintencMode
+    def get_line_index(self):
+        return self.line_index

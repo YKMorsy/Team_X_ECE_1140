@@ -16,7 +16,7 @@ class test_window (QtWidgets.QMainWindow, Ui_TestingWindow):
         QtWidgets.QMainWindow.__init__(self)
         Ui_TestingWindow.__init__(self)
         self.setupUi(self)
-        self.UploadNewPLCButton.clicked.connect(self.openFileNameDialog)
+        self.UploadNewPLCButton.clicked.connect(self.open_file_name_dialog)
         self.run_PLC_button.clicked.connect(self.run_plc)
 
         self.CurrentPLCLabel.setText("Currently Running: "+ self.track_control_data.get_PLC())
@@ -31,7 +31,7 @@ class test_window (QtWidgets.QMainWindow, Ui_TestingWindow):
 
         self.update_tables()
 
-    def openFileNameDialog(self):
+    def open_file_name_dialog(self):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         fileName, _ = QFileDialog.getOpenFileName(self,"QFileDialog.getOpenFileName()", "","All Files (*);;Python Files (*.py)", options=options)
@@ -100,7 +100,7 @@ class test_window (QtWidgets.QMainWindow, Ui_TestingWindow):
 
     def run_plc (self):
         self.make_changes()
-        self.track_control_data.ParsePLC()
+        self.track_control_data.parse_plc()
         self.update_tables()
 
     def make_changes(self):

@@ -20,7 +20,7 @@ class TestTrackController(unittest.TestCase):
         way.set_speed_limit([(1,0b000100000), (2, 0b00010000), (3, 0b00010000)])
         way.set_PLC("track_controller/TestingPLC.txt")
 
-        way.ParsePLC()
+        way.parse_plc()
         self.assertEqual(way.get_switch_positions(), [(1,False)])
 
     def test_SwitchIsTrueWhenComingFromLeftTrack(self):
@@ -36,7 +36,7 @@ class TestTrackController(unittest.TestCase):
         way.set_speed_limit([(1,0b000100000), (2, 0b00010000), (3, 0b00010000)])
         way.set_PLC("track_controller/TestingPLC.txt")
 
-        way.ParsePLC()
+        way.parse_plc()
         self.assertEqual(way.get_switch_positions(), [(1,True)])
         
     def test_commandSpeedIsZeroWhenAuthorityAheadIsFalse (self):
@@ -52,7 +52,7 @@ class TestTrackController(unittest.TestCase):
         way.set_speed_limit([(1,0b000100000), (2, 0b00010000), (3, 0b00010000)])
         way.set_PLC("track_controller/TestingPLC.txt")
 
-        way.ParsePLC()
+        way.parse_plc()
         self.assertEqual(way.get_commanded_speed(), [(1,0b000001000), (2, 0b0), (3, 0b00001000)])
 
     def test_AllFalseIsFalse (self):
@@ -68,7 +68,7 @@ class TestTrackController(unittest.TestCase):
         way.set_speed_limit([(1,0b000100000), (2, 0b00010000), (3, 0b00010000)])
         issue = way.set_PLC("track_controller/ParentheseTest.txt")
 
-        way.ParsePLC()
+        way.parse_plc()
         self.assertEqual(way.get_commanded_speed(), [(1,0b000000000), (2, 0b000000000), (3, 0b00000011)])
 
     def test_OnlyOccupancyTrue (self):
@@ -84,7 +84,7 @@ class TestTrackController(unittest.TestCase):
         way.set_speed_limit([(1,0b000100000), (2, 0b00010000), (3, 0b00010000)])
         issue = way.set_PLC("track_controller/ParentheseTest.txt")
 
-        way.ParsePLC()
+        way.parse_plc()
         self.assertEqual(way.get_commanded_speed(), [(1,0b000000000), (2, 0b000000000), (3, 0b00000011)])
 
     def test_OnlyAuthorityTrueAndOccupancy (self):
@@ -100,7 +100,7 @@ class TestTrackController(unittest.TestCase):
         way.set_speed_limit([(1,0b000100000), (2, 0b00010000), (3, 0b00010000)])
         issue = way.set_PLC("track_controller/ParentheseTest.txt")
 
-        way.ParsePLC()
+        way.parse_plc()
         self.assertEqual(way.get_commanded_speed(), [(1,0b000000000), (2, 0b000000000), (3, 0b00000011)])
 
     def test_2istrue (self):
@@ -116,7 +116,7 @@ class TestTrackController(unittest.TestCase):
         way.set_speed_limit([(1,0b000100000), (2, 0b00010000), (3, 0b00010000)])
         issue = way.set_PLC("track_controller/ParentheseTest.txt")
 
-        way.ParsePLC()
+        way.parse_plc()
         self.assertEqual(way.get_commanded_speed(), [(1,0b000000000), (2, 0b000000000), (3, 0b00010000)])
 
 
@@ -133,7 +133,7 @@ class TestTrackController(unittest.TestCase):
         way.set_speed_limit([(1,0b000100000), (2, 0b00010000), (3, 0b00010000)])
         issue = way.set_PLC("track_controller/ParentheseTest.txt")
 
-        way.ParsePLC()
+        way.parse_plc()
         self.assertEqual(way.get_commanded_speed(), [(1,0b000000000), (2, 0b000000000), (3, 0b00010000)])
 
     def test_occNotTrue (self):
@@ -149,7 +149,7 @@ class TestTrackController(unittest.TestCase):
         way.set_speed_limit([(1,0b000100000), (2, 0b00010000), (3, 0b00010000)])
         issue = way.set_PLC("track_controller/ParentheseTest.txt")
 
-        way.ParsePLC()
+        way.parse_plc()
         self.assertEqual(way.get_commanded_speed(), [(1,0b000000000), (2, 0b000000000), (3, 0b00000011)])
 
 if __name__ == '__main__':

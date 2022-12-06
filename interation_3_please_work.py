@@ -65,7 +65,7 @@ class Iteration3(QWidget):
         for train in new_trains:
             self.new_train.append(train)
         #Sierra call your update here
-        self.wayside_sign_in.Timer_TrackControl()
+        self.wayside_sign_in.timer_track_control()
 
         #Peter call your update here
 
@@ -86,7 +86,6 @@ class Iteration3(QWidget):
             self.train_controller[train_id].start_driver_ui()
 
             self.new_train.remove(train)
-        
         self.ctc_office.greenLine.setThroughput(self.track_model_var.stations.get_throughput())
         #Train deletion, wont do this for iteration 3 cause too hard
 
