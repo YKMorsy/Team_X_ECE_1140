@@ -15,12 +15,20 @@ class Train:
         # Intialize route using arrival stations
         self.route = line.getRoute()
 
+        # Set authority and suggested speed of yard and next block
+        self.line.block_list[self.route[0]].block_authority = True
+        self.line.block_list[self.route[1]].block_authority = True
+        self.line.block_list[self.route[0]].block_suggested_speed = self.line.block_list[self.route[0]].block_speed_limit
+        self.line.block_list[self.route[1]].block_suggested_speed = self.line.block_list[self.route[1]].block_speed_limit
+
     def updateStations(self, station_list):
         self.station_list = station_list
 
     def setPosition(self, line_color, block_number, occupancy):
         # print(self.station_lists)
         if (block_number == self.route[1] and self.line.line_color == line_color and occupancy == True):
+
+            print("tracking train")
 
             # Set previous authority to False
             self.line.block_list[self.route[0]].block_authority = False
