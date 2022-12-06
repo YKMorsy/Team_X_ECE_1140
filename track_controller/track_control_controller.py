@@ -24,11 +24,12 @@ class track_control_controller():
         self.track_controller_list[0].set_switch_positions({2009:False, 2016:False})
         self.track_controller_list[0].set_occupancy(occ)
         self.track_controller_list[0].set_railway_crossings({})
-        self.track_controller_list[0].set_light_colors({1:[True,True]})
+        self.track_controller_list[0].set_light_colors({2001:[True,True]})
         self.track_controller_list[0].set_statuses(stat)
         self.track_controller_list[0].set_suggested_speed(sug)
         self.track_controller_list[0].set_commanded_speed(com)
         self.track_controller_list[0].set_speed_limit(lim)
+        self.track_controller_list[0].set_line_index(2000)
         self.track_controller_list[0].set_PLC("track_controller/RedLineTop_Red.txt")
 
         #Bottom Yellow
@@ -50,11 +51,12 @@ class track_control_controller():
         self.track_controller_list[2].set_switch_positions({2052:False})
         self.track_controller_list[2].set_occupancy(occ)
         self.track_controller_list[2].set_railway_crossings({2001: False})
-        self.track_controller_list[2].set_light_colors({1:[True,True]})
+        self.track_controller_list[2].set_light_colors({2001:[True,True]})
         self.track_controller_list[2].set_statuses(stat)
         self.track_controller_list[2].set_suggested_speed(sug)
         self.track_controller_list[2].set_commanded_speed(com)
         self.track_controller_list[2].set_speed_limit(lim)
+        self.track_controller_list[2].set_line_index(2000)
         self.track_controller_list[2].set_PLC("track_controller/RedLineBottom_Yellow.txt")
 
         #temp redline middle blue
@@ -82,12 +84,13 @@ class track_control_controller():
         self.track_controller_list[1].set_authority(auth)
         self.track_controller_list[1].set_switch_positions({2027:False, 2032:False, 2038:False, 2043:False})
         self.track_controller_list[1].set_occupancy(occ)
-        self.track_controller_list[1].set_railway_crossings({1:True})
-        self.track_controller_list[1].set_light_colors({1:[True,True]})
+        self.track_controller_list[1].set_railway_crossings({2001:True})
+        self.track_controller_list[1].set_light_colors({2001:[True,True]})
         self.track_controller_list[1].set_statuses(stat)
         self.track_controller_list[1].set_suggested_speed(sug)
         self.track_controller_list[1].set_commanded_speed(com)
         self.track_controller_list[1].set_speed_limit(lim)
+        self.track_controller_list[1].set_line_index(2000)
         self.track_controller_list[1].set_PLC("track_controller/RedLineMiddle_Blue.txt")
 
         #temp green line
@@ -114,6 +117,7 @@ class track_control_controller():
         self.track_controller_list[3].set_suggested_speed(sug)
         self.track_controller_list[3].set_commanded_speed(com)
         self.track_controller_list[3].set_speed_limit(lim)
+        self.track_controller_list[3].set_line_index(1000)
         self.track_controller_list[3].set_PLC("track_controller/GreenLineTop_Red.txt")
 
         #temp green line
@@ -148,6 +152,7 @@ class track_control_controller():
         self.track_controller_list[4].set_suggested_speed(sug)
         self.track_controller_list[4].set_commanded_speed(com)
         self.track_controller_list[4].set_speed_limit(lim)
+        self.track_controller_list[4].set_line_index(1000)
         self.track_controller_list[4].set_PLC("track_controller/GreenLineMiddle_Yellow.txt")
 
         #temp green line Bottom Blue
@@ -179,6 +184,7 @@ class track_control_controller():
         self.track_controller_list[5].set_suggested_speed(sug)
         self.track_controller_list[5].set_commanded_speed(com)
         self.track_controller_list[5].set_speed_limit(lim)
+        self.track_controller_list[5].set_line_index(1000)
         self.track_controller_list[5].set_PLC("track_controller/GreenLineBottom_Blue.txt")
 
         self.track_controller_list[0].set_wayside_id("RedLine Top Red")
