@@ -6,6 +6,7 @@ from PyQt5.QtGui import *
 from PyQt5 import uic
 from CTC_App.Iteration3.Line import Line
 from CTC_App.Iteration3.Dispatcher import Dispatcher
+from datetime import datetime
 
 # greenLine = Line("Iteration3/Track_Layout_Green.xlsx")
 
@@ -92,6 +93,9 @@ class CTCApp(QWidget):
         # Update time in dispatcher
         self.start_time = self.start_time + 1
         self.CTCDispatcher.updateTime(self.start_time)
+        time_dt = datetime.fromtimestamp(self.start_time)
+
+        self.timeValue.setText(time_dt.strftime('%Y/%m/%d %I:%M:%S %p'))
 
         if self.current_line == "Green":
             self.CTCDispatcher.checkDispatch(self.greenLine)

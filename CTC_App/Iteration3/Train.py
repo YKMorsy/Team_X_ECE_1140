@@ -9,6 +9,8 @@ class Train:
         self.station_list = station_list
         self.line = line
         self.current_position = 0
+        self.cur_section = 'YARD'
+        self.next_section = 'K'
 
         # Intialize route using arrival stations
         self.route = line.getRoute()
