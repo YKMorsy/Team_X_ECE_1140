@@ -66,6 +66,8 @@ class CTCApp(QWidget):
         self.redUpdateButton.clicked.connect(self.updateEditDispatch)
         self.greenUpdateButton.clicked.connect(self.updateEditDispatch)
 
+        self.openFile.clicked.connect(self.loadSchedule)
+
         ############### MAINTENANCE WINDOW ###############
         self.redLineButton_2.clicked.connect(self.chooseRedLineMaint)
         self.greenLineButton_2.clicked.connect(self.chooseGreenLineMaint)
@@ -76,19 +78,23 @@ class CTCApp(QWidget):
 
         ############### CONSTANT UPDATES ###############
         # Initialize timer
-        self.cur_time = 0
-        self.timer = QTimer()
-        self.timer.timeout.connect(self.updateTimer)
-        self.timer.setInterval(1000)
-        self.timer.start()
+        self.start_time = round(time.time())
+        # self.timer = QTimer()
+        # self.timer.timeout.connect(self.updateTimer)
+        # self.timer.setInterval(1000)
+        # self.timer.start()
 
 
         # Constantly update train table
 
     # Function to call all constatn updates
     def updateTimer(self):
-        # Update current time
-        self.cur_time += 1
+        # Update time in dispatcher
+        self.start_time = self.start_time + 1
+        self.CTCDispatcher.updateTime(self.start_time)
+
+        if self.current_line == "Green":
+            self.CTCDispatcher.checkDispatch(self.greenLine)
 
         output = []
 
@@ -327,7 +333,7 @@ class CTCApp(QWidget):
 
             # Call dispatch function
             if self.current_line == "Green":
-                self.CTCDispatcher.scheduleSingle(destination_stations, self.greenLine, self.cur_time)
+                self.CTCDispatcher.scheduleSingle(destination_stations, self.greenLine)
 
             # Update table with train
             cur_train = self.CTCDispatcher.trains[-1]
@@ -444,3 +450,15 @@ class CTCApp(QWidget):
 
             elif self.current_line_maint == "Red":
                 pass
+
+    def open_file(self):
+        filename = QFileDialog.getOpenFileName()
+        path = filename[0]
+        return path
+
+    def loadSchedule(self):
+        # get file path and call dispatcher
+        file_path = self.open_file()
+        self.CTCDispatcher.scheduleMultiple(file_path)
+
+        

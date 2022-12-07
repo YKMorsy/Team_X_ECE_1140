@@ -1,16 +1,14 @@
-import pandas as pd
 from CTC_App.Iteration3.Line import Line
 
 class Train:
 
-    def __init__(self, train_id, station_list, line, depart_time):
+    def __init__(self, train_id, station_list, line):
 
         # Initialize variables
         self.train_id = train_id
         self.station_list = station_list
         self.line = line
         self.current_position = 0
-        self.depart_time = depart_time
 
         # Intialize route using arrival stations
         self.route = line.getRoute()
@@ -27,9 +25,6 @@ class Train:
     def setPosition(self, line_color, block_number, occupancy):
         # print(self.station_lists)
         if (block_number == self.route[1] and self.line.line_color == line_color and occupancy == True):
-
-            print("tracking train")
-
             # Set previous authority to False
             self.line.block_list[self.route[0]].block_authority = False
 

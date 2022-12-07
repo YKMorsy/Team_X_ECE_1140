@@ -29,7 +29,7 @@ class sign_in_window (QtWidgets.QMainWindow, Ui_sign_in_window):
 
     def timer_track_control(self):
         self.all_tracks.run_all_track_controllers_plc()
-        #self.main_wind.run_PLC()
+        self.main_wind.run_PLC()
 
 
     def open_main_window(self):
