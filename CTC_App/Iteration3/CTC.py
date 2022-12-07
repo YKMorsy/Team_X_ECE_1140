@@ -102,12 +102,12 @@ class CTCApp(QWidget):
 
         output = []
 
-        while (self.train_list_length != len(self.CTCDispatcher.trains)):
+        while (self.train_list_length != len(self.CTCDispatcher.all_trains)):
             self.greenLine.block_list[0].block_authority = True
             self.greenLine.block_list[0].block_suggested_speed = self.greenLine.block_list[0].block_speed_limit
 
-            if self.train_list_length <= len(self.CTCDispatcher.trains): 
-                output.append((self.CTCDispatcher.trains[self.train_list_length]))
+            if self.train_list_length <= len(self.CTCDispatcher.all_trains): 
+                output.append((self.CTCDispatcher.all_trains[self.train_list_length]))
                 self.train_list_length += 1
 
         # Table updates
@@ -169,7 +169,7 @@ class CTCApp(QWidget):
         if self.current_line == "Green":
 
             self.greenTrainTable.setRowCount(0)
-            trains = self.CTCDispatcher.trains
+            trains = self.CTCDispatcher.all_trains
 
             
 
@@ -340,7 +340,7 @@ class CTCApp(QWidget):
                 self.CTCDispatcher.scheduleSingle(destination_stations, self.greenLine)
 
             # Update table with train
-            cur_train = self.CTCDispatcher.trains[-1]
+            cur_train = self.CTCDispatcher.all_trains[-1]
             if self.current_line == "Green":
                 rowPosition = self.greenTrainTable.rowCount()
                 self.greenTrainTable.insertRow(rowPosition)
@@ -360,7 +360,7 @@ class CTCApp(QWidget):
 
     def updateAddRemoveCombo(self):
         if self.current_line == "Green":
-            cur_train = self.CTCDispatcher.trains[int(self.greenChooseTrain.currentText())-1]
+            cur_train = self.CTCDispatcher.all_trains[int(self.greenChooseTrain.currentText())-1]
             cur_train_stations = cur_train.station_list
 
             # Put all current stations in stations table
@@ -463,6 +463,16 @@ class CTCApp(QWidget):
     def loadSchedule(self):
         # get file path and call dispatcher
         file_path = self.open_file()
-        self.CTCDispatcher.scheduleMultiple(file_path)
+        if self.current_line == "Green":
+            self.CTCDispatcher.scheduleMultiple(file_path, self.greenLine)
+            cur_train = self.CTCDispatcher.all_trains[-1]
+            self.greenChooseTrain.addItem(str(cur_train.train_id))
+        # elif self.current_line == "Red":
+        #     rowPosition = self.redTrainTable.rowCount()
+        #     self.redTrainTable.insertRow(rowPosition)
+        #     self.redTrainTable.setItem(rowPosition, 0, QTableWidgetItem(str(cur_train.train_id)))
+        #     self.redTrainTable.setItem(rowPosition, 1, QTableWidgetItem(str(cur_train.current_position)))
+        #     self.redTrainTable.setItem(rowPosition, 2, QTableWidgetItem(str(cur_train.station_list[0])))
 
+        #     self.redChooseTrain.addItem(str(cur_train.train_id))
         

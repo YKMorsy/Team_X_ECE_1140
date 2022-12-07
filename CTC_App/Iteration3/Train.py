@@ -28,7 +28,7 @@ class Train:
 
     def setPosition(self, line_color, block_number, occupancy):
         if (block_number == self.route[1] and self.line.line_color == line_color and occupancy == True):
-
+            
             # Set previous authority to False
             self.line.block_list[self.route[0]].block_authority = False
 

@@ -5,16 +5,19 @@ from datetime import datetime
 class Dispatcher:
 
     def __init__(self):
-        self.trains = []
+        self.trains = [] # List of already dispatched trains
+        self.all_trains = [] # List of all trains (dispatched and scheduled)
         self.train_schedule = []
         self.cur_time = 0
 
     # Function to schedule single train
     def scheduleSingle(self, station_list, line):
-        train_id = len(self.trains) + 1
+        train_id = len(self.all_trains) + 1
         self.trains.append(Train(train_id, station_list, line, self.trains))
+        self.all_trains.append(Train(train_id, station_list, line, self.trains))
 
-    def scheduleMultiple(self, filepath):
+    # Function that updates train_schedule list
+    def scheduleMultiple(self, filepath, line):
         schedule = pd.read_excel(filepath)
         schedule = schedule.loc[:,"Time, Line, and Stations"]
         schedule_time = datetime.timestamp(schedule[0])
@@ -22,8 +25,11 @@ class Dispatcher:
         for i in range(1, len(schedule)):
             schedule_list.append(schedule[i])
 
-        self.train_schedule.append([schedule_time, schedule_list])
+        train_id = len(self.all_trains) + 1
+        self.all_trains.append(Train(train_id, schedule_list, line, self.trains))
+        self.train_schedule.append([schedule_time, schedule_list, train_id])
 
+    # Function that updates station list
     def updateStations(self, idx, station_list):
         self.trains[idx].updateStations(station_list)
 
@@ -32,7 +38,8 @@ class Dispatcher:
         for train in self.train_schedule.copy():
             if(train[0]) == self.cur_time:
                 # Create train
-                self.scheduleSingle(train[1], line)
+                # self.scheduleSingle(train[1], line)
+                self.trains.append(Train(train[2], train[1], line, self.trains))
                 self.train_schedule.remove(train)
 
     # Function to update time in dispatcher
@@ -51,7 +58,7 @@ class Dispatcher:
                     line_color = "Red"
                     cur_key = key - 2000
 
-                for train in self.trains:
+                for train in self.all_trains:
                     # if len(train.route) <= 1:
                     #     self.trains.remove(train)
                     # else:

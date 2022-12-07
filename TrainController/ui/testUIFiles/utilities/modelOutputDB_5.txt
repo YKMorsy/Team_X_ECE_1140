@@ -1,8 +1,7 @@
-10.000008000000001
+False
+0.0
 False
 False
-False
-70
 False
 False
 False
