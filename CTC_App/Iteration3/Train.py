@@ -244,6 +244,9 @@ class Train:
 
                             break
             
+            elif self.line.line_color == 'Red':
+                pass
+
             if two_way_collision_flag == False:
                 if len(self.route) >= 1:
                     self.current_position = self.route[0] # Current position
