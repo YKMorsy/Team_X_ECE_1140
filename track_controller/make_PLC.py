@@ -24,8 +24,8 @@ with open("track_controller/PLCs/RedLineTop_Red.txt", "w") as f:
         f.write("}\n")
 
 
-    switches = [2009, 2016]
-    lower = [2000, 2001]
+    switches = [2000, 2016]
+    lower = [2009, 2001]
     higher = [2010, 2015]
     for s in range(len(switches)):
         #f.write("S-"+str(switches[s])+" = 1\n")
@@ -124,7 +124,7 @@ with open("track_controller/PLCs/RedLineBottom_Yellow.txt", "w") as f:
 
     #Railway 47
     f.write("R-2001 = 0\n")
-    f.write("IF ( O-2047 | O-2049 |O-2048 | O-2047 | O-2046 | O-2045 ) {\n")
+    f.write("IF ( O-2047 | O-2049 | O-2048 | O-2047 | O-2046 | O-2045 ) {\n")
     f.write("R-2001 = 1\n")
     f.write("}\n")
 
