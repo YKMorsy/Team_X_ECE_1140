@@ -12,7 +12,7 @@ class Dispatcher:
     # Function to schedule single train
     def scheduleSingle(self, station_list, line):
         train_id = len(self.trains) + 1
-        self.trains.append(Train(train_id, station_list, line))
+        self.trains.append(Train(train_id, station_list, line, self.trains))
 
     def scheduleMultiple(self, filepath):
         schedule = pd.read_excel(filepath)
