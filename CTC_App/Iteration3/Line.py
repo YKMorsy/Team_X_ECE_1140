@@ -77,7 +77,10 @@ class Line:
             pass
 
     def getRoute(self):
-        return self.__default_route
+        route = []
+        for block in self.__default_route:
+            route.append(block)
+        return route
 
     # Called by UI:
     # Function to return list of closed blocks
