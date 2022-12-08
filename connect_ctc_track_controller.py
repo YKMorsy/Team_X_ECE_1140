@@ -1,4 +1,4 @@
-def connect_ctc_track_controller(dispatcherCTC, greenLineCTC, redLineCTC, trcControl):
+def connect_ctc_track_controller(dispatcherCTC, greenLineCTC, redLineCTC, trcControl, manualModeChecked):
     
     # Setters of CTC (WAYSIDE -> CTC)
     occupancy_from_trc = trcControl[0].get_occupancy() | trcControl[1].get_occupancy() | trcControl[2].get_occupancy() | trcControl[3].get_occupancy() | trcControl[4].get_occupancy() | trcControl[5].get_occupancy()
@@ -10,11 +10,14 @@ def connect_ctc_track_controller(dispatcherCTC, greenLineCTC, redLineCTC, trcCon
     dispatcherCTC.setOccupancy(occupancy_from_trc)
 
     green_switch_position_trc = trcControl[3].get_switch_positions() | trcControl[4].get_switch_positions() | trcControl[5].get_switch_positions()
-
-    greenLineCTC.setSwitchPosition(green_switch_position_trc)
+    
+    if manualModeChecked == False:
+        greenLineCTC.setSwitchPosition(green_switch_position_trc)
 
     red_switch_position_trc = trcControl[0].get_switch_positions() | trcControl[1].get_switch_positions() | trcControl[2].get_switch_positions()
-    redLineCTC.setSwitchPosition(red_switch_position_trc)
+    
+    if manualModeChecked == False:
+        redLineCTC.setSwitchPosition(red_switch_position_trc)
 
     green_block_status_trc = trcControl[3].get_statuses() | trcControl[4].get_statuses() | trcControl[5].get_statuses()
     greenLineCTC.setBlockStatus(green_block_status_trc)

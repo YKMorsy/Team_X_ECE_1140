@@ -42,8 +42,13 @@ class Line:
 
         for i in range(0, len(block_numbers)):
             # Append block objects to block list
+            railway_cross = -1
+            if block_railway_crossing[i] == 1:
+                railway_cross = True
+            elif block_railway_crossing[i] == 0:
+                railway_cross = False
             self.block_list.append(Block(block_numbers[i], block_lengths[i], block_speed_limits[i], 
-            block_switches_1[i], block_switches_2[i], block_stations[i], block_railway_crossing[i]))
+            block_switches_1[i], block_switches_2[i], block_stations[i], railway_cross))
             
             # Append section+block to section_block dictionary
             if block_section[i] in self.__section_block_dict:
@@ -126,6 +131,7 @@ class Line:
         for block in self.block_list:
             if block.block_railway != -1:
                 cross_state.append([block.block_number, block.block_railway])
+        
         
         return cross_state
         

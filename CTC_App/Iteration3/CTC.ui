@@ -23,7 +23,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>1</number>
    </property>
    <widget class="QWidget" name="Schedule">
     <property name="enabled">
@@ -167,7 +167,7 @@
     <widget class="QLabel" name="throughputLabel">
      <property name="geometry">
       <rect>
-       <x>500</x>
+       <x>480</x>
        <y>60</y>
        <width>91</width>
        <height>41</height>
@@ -183,9 +183,9 @@
     <widget class="QLabel" name="throughPutValue">
      <property name="geometry">
       <rect>
-       <x>610</x>
+       <x>600</x>
        <y>60</y>
-       <width>91</width>
+       <width>101</width>
        <height>41</height>
       </rect>
      </property>
@@ -201,7 +201,7 @@
       <rect>
        <x>600</x>
        <y>30</y>
-       <width>111</width>
+       <width>101</width>
        <height>41</height>
       </rect>
      </property>
@@ -215,7 +215,7 @@
     <widget class="QLabel" name="currentLineLabel">
      <property name="geometry">
       <rect>
-       <x>500</x>
+       <x>480</x>
        <y>30</y>
        <width>91</width>
        <height>41</height>
@@ -317,7 +317,7 @@
       </rect>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="redEditStacked">
       <widget class="QGroupBox" name="redEditDispatch">
@@ -605,7 +605,7 @@
     <widget class="QLabel" name="timeLabel">
      <property name="geometry">
       <rect>
-       <x>500</x>
+       <x>480</x>
        <y>0</y>
        <width>91</width>
        <height>41</height>
@@ -621,9 +621,9 @@
     <widget class="QLabel" name="timeValue">
      <property name="geometry">
       <rect>
-       <x>570</x>
+       <x>560</x>
        <y>0</y>
-       <width>171</width>
+       <width>181</width>
        <height>41</height>
       </rect>
      </property>
@@ -678,7 +678,7 @@
       <number>1</number>
      </property>
      <widget class="QWidget" name="redInfo">
-      <widget class="QGroupBox" name="greenClosedBlocksGroup_2">
+      <widget class="QGroupBox" name="redClosedBlocksGroup">
        <property name="geometry">
         <rect>
          <x>20</x>
@@ -690,7 +690,7 @@
        <property name="title">
         <string>Closed Blocks</string>
        </property>
-       <widget class="QTableWidget" name="greenClosedBlocksTable_2">
+       <widget class="QTableWidget" name="redClosedBlocksTable">
         <property name="geometry">
          <rect>
           <x>10</x>
@@ -709,7 +709,7 @@
         </column>
        </widget>
       </widget>
-      <widget class="QGroupBox" name="greenSwitchStateGroup_2">
+      <widget class="QGroupBox" name="redSwitchStateGroup">
        <property name="geometry">
         <rect>
          <x>390</x>
@@ -721,7 +721,7 @@
        <property name="title">
         <string>Switch State</string>
        </property>
-       <widget class="QTableWidget" name="greenSwitchStateTable_2">
+       <widget class="QTableWidget" name="redSwitchStateTable">
         <property name="geometry">
          <rect>
           <x>10</x>
@@ -748,7 +748,7 @@
         </column>
        </widget>
       </widget>
-      <widget class="QGroupBox" name="greenChangeSwitchGroup_2">
+      <widget class="QGroupBox" name="redChangeSwitchGroup">
        <property name="geometry">
         <rect>
          <x>390</x>
@@ -760,7 +760,7 @@
        <property name="title">
         <string>Switch Position</string>
        </property>
-       <widget class="QComboBox" name="greenChooseOriginCombo_2">
+       <widget class="QComboBox" name="redChooseOriginCombo">
         <property name="geometry">
          <rect>
           <x>190</x>
@@ -770,7 +770,7 @@
          </rect>
         </property>
        </widget>
-       <widget class="QPushButton" name="greenSetState_2">
+       <widget class="QPushButton" name="redSetState">
         <property name="geometry">
          <rect>
           <x>20</x>
@@ -796,7 +796,7 @@
          <string>Choose Origin Block:</string>
         </property>
        </widget>
-       <widget class="QComboBox" name="greenChooseTargetCombo_2">
+       <widget class="QComboBox" name="redChooseTargetCombo">
         <property name="geometry">
          <rect>
           <x>190</x>
@@ -820,7 +820,7 @@
         </property>
        </widget>
       </widget>
-      <widget class="QGroupBox" name="greenCrossingGroup_2">
+      <widget class="QGroupBox" name="redCrossingGroup">
        <property name="geometry">
         <rect>
          <x>790</x>
@@ -832,7 +832,7 @@
        <property name="title">
         <string>Crossing Status</string>
        </property>
-       <widget class="QTableWidget" name="greenCrossingTable_2">
+       <widget class="QTableWidget" name="redCrossingTable">
         <property name="geometry">
          <rect>
           <x>10</x>
@@ -859,7 +859,7 @@
         </column>
        </widget>
       </widget>
-      <widget class="QGroupBox" name="greenMaintenanceGroup_2">
+      <widget class="QGroupBox" name="redMaintenanceGroup">
        <property name="geometry">
         <rect>
          <x>20</x>
@@ -871,7 +871,7 @@
        <property name="title">
         <string>Block Maintenance</string>
        </property>
-       <widget class="QComboBox" name="chooseMaintenanceCombo_2">
+       <widget class="QComboBox" name="redChooseMaintenanceCombo">
         <property name="geometry">
          <rect>
           <x>170</x>
@@ -881,7 +881,7 @@
          </rect>
         </property>
        </widget>
-       <widget class="QPushButton" name="putMaintenanceButton_2">
+       <widget class="QPushButton" name="redMaintenanceButton">
         <property name="geometry">
          <rect>
           <x>18</x>
