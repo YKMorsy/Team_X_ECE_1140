@@ -13,10 +13,11 @@ from datetime import datetime
 # CTCDispatcher = Dispatcher()
 
 class CTCApp(QWidget):
-    def __init__(self, greenLine, CTCDispatcher):
+    def __init__(self, greenLine, redLine, CTCDispatcher):
         super().__init__()
         
         self.greenLine = greenLine
+        self.redLine = redLine
         self.CTCDispatcher = CTCDispatcher
 
         self.train_list_length = 0
@@ -244,6 +245,9 @@ class CTCApp(QWidget):
         self.editDispatchStacked.setCurrentIndex(0)
         self.trainTableStacked.setCurrentIndex(0)
         self.chooseStationCombo.clear()
+        station_list = self.redLine.line_station_list
+        for station in station_list:
+            self.chooseStationCombo.addItem(station)
 
     # Function to update display when green line is chosen
     def chooseGreenLine(self):
@@ -335,13 +339,17 @@ class CTCApp(QWidget):
 
             # destination_stations = [x for _, x in sorted(zip(order_list, destination_stations))]
 
-            # Call dispatch function
-            if self.current_line == "Green":
-                self.CTCDispatcher.scheduleSingle(destination_stations, self.greenLine)
+            # # Call dispatch function
+            # if self.current_line == "Green":
+            #     self.CTCDispatcher.scheduleSingle(destination_stations, self.greenLine)
 
-            # Update table with train
-            cur_train = self.CTCDispatcher.all_trains[-1]
+            
+            
             if self.current_line == "Green":
+                # Call dispatch function
+                self.CTCDispatcher.scheduleSingle(destination_stations, self.greenLine)
+                # Update table with train
+                cur_train = self.CTCDispatcher.all_trains[-1]
                 rowPosition = self.greenTrainTable.rowCount()
                 self.greenTrainTable.insertRow(rowPosition)
                 self.greenTrainTable.setItem(rowPosition, 0, QTableWidgetItem(str(cur_train.train_id)))
@@ -350,6 +358,10 @@ class CTCApp(QWidget):
 
                 self.greenChooseTrain.addItem(str(cur_train.train_id))
             elif self.current_line == "Red":
+
+                self.CTCDispatcher.scheduleSingle(destination_stations, self.redLine)
+
+                cur_train = self.CTCDispatcher.all_trains[-1]
                 rowPosition = self.redTrainTable.rowCount()
                 self.redTrainTable.insertRow(rowPosition)
                 self.redTrainTable.setItem(rowPosition, 0, QTableWidgetItem(str(cur_train.train_id)))

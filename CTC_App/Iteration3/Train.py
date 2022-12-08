@@ -16,6 +16,9 @@ class Train:
         if self.line.line_color == 'Green':
             self.cur_section = 'YARD'
             self.next_section = 'K'
+        elif self.line.line_color == 'Red':
+            self.cur_section = 'YARD'
+            self.next_section = 'C'
 
         # Set authority and suggested speed of yard and next block
         self.line.block_list[self.route[0]].block_authority = True
