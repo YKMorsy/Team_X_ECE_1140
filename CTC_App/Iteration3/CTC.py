@@ -552,8 +552,6 @@ class CTCApp(QWidget):
                 cur_block = self.redLine.block_list[int(cur_origin)]
                 switch_1 = cur_block.block_switch_1
                 switch_2 = cur_block.block_switch_2
-                print(cur_origin)
-                print(switch_1)
 
                 self.redChooseTargetCombo.clear()
                 self.redChooseTargetCombo.addItem(str(switch_1))
