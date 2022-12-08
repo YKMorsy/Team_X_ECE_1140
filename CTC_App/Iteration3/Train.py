@@ -248,7 +248,293 @@ class Train:
                             break
             
             elif self.line.line_color == 'Red':
-                pass
+                # Make sure no collisions happen before entering a two way
+                # Get current and next section using current location
+                if block_number >= 1 and block_number <= 9:
+                    self.cur_section = "ABC"
+                    self.next_section = "FGH1"
+                elif self.cur_section == "ABC" and block_number >= 16 and block_number <= 27:
+                    self.cur_section = "FGH1"
+                    self.next_section = "H2"
+                elif self.cur_section == "FGH1" and block_number >= 28 and block_number <= 32:
+                    self.cur_section = "H2"
+                    self.next_section = "H3"
+                elif self.cur_section == "H2" and block_number >= 33 and block_number <= 38:
+                    self.cur_section = "H3"
+                    self.next_section = "H4"
+                elif self.cur_section == "H3" and block_number >= 39 and block_number <= 43:
+                    self.cur_section = "H4"
+                    self.next_section = "H5IJ1"
+                elif self.cur_section == "H4" and block_number >= 44 and block_number <= 52:
+                    self.cur_section = "H5IJ1"
+                    self.next_section = "J2KLMN"
+                elif self.cur_section == "H5IJ1" and block_number >= 53 and block_number <= 66:
+                    self.cur_section = "J2KLMN"
+                    self.next_section = "H5IJ1"
+                elif self.cur_section == "J2KLMN" and block_number >= 44 and block_number <= 52:
+                    self.cur_section = "H5IJ1"
+                    self.next_section = "OPQ"
+                elif self.cur_section == "H5IJ1" and block_number >= 67 and block_number <= 71:
+                    self.cur_section = "OPQ"
+                    self.next_section = "H3"
+                elif self.cur_section == "OPQ" and block_number >= 33 and block_number <= 38:
+                    self.cur_section = "H3"
+                    self.next_section = "RST"
+                elif self.cur_section == "H3" and block_number >= 72 and block_number <= 76:
+                    self.cur_section = "RST"
+                    self.next_section = "FGH1"
+                elif self.cur_section == "RST" and block_number >= 16 and block_number <= 27:
+                    self.cur_section = "FGH1"
+                    self.next_section = "ED"
+                elif self.cur_section == "FGH1" and block_number >= 16 and block_number <= 27:
+                    self.cur_section = "ED"
+                    self.next_section = "YARD"
+
+                # # Check if train is on section J2KLMN and see if train is coming from H5IJ1 to J2KLMN
+                if self.cur_section == "J2KLMN":
+                    for train in self.train_list:
+                        if train.cur_section == "H5IJ1" and train.next_section == "J2KLMN":
+                            # Check if train is on the last 4 blocks of OPQ
+                            if block_number == 63:
+                                suggested_speed = 0.75*current_block.block_speed_limit
+                                self.line.block_list[self.route[0]].block_authority = True
+                                self.line.block_list[self.route[1]].block_authority = True
+                                self.line.block_list[self.route[0]].block_suggested_speed = suggested_speed
+                                self.line.block_list[self.route[1]].block_suggested_speed = self.line.block_list[self.route[1]].block_speed_limit
+                                print("Possible Two Way Collision... Avoiding")
+                            elif block_number == 64:
+                                suggested_speed = 0.5*current_block.block_speed_limit
+                                self.line.block_list[self.route[0]].block_authority = True
+                                self.line.block_list[self.route[1]].block_authority = True
+                                self.line.block_list[self.route[0]].block_suggested_speed = suggested_speed
+                                self.line.block_list[self.route[1]].block_suggested_speed = self.line.block_list[self.route[1]].block_speed_limit
+                                print("Possible Two Way Collision... Avoiding")
+                            elif block_number == 65:
+                                suggested_speed = 1
+                                self.line.block_list[self.route[0]].block_authority = True
+                                self.line.block_list[self.route[1]].block_authority = False
+                                self.line.block_list[self.route[0]].block_suggested_speed = suggested_speed
+                                self.line.block_list[self.route[1]].block_suggested_speed = self.line.block_list[self.route[1]].block_speed_limit
+                                self.route.insert(0, 64)
+                                print("Possible Two Way Collision... Avoiding")
+                            else:
+                                suggested_speed = current_block.block_speed_limit
+                                self.line.block_list[self.route[0]].block_authority = True
+                                self.line.block_list[self.route[1]].block_authority = True
+
+                                self.line.block_list[self.route[0]].block_suggested_speed = suggested_speed
+                                self.line.block_list[self.route[1]].block_suggested_speed = self.line.block_list[self.route[1]].block_speed_limit
+                            print("Suggested Speed Is " + str(suggested_speed))
+                            print("Next Block Authority Is " + str(self.line.block_list[self.route[2]].block_authority))
+
+                            two_way_collision_flag = True
+
+                            break
+                # # Check if train is on section H4 and see if train is coming from H5IJ1 to OPQ
+                elif self.cur_section == "H4":
+                    for train in self.train_list:
+                        if train.cur_section == "H5IJ1" and train.next_section == "OPQ":
+                            
+                            # Check if train is on the last 4 blocks of OPQ
+                            if block_number == 40:
+                                suggested_speed = 0.75*current_block.block_speed_limit
+                                self.line.block_list[self.route[0]].block_authority = True
+                                self.line.block_list[self.route[1]].block_authority = True
+                                self.line.block_list[self.route[0]].block_suggested_speed = suggested_speed
+                                self.line.block_list[self.route[1]].block_suggested_speed = self.line.block_list[self.route[1]].block_speed_limit
+                                print("Possible Two Way Collision... Avoiding")
+                            elif block_number == 41:
+                                suggested_speed = 0.5*current_block.block_speed_limit
+                                self.line.block_list[self.route[0]].block_authority = True
+                                self.line.block_list[self.route[1]].block_authority = True
+                                self.line.block_list[self.route[0]].block_suggested_speed = suggested_speed
+                                self.line.block_list[self.route[1]].block_suggested_speed = self.line.block_list[self.route[1]].block_speed_limit
+                                print("Possible Two Way Collision... Avoiding")
+                            elif block_number == 42:
+                                suggested_speed = 1
+                                self.line.block_list[self.route[0]].block_authority = True
+                                self.line.block_list[self.route[1]].block_authority = False
+                                self.line.block_list[self.route[0]].block_suggested_speed = suggested_speed
+                                self.line.block_list[self.route[1]].block_suggested_speed = self.line.block_list[self.route[1]].block_speed_limit
+                                self.route.insert(0, 41)
+                                print("Possible Two Way Collision... Avoiding")
+                            else:
+                                suggested_speed = current_block.block_speed_limit
+                                self.line.block_list[self.route[0]].block_authority = True
+                                self.line.block_list[self.route[1]].block_authority = True
+
+                                self.line.block_list[self.route[0]].block_suggested_speed = suggested_speed
+                                self.line.block_list[self.route[1]].block_suggested_speed = self.line.block_list[self.route[1]].block_speed_limit
+                            print("Suggested Speed Is " + str(suggested_speed))
+                            print("Next Block Authority Is " + str(self.line.block_list[self.route[2]].block_authority))
+
+                            two_way_collision_flag = True
+
+                            break
+                # # Check if train is on section OPQ and see if train is coming from H3 to H4
+                elif self.cur_section == "OPQ":
+                    for train in self.train_list:
+                        if train.cur_section == "H3" and train.next_section == "H4":
+                            
+                            # Check if train is on the last 4 blocks of OPQ
+                            if block_number == 68:
+                                suggested_speed = 0.75*current_block.block_speed_limit
+                                self.line.block_list[self.route[0]].block_authority = True
+                                self.line.block_list[self.route[1]].block_authority = True
+                                self.line.block_list[self.route[0]].block_suggested_speed = suggested_speed
+                                self.line.block_list[self.route[1]].block_suggested_speed = self.line.block_list[self.route[1]].block_speed_limit
+                                print("Possible Two Way Collision... Avoiding")
+                            elif block_number == 69:
+                                suggested_speed = 0.5*current_block.block_speed_limit
+                                self.line.block_list[self.route[0]].block_authority = True
+                                self.line.block_list[self.route[1]].block_authority = True
+                                self.line.block_list[self.route[0]].block_suggested_speed = suggested_speed
+                                self.line.block_list[self.route[1]].block_suggested_speed = self.line.block_list[self.route[1]].block_speed_limit
+                                print("Possible Two Way Collision... Avoiding")
+                            elif block_number == 70:
+                                suggested_speed = 1
+                                self.line.block_list[self.route[0]].block_authority = True
+                                self.line.block_list[self.route[1]].block_authority = False
+                                self.line.block_list[self.route[0]].block_suggested_speed = suggested_speed
+                                self.line.block_list[self.route[1]].block_suggested_speed = self.line.block_list[self.route[1]].block_speed_limit
+                                self.route.insert(0, 69)
+                                print("Possible Two Way Collision... Avoiding")
+                            else:
+                                suggested_speed = current_block.block_speed_limit
+                                self.line.block_list[self.route[0]].block_authority = True
+                                self.line.block_list[self.route[1]].block_authority = True
+
+                                self.line.block_list[self.route[0]].block_suggested_speed = suggested_speed
+                                self.line.block_list[self.route[1]].block_suggested_speed = self.line.block_list[self.route[1]].block_speed_limit
+                            print("Suggested Speed Is " + str(suggested_speed))
+                            print("Next Block Authority Is " + str(self.line.block_list[self.route[2]].block_authority))
+
+                            two_way_collision_flag = True
+
+                            break
+                # # Check if train is on section H2 and see if train is coming from H3 to RST
+                elif self.cur_section == "H2":
+                    for train in self.train_list:
+                        if train.cur_section == "H3" and train.next_section == "RST":
+                            
+                            # Check if train is on the last 4 blocks of OPQ
+                            if block_number == 29:
+                                suggested_speed = 0.75*current_block.block_speed_limit
+                                self.line.block_list[self.route[0]].block_authority = True
+                                self.line.block_list[self.route[1]].block_authority = True
+                                self.line.block_list[self.route[0]].block_suggested_speed = suggested_speed
+                                self.line.block_list[self.route[1]].block_suggested_speed = self.line.block_list[self.route[1]].block_speed_limit
+                                print("Possible Two Way Collision... Avoiding")
+                            elif block_number == 30:
+                                suggested_speed = 0.5*current_block.block_speed_limit
+                                self.line.block_list[self.route[0]].block_authority = True
+                                self.line.block_list[self.route[1]].block_authority = True
+                                self.line.block_list[self.route[0]].block_suggested_speed = suggested_speed
+                                self.line.block_list[self.route[1]].block_suggested_speed = self.line.block_list[self.route[1]].block_speed_limit
+                                print("Possible Two Way Collision... Avoiding")
+                            elif block_number == 31:
+                                suggested_speed = 1
+                                self.line.block_list[self.route[0]].block_authority = True
+                                self.line.block_list[self.route[1]].block_authority = False
+                                self.line.block_list[self.route[0]].block_suggested_speed = suggested_speed
+                                self.line.block_list[self.route[1]].block_suggested_speed = self.line.block_list[self.route[1]].block_speed_limit
+                                self.route.insert(0, 30)
+                                print("Possible Two Way Collision... Avoiding")
+                            else:
+                                suggested_speed = current_block.block_speed_limit
+                                self.line.block_list[self.route[0]].block_authority = True
+                                self.line.block_list[self.route[1]].block_authority = True
+
+                                self.line.block_list[self.route[0]].block_suggested_speed = suggested_speed
+                                self.line.block_list[self.route[1]].block_suggested_speed = self.line.block_list[self.route[1]].block_speed_limit
+                            print("Suggested Speed Is " + str(suggested_speed))
+                            print("Next Block Authority Is " + str(self.line.block_list[self.route[2]].block_authority))
+
+                            two_way_collision_flag = True
+
+                            break
+                # # Check if train is on section RST and see if train is coming from FGH1 to H2
+                elif self.cur_section == "RST":
+                    for train in self.train_list:
+                        if train.cur_section == "FGH1" and train.next_section == "H2":
+                            
+                            # Check if train is on the last 4 blocks of OPQ
+                            if block_number == 73:
+                                suggested_speed = 0.75*current_block.block_speed_limit
+                                self.line.block_list[self.route[0]].block_authority = True
+                                self.line.block_list[self.route[1]].block_authority = True
+                                self.line.block_list[self.route[0]].block_suggested_speed = suggested_speed
+                                self.line.block_list[self.route[1]].block_suggested_speed = self.line.block_list[self.route[1]].block_speed_limit
+                                print("Possible Two Way Collision... Avoiding")
+                            elif block_number == 74:
+                                suggested_speed = 0.5*current_block.block_speed_limit
+                                self.line.block_list[self.route[0]].block_authority = True
+                                self.line.block_list[self.route[1]].block_authority = True
+                                self.line.block_list[self.route[0]].block_suggested_speed = suggested_speed
+                                self.line.block_list[self.route[1]].block_suggested_speed = self.line.block_list[self.route[1]].block_speed_limit
+                                print("Possible Two Way Collision... Avoiding")
+                            elif block_number == 75:
+                                suggested_speed = 1
+                                self.line.block_list[self.route[0]].block_authority = True
+                                self.line.block_list[self.route[1]].block_authority = False
+                                self.line.block_list[self.route[0]].block_suggested_speed = suggested_speed
+                                self.line.block_list[self.route[1]].block_suggested_speed = self.line.block_list[self.route[1]].block_speed_limit
+                                self.route.insert(0, 74)
+                                print("Possible Two Way Collision... Avoiding")
+                            else:
+                                suggested_speed = current_block.block_speed_limit
+                                self.line.block_list[self.route[0]].block_authority = True
+                                self.line.block_list[self.route[1]].block_authority = True
+
+                                self.line.block_list[self.route[0]].block_suggested_speed = suggested_speed
+                                self.line.block_list[self.route[1]].block_suggested_speed = self.line.block_list[self.route[1]].block_speed_limit
+                            print("Suggested Speed Is " + str(suggested_speed))
+                            print("Next Block Authority Is " + str(self.line.block_list[self.route[2]].block_authority))
+
+                            two_way_collision_flag = True
+
+                            break
+                # # Check if train is on section ABC and see if train is coming from FGH1 to ED
+                elif self.cur_section == "ABC":
+                    for train in self.train_list:
+                        if train.cur_section == "FGH1" and train.next_section == "ED":
+                            
+                            # Check if train is on the last 4 blocks of OPQ
+                            if block_number == 4:
+                                suggested_speed = 0.75*current_block.block_speed_limit
+                                self.line.block_list[self.route[0]].block_authority = True
+                                self.line.block_list[self.route[1]].block_authority = True
+                                self.line.block_list[self.route[0]].block_suggested_speed = suggested_speed
+                                self.line.block_list[self.route[1]].block_suggested_speed = self.line.block_list[self.route[1]].block_speed_limit
+                                print("Possible Two Way Collision... Avoiding")
+                            elif block_number == 3:
+                                suggested_speed = 0.5*current_block.block_speed_limit
+                                self.line.block_list[self.route[0]].block_authority = True
+                                self.line.block_list[self.route[1]].block_authority = True
+                                self.line.block_list[self.route[0]].block_suggested_speed = suggested_speed
+                                self.line.block_list[self.route[1]].block_suggested_speed = self.line.block_list[self.route[1]].block_speed_limit
+                                print("Possible Two Way Collision... Avoiding")
+                            elif block_number == 2:
+                                suggested_speed = 1
+                                self.line.block_list[self.route[0]].block_authority = True
+                                self.line.block_list[self.route[1]].block_authority = False
+                                self.line.block_list[self.route[0]].block_suggested_speed = suggested_speed
+                                self.line.block_list[self.route[1]].block_suggested_speed = self.line.block_list[self.route[1]].block_speed_limit
+                                self.route.insert(0, 3)
+                                print("Possible Two Way Collision... Avoiding")
+                            else:
+                                suggested_speed = current_block.block_speed_limit
+                                self.line.block_list[self.route[0]].block_authority = True
+                                self.line.block_list[self.route[1]].block_authority = True
+
+                                self.line.block_list[self.route[0]].block_suggested_speed = suggested_speed
+                                self.line.block_list[self.route[1]].block_suggested_speed = self.line.block_list[self.route[1]].block_speed_limit
+                            print("Suggested Speed Is " + str(suggested_speed))
+                            print("Next Block Authority Is " + str(self.line.block_list[self.route[2]].block_authority))
+
+                            two_way_collision_flag = True
+
+                            break
 
             if two_way_collision_flag == False:
                 if len(self.route) >= 1:
