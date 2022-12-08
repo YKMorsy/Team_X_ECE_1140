@@ -31,7 +31,7 @@ class Dispatcher:
 
     # Function that updates station list
     def updateStations(self, idx, station_list):
-        self.trains[idx].updateStations(station_list)
+        self.all_trains[idx].updateStations(station_list)
 
     # Function to check if train object needs to be created
     def checkDispatch(self, line):

@@ -137,7 +137,7 @@ class PLC_Parser ():
 						else:
 							return "Found Unknown character '"+ str(arg) +"' in line '"+str(line)+" '"
 					except  Exception as e:
-						print(e)
+						# print(e) ### COMMENTED BY YASSER... WILL UNCOMMENT
 						return str(e)
 		return changes
 
