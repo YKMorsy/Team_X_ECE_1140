@@ -123,9 +123,9 @@ with open("track_controller/PLCs/RedLineBottom_Yellow.txt", "w") as f:
         f.write("}\n")
 
     #Railway 47
-    f.write("R-2001 = 0\n")
+    f.write("R-2047 = 0\n")
     f.write("IF ( O-2047 | O-2049 | O-2048 | O-2047 | O-2046 | O-2045 ) {\n")
-    f.write("R-2001 = 1\n")
+    f.write("R-2047 = 1\n")
     f.write("}\n")
 
     #write lights logic
@@ -193,9 +193,9 @@ with open("track_controller/PLCs/GreenLineTop_Red.txt", "w") as f:
 
     #write lights and rail way crossing logic
     #Railway
-    f.write("R-1001 = 0\n")
+    f.write("R-1019 = 0\n")
     f.write("IF ( O-1020 | O-1021 | O-1019 | O-1018 | O-1017 | O-1016 ) {\n")
-    f.write("R-1001 = 1\n")
+    f.write("R-1019 = 1\n")
     f.write("}\n")
 
     #Lights
