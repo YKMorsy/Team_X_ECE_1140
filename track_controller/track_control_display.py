@@ -8,7 +8,7 @@ import copy
 from track_controller.test_window import test_window
 
 qt_creator_file = "track_controller.ui"
-Ui_MainWindow, QtBaseClass = uic.loadUiType("track_controller/"+qt_creator_file)
+Ui_MainWindow, QtBaseClass = uic.loadUiType("track_controller/UIs/"+qt_creator_file)
 
 class track_control_display (QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self, trc):
@@ -39,8 +39,8 @@ class track_control_display (QtWidgets.QMainWindow, Ui_MainWindow):
         self.update_tables()
 
     def maintence_box_checked(self):
-        self.track_data.set_maintenance_mode(self.maintenance_check_box.isChecked())
         self.update_tables()
+        self.track_data.set_maintenance_mode(self.maintenance_check_box.isChecked())
 
     def item_changed(self, item):
         if item.column() ==1:
@@ -86,16 +86,18 @@ class track_control_display (QtWidgets.QMainWindow, Ui_MainWindow):
 
     def update_tables(self):
         self.update_table(self.track_data.get_switch_positions(), self.SwitchPosTable, False)
-        self.update_table(self.track_data.get_switch_positions(), self.maint_SwitchPosTable, self.maintenance_check_box.isChecked())
-        self.update_table(self.track_data.get_authority(), self.maint_Auth, False)
-        self.update_table(self.track_data.get_commanded_speed(), self.maint_CS, False)
+        if not self.track_data.get_maintenance_mode() :
+            self.update_table(self.track_data.get_switch_positions(), self.maint_SwitchPosTable, self.maintenance_check_box.isChecked())
+            self.update_light_table(self.track_data.get_light_colors(), self.maint_LightColorTable, self.maintenance_check_box.isChecked())
+            self.update_table(self.track_data.get_railway_crossings(), self.maint_RailwayCrossingTable, self.maintenance_check_box.isChecked())
+            self.update_table(self.track_data.get_statuses(), self.maint_StatusTable, self.maintenance_check_box.isChecked())
+            
+        self.update_table(self.track_data.get_authority(), self.maint_Auth, False)   
         self.update_table(self.track_data.get_occupancy(), self.maint_Occ_table, False)
-        self.update_table(self.track_data.get_railway_crossings(), self.RailwayCrossingTable, False)
+        self.update_table(self.track_data.get_commanded_speed(), self.maint_CS, False)
         self.update_light_table(self.track_data.get_light_colors(), self.LightColorTable, False)
-        self.update_light_table(self.track_data.get_light_colors(), self.maint_LightColorTable, self.maintenance_check_box.isChecked())
-        self.update_table(self.track_data.get_railway_crossings(), self.maint_RailwayCrossingTable, self.maintenance_check_box.isChecked())
-        self.update_table(self.track_data.get_statuses(), self.maint_StatusTable, True)
         self.update_table(self.track_data.get_statuses(), self.maint_StatusTable_2, False)
+        self.update_table(self.track_data.get_railway_crossings(), self.RailwayCrossingTable, False)
         self.unsaved_changes_label.setText("")
 
     def update_table(self, data, table, changable):
@@ -166,5 +168,6 @@ class track_control_display (QtWidgets.QMainWindow, Ui_MainWindow):
                     
     def run_PLC(self):
         #self.track_data.ParsePLC()
-        self.update_tables()
+        if not self.track_data.get_maintenance_mode() :
+            self.update_tables()
         #print("RUN PLC")

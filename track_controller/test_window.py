@@ -8,7 +8,7 @@ import copy
 from track_controller.track_controller import WaysideController
 
 TestingPLCWind = "testing_PLC.ui"
-Ui_TestingWindow, QtBaseClass = uic.loadUiType("track_controller/"+TestingPLCWind)
+Ui_TestingWindow, QtBaseClass = uic.loadUiType("track_controller/UIs/"+TestingPLCWind)
 
 class test_window (QtWidgets.QMainWindow, Ui_TestingWindow):
     def __init__(self, trc):

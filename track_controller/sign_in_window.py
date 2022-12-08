@@ -8,7 +8,7 @@ import copy
 from track_controller.track_control_display import track_control_display
 
 sign_in_wind = "sign_in.ui"
-Ui_sign_in_window, QtBaseClass = uic.loadUiType("track_controller/"+sign_in_wind)
+Ui_sign_in_window, QtBaseClass = uic.loadUiType("track_controller/UIs/"+sign_in_wind)
 
 class sign_in_window (QtWidgets.QMainWindow, Ui_sign_in_window):
     def __init__(self):
