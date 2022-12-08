@@ -57,7 +57,7 @@ def connect_ctc_track_controller(dispatcherCTC, greenLineCTC, redLineCTC, trcCon
     for key in red_authority_total:
         if (((key-2000) >= 1) and ((key-2000) <= 24)) or (key-2000) == 0:
             for_ws_0[key] = red_authority_total[key]
-        if (((key-2000) >= 23) and ((key-2000) <= 46)) or (((key-2000) >= 67) and ((key-1000) <= 76)):
+        if (((key-2000) >= 23) and ((key-2000) <= 46)) or (((key-2000) >= 67) and ((key-2000) <= 76)):
             for_ws_1[key] = red_authority_total[key]
         if (((key-2000) >= 45) and ((key-2000) <= 66)):
             for_ws_2[key] = red_authority_total[key]
