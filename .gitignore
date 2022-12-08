@@ -1,0 +1,4 @@
+
+*.pyc
+track_controller/~$TrackLayout_TrackControl.xlsx
+.vs/slnx.sqlite
