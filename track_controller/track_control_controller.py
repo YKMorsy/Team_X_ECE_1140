@@ -92,7 +92,7 @@ class track_control_controller():
             stat.update({new_block: True})
             sug.update({new_block: 0b00100000})
             com.update({new_block: 0b00000000})
-            lim.update({new_block: speed_lim[i]})
+            lim.update({new_block: int(float(speed_lim[i]))})
             if is_light[i] == 1:
                 light.update({new_block: [True, True]})
             if is_switch[i] == 1:
@@ -259,7 +259,7 @@ class track_control_controller():
             stat.update({new_block: True})
             sug.update({new_block: 0b00100000})
             com.update({new_block: 0b00000000})
-            lim.update({new_block: speed_lim[i]})
+            lim.update({new_block: int(float(speed_lim[i]))})
             if is_light[i] == 1:
                 light.update({new_block: [True, True]})
             if is_switch[i] == 1:

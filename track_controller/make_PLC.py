@@ -3,17 +3,23 @@ def switch_if(f, past, fut, other):
 
 
 with open("track_controller/PLCs/RedLineTop_Red.txt", "w") as f:
-    for i in range(2001, 2024):
+    for i in range(2000, 2024):
         past = i-1
         fut = i+1
         if (i == 2001):
             past =  2016
+        elif(i == 2009):
+            fut = 2000
+        elif (i ==2010):
+            past = 2000
+
         if(i == 2016):
             other = 2001
             f.write("IF ( ( ( A-"+str(past)+" & F-"+str(past)+" & ! O-"+str(past)+" ) | ( A-"+str(fut)+" & F-"+str(fut)+" & ! O-"+str(fut)+" ) | ( A-"+str(other)+" & F-"+str(other)+" & ! O-"+str(other)+" ) ) & O-"+str(i)+" ) {\n")
-        elif(i == 2009):
-            other = 2000
-            f.write("IF ( ( ( A-"+str(past)+" & F-"+str(past)+" & ! O-"+str(past)+" ) | ( A-"+str(fut)+" & F-"+str(fut)+" & ! O-"+str(fut)+" ) | ( A-"+str(other)+" & F-"+str(other)+" & ! O-"+str(other)+" ) ) & O-"+str(i)+" ) {\n")
+        elif(i == 2000):
+            other = 2009
+            fut = 2010
+            f.write("IF ( ( ( A-"+str(fut)+" & F-"+str(fut)+" & ! O-"+str(fut)+" ) | ( A-"+str(other)+" & F-"+str(other)+" & ! O-"+str(other)+" ) ) & O-"+str(i)+" ) {\n")
         else:
             f.write("IF ( ( ( A-"+str(past)+" & F-"+str(past)+" & ! O-"+str(past)+" ) | ( A-"+str(fut)+" & F-"+str(fut)+" & ! O-"+str(fut)+" ) ) & O-"+str(i)+" ) {\n")
         f.write("C-"+str(i)+" = D-"+str(i)+"\n")
