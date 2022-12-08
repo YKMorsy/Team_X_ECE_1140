@@ -43,6 +43,12 @@ class CTCApp(QWidget):
         header.setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)
         header = self.greenCrossingTable.horizontalHeader() 
         header.setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)
+        header = self.redClosedBlocksTable.horizontalHeader() 
+        header.setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)
+        header = self.redSwitchStateTable.horizontalHeader() 
+        header.setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)
+        header = self.redCrossingTable.horizontalHeader() 
+        header.setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)
 
         ############### SCHEDULE/TRAINS WINDOW ###############
 
@@ -76,8 +82,14 @@ class CTCApp(QWidget):
         self.greenLineButton_2.clicked.connect(self.chooseGreenLineMaint)
         self.current_line_maint = ""
         self.greenMaintenanceButton.clicked.connect(self.putMaintenance)
+        self.redMaintenanceButton.clicked.connect(self.putMaintenance)
+
         self.greenChooseOriginCombo.currentTextChanged.connect(self.updateTargetComboBox)
+        self.redChooseOriginCombo.currentTextChanged.connect(self.updateTargetComboBox)
+
         self.greenSetState.clicked.connect(self.setState)
+        self.redSetState.clicked.connect(self.setState)
+
 
         ############### CONSTANT UPDATES ###############
         # Initialize timer
@@ -150,7 +162,13 @@ class CTCApp(QWidget):
                 self.greenSwitchStateTable.setItem(rowPosition, 1, QTableWidgetItem(str(switch[1])))
 
         elif self.current_line_maint == "Red":
-            pass
+            self.redSwitchStateTable.setRowCount(0)
+            switch_orig_targ = self.redLine.getSwitchState()
+            for switch in switch_orig_targ:
+                rowPosition = self.redSwitchStateTable.rowCount()
+                self.redSwitchStateTable.insertRow(rowPosition)
+                self.redSwitchStateTable.setItem(rowPosition, 0, QTableWidgetItem(str(switch[0])))
+                self.redSwitchStateTable.setItem(rowPosition, 1, QTableWidgetItem(str(switch[1])))
 
     # Function to update cross status table
     def updateCrossStatusTable(self):
@@ -164,7 +182,13 @@ class CTCApp(QWidget):
                 self.greenCrossingTable.setItem(rowPosition, 1, QTableWidgetItem(str(cross[1])))
 
         elif self.current_line_maint == "Red":
-            pass
+            self.redCrossingTable.setRowCount(0)
+            cross_status = self.redLine.getCrossingState()
+            for cross in cross_status:
+                rowPosition = self.redCrossingTable.rowCount()
+                self.redCrossingTable.insertRow(rowPosition)
+                self.redCrossingTable.setItem(rowPosition, 0, QTableWidgetItem(str(cross[0])))
+                self.redCrossingTable.setItem(rowPosition, 1, QTableWidgetItem(str(cross[1])))
 
     # Function to update train Table
     def updateTrainTable(self):
@@ -235,6 +259,17 @@ class CTCApp(QWidget):
         self.current_line_maint = "Red"
         self.currentLineValue_2.setText(self.current_line_maint)
         self.maintenanceStack.setCurrentIndex(0)
+
+        # Fill combo box
+        self.redChooseMaintenanceCombo.clear()
+        block_list = self.redLine.getClosedBlocks()
+        for block in block_list:
+            self.redChooseMaintenanceCombo.addItem(str(block))
+
+        self.redChooseOriginCombo.clear()
+        switch_list = self.redLine.getSwitchState()
+        for switch in switch_list:
+            self.redChooseOriginCombo.addItem(str(switch[0]))
 
     # Function to update maintenace display when green line is chosen
     def chooseGreenLineMaint(self):
@@ -483,8 +518,6 @@ class CTCApp(QWidget):
             destination_stations = [x for _, x in sorted(zip(order_list, destination_stations))]
             self.CTCDispatcher.updateStations(int(self.redChooseTrain.currentText())-1, destination_stations)
 
-            print(self.CTCDispatcher.all_trains[int(self.redChooseTrain.currentText())-1].station_list)
-
     # Function to update closed blocks when put in maintenance using button
     def putMaintenance(self):
         if self.manualModeCheck.isChecked() == True:
@@ -495,7 +528,11 @@ class CTCApp(QWidget):
                 self.greenChooseMaintenanceCombo.removeItem(self.greenChooseMaintenanceCombo.currentIndex())
 
             elif self.current_line_maint == "Red":
-                pass
+                selected_block = self.redChooseMaintenanceCombo.currentText()
+                # Set block status to True in line object and update choose block list
+                # greenLine.setBlockStatus(int(selected_block), True)
+                self.redChooseMaintenanceCombo.removeItem(self.redChooseMaintenanceCombo.currentIndex())
+
 
     def updateTargetComboBox(self):
         if self.current_line_maint == "Green":
@@ -510,7 +547,17 @@ class CTCApp(QWidget):
                 self.greenChooseTargetCombo.addItem(str(switch_2))
 
         elif self.current_line_maint == "Red":
-            pass
+            cur_origin = self.redChooseOriginCombo.currentText()
+            if (cur_origin != ""):
+                cur_block = self.redLine.block_list[int(cur_origin)]
+                switch_1 = cur_block.block_switch_1
+                switch_2 = cur_block.block_switch_2
+                print(cur_origin)
+                print(switch_1)
+
+                self.redChooseTargetCombo.clear()
+                self.redChooseTargetCombo.addItem(str(switch_1))
+                self.redChooseTargetCombo.addItem(str(switch_2))
 
     def setState(self):
         if self.manualModeCheck.isChecked() == True:
@@ -524,17 +571,41 @@ class CTCApp(QWidget):
 
                 if(int(selected_target) == switch_1):
                     if (int(selected_target) > switch_2):
-                        self.greenLine.setSwitchPosition(int(selected_origin), True)
+                        self.greenLine.block_list[int(selected_origin)].setSwitchPos(True)
+                        # self.greenLine.setSwitchPosition(int(selected_origin), True)
                     else:
-                        self.greenLine.setSwitchPosition(int(selected_origin), False)
+                        self.greenLine.block_list[int(selected_origin)].setSwitchPos(False)
+                        # self.greenLine.setSwitchPosition(int(selected_origin), False)
                 else:
                     if (int(selected_target) > switch_1):
-                       self. greenLine.setSwitchPosition(int(selected_origin), True)
+                        self.greenLine.block_list[int(selected_origin)].setSwitchPos(True)
+                    #    self. greenLine.setSwitchPosition(int(selected_origin), True)
                     else:
-                        self.greenLine.setSwitchPosition(int(selected_origin), False)
+                        self.greenLine.block_list[int(selected_origin)].setSwitchPos(False)
+                        # self.greenLine.setSwitchPosition(int(selected_origin), False)
 
             elif self.current_line_maint == "Red":
-                pass
+                selected_origin = self.redChooseOriginCombo.currentText()
+                selected_target = self.redChooseTargetCombo.currentText()
+
+                cur_block = self.redLine.block_list[int(selected_origin)]
+                switch_1 = cur_block.block_switch_1
+                switch_2 = cur_block.block_switch_2
+
+                if(int(selected_target) == switch_1):
+                    if (int(selected_target) > switch_2):
+                        self.redLine.block_list[int(selected_origin)].setSwitchPos(True)
+                        # self.greenLine.setSwitchPosition(int(selected_origin), True)
+                    else:
+                        self.redLine.block_list[int(selected_origin)].setSwitchPos(False)
+                        # self.greenLine.setSwitchPosition(int(selected_origin), False)
+                else:
+                    if (int(selected_target) > switch_1):
+                        self.redLine.block_list[int(selected_origin)].setSwitchPos(True)
+                    #    self. greenLine.setSwitchPosition(int(selected_origin), True)
+                    else:
+                        self.redLine.block_list[int(selected_origin)].setSwitchPos(False)
+                        # self.greenLine.setSwitchPosition(int(selected_origin), False)
 
     def open_file(self):
         filename = QFileDialog.getOpenFileName()

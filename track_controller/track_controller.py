@@ -26,7 +26,7 @@ class WaysideController ():
             print("difference in plc parsing")
             return
         if isinstance(changes, str):
-            # print("Error " + changes) ### COMMENTED BY YASSER... WILL UNCOMMENT
+            print("Error " + changes)
             return False
         for change in changes:
             (typeS, bl, val) = change

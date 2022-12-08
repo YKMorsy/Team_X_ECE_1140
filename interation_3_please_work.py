@@ -55,7 +55,7 @@ class Iteration3(QWidget):
 
     def update_everything(self):
 
-        connect_ctc_track_controller(self.dispatcher, self.green_line, self.red_line, self.wayside_sign_in.get_all_track_controllers())
+        connect_ctc_track_controller(self.dispatcher, self.green_line, self.red_line, self.wayside_sign_in.get_all_track_controllers(), self.ctc_office.manualModeCheck.isChecked())
 
         Connect_Track_Control_And_Model(self.wayside_sign_in.get_all_track_controllers(), self.track_model_var)
 
