@@ -71,6 +71,25 @@ with open("track_controller/PLCs/RedLineMiddle_Blue.txt", "w") as f:
         f.write("C-"+str(i)+" = 0\n")
         f.write("}\n")
 
+    for i in range(2067, 2077):
+        past = i-1
+        fut = i+1
+        if(i == 2076):
+            fut = 2027
+        elif(i == 2072):
+            past = 2033
+        elif(i == 2071):
+            fut = 2038
+        elif(i == 2067):
+            past = 2044
+        f.write("IF ( ( ( A-"+str(past)+" & F-"+str(past)+" & ! O-"+str(past)+" ) | ( A-"+str(fut)+" & F-"+str(fut)+" & ! O-"+str(fut)+" ) ) & O-"+str(i)+" ) {\n")
+        f.write("C-"+str(i)+" = D-"+str(i)+"\n")
+        f.write("}\n")
+        f.write("ELSE\n")
+        f.write("{\n")
+        f.write("C-"+str(i)+" = 0\n")
+        f.write("}\n")
+
 
     switches = [2027, 2033, 2038, 2044]
     lower = [2028, 2032, 2039, 2043]
