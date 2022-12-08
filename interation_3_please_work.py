@@ -36,9 +36,10 @@ class Iteration3(QWidget):
 
         #Create CTC
         self.green_line = Line("./CTC_App/Iteration3/Track_Layout_Green.xlsx")
+        self.red_line = Line("./CTC_App/Iteration3/Track_Layout_Red.xlsx")
         self.dispatcher = Dispatcher()
         self.dispatcher.updateTime(time.time())
-        self.ctc_office = CTCApp(self.green_line, self.dispatcher)
+        self.ctc_office = CTCApp(self.green_line, self.red_line, self.dispatcher)
         self.ctc_office.show()
         #Place waysides
         self.wayside_sign_in = sign_in_window()
@@ -54,7 +55,7 @@ class Iteration3(QWidget):
 
     def update_everything(self):
 
-        connect_ctc_track_controller(self.dispatcher, self.green_line, self.green_line, self.wayside_sign_in.get_all_track_controllers())
+        connect_ctc_track_controller(self.dispatcher, self.green_line, self.red_line, self.wayside_sign_in.get_all_track_controllers())
 
         Connect_Track_Control_And_Model(self.wayside_sign_in.get_all_track_controllers(), self.track_model_var)
 

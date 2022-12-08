@@ -6,16 +6,18 @@ from PyQt5.QtGui import *
 from PyQt5 import uic
 from CTC_App.Iteration3.Line import Line
 from CTC_App.Iteration3.Dispatcher import Dispatcher
+from datetime import datetime
 
 # greenLine = Line("Iteration3/Track_Layout_Green.xlsx")
 
 # CTCDispatcher = Dispatcher()
 
 class CTCApp(QWidget):
-    def __init__(self, greenLine, CTCDispatcher):
+    def __init__(self, greenLine, redLine, CTCDispatcher):
         super().__init__()
         
         self.greenLine = greenLine
+        self.redLine = redLine
         self.CTCDispatcher = CTCDispatcher
 
         self.train_list_length = 0
@@ -92,18 +94,21 @@ class CTCApp(QWidget):
         # Update time in dispatcher
         self.start_time = self.start_time + 1
         self.CTCDispatcher.updateTime(self.start_time)
+        time_dt = datetime.fromtimestamp(self.start_time)
+
+        self.timeValue.setText(time_dt.strftime('%Y/%m/%d %I:%M:%S %p'))
 
         if self.current_line == "Green":
             self.CTCDispatcher.checkDispatch(self.greenLine)
 
         output = []
 
-        while (self.train_list_length != len(self.CTCDispatcher.trains)):
+        while (self.train_list_length != len(self.CTCDispatcher.all_trains)):
             self.greenLine.block_list[0].block_authority = True
             self.greenLine.block_list[0].block_suggested_speed = self.greenLine.block_list[0].block_speed_limit
 
-            if self.train_list_length <= len(self.CTCDispatcher.trains): 
-                output.append((self.CTCDispatcher.trains[self.train_list_length]))
+            if self.train_list_length <= len(self.CTCDispatcher.all_trains): 
+                output.append((self.CTCDispatcher.all_trains[self.train_list_length]))
                 self.train_list_length += 1
 
         # Table updates
@@ -165,7 +170,7 @@ class CTCApp(QWidget):
         if self.current_line == "Green":
 
             self.greenTrainTable.setRowCount(0)
-            trains = self.CTCDispatcher.trains
+            trains = self.CTCDispatcher.all_trains
 
             
 
@@ -240,6 +245,9 @@ class CTCApp(QWidget):
         self.editDispatchStacked.setCurrentIndex(0)
         self.trainTableStacked.setCurrentIndex(0)
         self.chooseStationCombo.clear()
+        station_list = self.redLine.line_station_list
+        for station in station_list:
+            self.chooseStationCombo.addItem(station)
 
     # Function to update display when green line is chosen
     def chooseGreenLine(self):
@@ -331,13 +339,17 @@ class CTCApp(QWidget):
 
             # destination_stations = [x for _, x in sorted(zip(order_list, destination_stations))]
 
-            # Call dispatch function
-            if self.current_line == "Green":
-                self.CTCDispatcher.scheduleSingle(destination_stations, self.greenLine)
+            # # Call dispatch function
+            # if self.current_line == "Green":
+            #     self.CTCDispatcher.scheduleSingle(destination_stations, self.greenLine)
 
-            # Update table with train
-            cur_train = self.CTCDispatcher.trains[-1]
+            
+            
             if self.current_line == "Green":
+                # Call dispatch function
+                self.CTCDispatcher.scheduleSingle(destination_stations, self.greenLine)
+                # Update table with train
+                cur_train = self.CTCDispatcher.all_trains[-1]
                 rowPosition = self.greenTrainTable.rowCount()
                 self.greenTrainTable.insertRow(rowPosition)
                 self.greenTrainTable.setItem(rowPosition, 0, QTableWidgetItem(str(cur_train.train_id)))
@@ -346,6 +358,10 @@ class CTCApp(QWidget):
 
                 self.greenChooseTrain.addItem(str(cur_train.train_id))
             elif self.current_line == "Red":
+
+                self.CTCDispatcher.scheduleSingle(destination_stations, self.redLine)
+
+                cur_train = self.CTCDispatcher.all_trains[-1]
                 rowPosition = self.redTrainTable.rowCount()
                 self.redTrainTable.insertRow(rowPosition)
                 self.redTrainTable.setItem(rowPosition, 0, QTableWidgetItem(str(cur_train.train_id)))
@@ -356,7 +372,7 @@ class CTCApp(QWidget):
 
     def updateAddRemoveCombo(self):
         if self.current_line == "Green":
-            cur_train = self.CTCDispatcher.trains[int(self.greenChooseTrain.currentText())-1]
+            cur_train = self.CTCDispatcher.all_trains[int(self.greenChooseTrain.currentText())-1]
             cur_train_stations = cur_train.station_list
 
             # Put all current stations in stations table
@@ -459,6 +475,16 @@ class CTCApp(QWidget):
     def loadSchedule(self):
         # get file path and call dispatcher
         file_path = self.open_file()
-        self.CTCDispatcher.scheduleMultiple(file_path)
+        if self.current_line == "Green":
+            self.CTCDispatcher.scheduleMultiple(file_path, self.greenLine)
+            cur_train = self.CTCDispatcher.all_trains[-1]
+            self.greenChooseTrain.addItem(str(cur_train.train_id))
+        # elif self.current_line == "Red":
+        #     rowPosition = self.redTrainTable.rowCount()
+        #     self.redTrainTable.insertRow(rowPosition)
+        #     self.redTrainTable.setItem(rowPosition, 0, QTableWidgetItem(str(cur_train.train_id)))
+        #     self.redTrainTable.setItem(rowPosition, 1, QTableWidgetItem(str(cur_train.current_position)))
+        #     self.redTrainTable.setItem(rowPosition, 2, QTableWidgetItem(str(cur_train.station_list[0])))
 
+        #     self.redChooseTrain.addItem(str(cur_train.train_id))
         

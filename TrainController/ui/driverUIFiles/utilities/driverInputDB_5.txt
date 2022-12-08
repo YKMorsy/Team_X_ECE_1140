@@ -1,0 +1,10 @@
+0.277778
+False
+False
+False
+70
+False
+False
+False
+False
+False

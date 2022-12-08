@@ -74,10 +74,30 @@ class Line:
                                     self.__section_block_dict['YARD']
 
         elif self.line_color == 'Red':
-            pass
-
+            # YARD -> C -> B -> A -> F -> G -> H12345 -> I -> J12 ->
+            # K -> L -> M -> N -> J1 -> I -> H5 -> O -> P -> Q -> H3 ->
+            # R -> S -> T -> H1 -> G -> F -> E -> D -> YARD
+            self.__default_route = self.__section_block_dict['YARD'] + list(reversed(self.__section_block_dict['C'])) +\
+                                    list(reversed(self.__section_block_dict['B'])) + list(reversed(self.__section_block_dict['A'])) +\
+                                    self.__section_block_dict['F'] + self.__section_block_dict['G'] + self.__section_block_dict['H1'] +\
+                                    self.__section_block_dict['H2'] + self.__section_block_dict['H3'] + self.__section_block_dict['H4'] +\
+                                    self.__section_block_dict['H5'] + self.__section_block_dict['I'] + self.__section_block_dict['J1'] +\
+                                    self.__section_block_dict['J2'] + self.__section_block_dict['K'] + self.__section_block_dict['L'] +\
+                                    self.__section_block_dict['M'] + self.__section_block_dict['N'] + list(reversed(self.__section_block_dict['J1'])) +\
+                                    list(reversed(self.__section_block_dict['I'])) + list(reversed(self.__section_block_dict['H5'])) +\
+                                    self.__section_block_dict['O'] + self.__section_block_dict['P'] + self.__section_block_dict['Q'] +\
+                                    list(reversed(self.__section_block_dict['H3'])) +\
+                                    self.__section_block_dict['R'] + self.__section_block_dict['S'] + self.__section_block_dict['T'] +\
+                                    list(reversed(self.__section_block_dict['H1'])) +\
+                                    list(reversed(self.__section_block_dict['G'])) + list(reversed(self.__section_block_dict['F'])) +\
+                                    list(reversed(self.__section_block_dict['E'])) + list(reversed(self.__section_block_dict['E'])) +\
+                                    self.__section_block_dict['YARD']
+            
     def getRoute(self):
-        return self.__default_route
+        route = []
+        for block in self.__default_route:
+            route.append(block)
+        return route
 
     # Called by UI:
     # Function to return list of closed blocks
@@ -108,9 +128,7 @@ class Line:
                 cross_state.append([block.block_number, block.block_railway])
         
         return cross_state
-
-
-
+        
     # Called by CTC (wayside to CTC)
     
     # Function to update throughput (Track Model to CTC)
@@ -139,7 +157,7 @@ class Line:
                 self.block_list[cur_key].status = status_dict[key]
             elif self.line_color == "Red":
                 cur_key = key - 2000
-                self.block_list[cur_key].status(status_dict[key])
+                self.block_list[cur_key].status = status_dict[key]
 
     # Function to update railway crossing
     def setRailWayCrossing(self, crossing_dict):
