@@ -227,10 +227,11 @@ class block:
             return self.switch_forward_loc
         if self.name == "F16" and train.direction == False:
             if self.switch == 0:
-                return "E15"
-            else:
                 train.direction = True
                 return self.switch_forward_loc
+            else:
+                
+                return "E15"
         if self.name == "H27" and train.direction == True:
             if self.switch == 0:
                 return self.next_loc
