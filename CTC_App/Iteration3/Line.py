@@ -36,7 +36,7 @@ class Line:
         block_switches_2 = df_track_layout.loc[:,"Switch 2"]
         block_stations = df_track_layout.loc[:,"Station"]
         self.line_station_list = block_stations.tolist()
-        self.line_station_list = [i for i in self.line_station_list if i != -1]
+        self.line_station_list = [str(i) for i in self.line_station_list if i != -1]
 
         block_railway_crossing = df_track_layout.loc[:,"Railway Crossing"]
 

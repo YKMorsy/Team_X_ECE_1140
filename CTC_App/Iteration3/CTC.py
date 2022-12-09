@@ -72,8 +72,8 @@ class CTCApp(QWidget):
         self.redAddButton.clicked.connect(self.addEditDestinationList)
         self.greenRemoveButton.clicked.connect(self.removeEditDestinationList)
         self.redRemoveButton.clicked.connect(self.removeEditDestinationList)
-        self.redUpdateButton.clicked.connect(self.updateEditDispatch)
-        self.greenUpdateButton.clicked.connect(self.updateEditDispatch)
+        # self.redUpdateButton.clicked.connect(self.updateEditDispatch)
+        # self.greenUpdateButton.clicked.connect(self.updateEditDispatch)
 
         self.openFile.clicked.connect(self.loadSchedule)
 
@@ -130,6 +130,12 @@ class CTCApp(QWidget):
         self.updateSwitchStateTable()
         self.updateCrossStatusTable()
         self.updateThroughPutLabel()
+        self.updateTrainStationTable()
+
+        for train in self.CTCDispatcher.all_trains:
+            train.update_time(self.start_time)
+        for train in self.CTCDispatcher.trains:
+            train.update_time(self.start_time)
 
         return output
 
@@ -210,30 +216,6 @@ class CTCApp(QWidget):
                         self.greenTrainTable.setItem(rowPosition, 1, QTableWidgetItem(str(train.current_position)))
                         self.greenTrainTable.setItem(rowPosition, 2, QTableWidgetItem("YARD"))
 
-
-
-
-            # rowPosition = self.greenTrainTable.rowCount()
-
-            # for row in range(0, rowPosition):
-            #     cur_train_id = self.greenTrainTable.item(row,0).text()
-            #     cur_train = self.CTCDispatcher.trains[int(cur_train_id)-1]
-            #     # selected_block = self.greenChooseMaintenanceCombo.currentText()
-            #     # # Set block status to True in line object and update choose block list
-            #     # greenLine.setBlockStatus(int(selected_block), True)
-            #     # self.greenChooseMaintenanceCombo.removeItem(self.greenChooseMaintenanceCombo.currentIndex())
-
-            #     current_position = cur_train.current_position
-
-            #     if len(cur_train.station_list) > 0:
-            #         next_station = cur_train.station_list[0]
-
-            #         self.greenTrainTable.setItem(row, 1, QTableWidgetItem(str(current_position)))
-            #         self.greenTrainTable.setItem(row, 2, QTableWidgetItem(str(next_station)))
-            #     else:
-            #         self.greenTrainTable.setItem(row, 1, QTableWidgetItem(str(current_position)))
-            #         self.greenTrainTable.setItem(row, 2, QTableWidgetItem("YARD"))
-
         elif self.current_line == "Red":
             self.redTrainTable.setRowCount(0)
             trains = self.CTCDispatcher.all_trains
@@ -252,7 +234,32 @@ class CTCApp(QWidget):
                         self.redTrainTable.setItem(rowPosition, 1, QTableWidgetItem(str(train.current_position)))
                         self.redTrainTable.setItem(rowPosition, 2, QTableWidgetItem("YARD"))
 
+    def updateTrainStationTable(self):
+        if self.current_line == "Green":
+            # Get train station list
+            if len(self.CTCDispatcher.all_trains) > 0:
+                cur_train = self.CTCDispatcher.all_trains[int(self.greenChooseTrain.currentText())-1]
+                cur_train_stations = cur_train.station_list
 
+                # update table
+                self.greenEditDispatchTable.setRowCount(0)
+                for station in cur_train_stations:
+                    rowPosition = self.greenEditDispatchTable.rowCount()
+                    self.greenEditDispatchTable.insertRow(rowPosition)
+                    self.greenEditDispatchTable.setItem(rowPosition, 0, QTableWidgetItem(station))
+
+        elif self.current_line == "Red":
+            if len(self.CTCDispatcher.all_trains) > 0:
+                # Get train station list
+                cur_train = self.CTCDispatcher.all_trains[int(self.redChooseTrain.currentText())-1]
+                cur_train_stations = cur_train.station_list
+
+                # update table
+                self.redEditDispatchTable.setRowCount(0)
+                for station in cur_train_stations:
+                    rowPosition = self.redEditDispatchTable.rowCount()
+                    self.redEditDispatchTable.insertRow(rowPosition)
+                    self.redEditDispatchTable.setItem(rowPosition, 0, QTableWidgetItem(station))
 
     # Function to update maintenace display when red line is chosen
     def chooseRedLineMaint(self):
@@ -324,66 +331,71 @@ class CTCApp(QWidget):
     # Function to add to edit desination list #################### FIX ADD AND REMOVE FUNCTIONS
     def addEditDestinationList(self):
         if self.current_line == "Green":
-            cur_station = self.greenAddStation.currentText()
-            station_rows = self.getGreenEditDestinationList()
-            rowPosition = self.greenEditDispatchTable.rowCount()
-            if (cur_station not in station_rows) and (cur_station != ""):
-                self.greenEditDispatchTable.insertRow(rowPosition)
-                self.greenEditDispatchTable.setItem(rowPosition, 0, QTableWidgetItem(cur_station))
 
-            # Remove removed item from combo box
+            # Get current station
+            cur_station = self.greenAddStation.currentText()
+            # Get station list
+            # Add station to correct index
+            destination_stations = self.CTCDispatcher.all_trains[int(self.greenChooseTrain.currentText())-1].station_list
+            destination_stations.append(cur_station)
+            order_list = []
+            for station in destination_stations:
+                order_list.append(self.greenLine.line_station_list.index(station))
+            destination_stations = [x for _, x in sorted(zip(order_list, destination_stations))]
+            # Update station
+            self.CTCDispatcher.updateStations(int(self.greenChooseTrain.currentText())-1, destination_stations)
+            
             self.greenAddStation.removeItem(self.greenAddStation.currentIndex())
             self.greenRemoveStation.addItem(cur_station)
 
         elif self.current_line == "Red":
+            # Get current station
             cur_station = self.redAddStation.currentText()
-            station_rows = self.getRedEditDestinationList()
-            rowPosition = self.redEditDispatchTable.rowCount()
-            if (cur_station not in station_rows) and (cur_station != ""):
-                self.redEditDispatchTable.insertRow(rowPosition)
-                self.redEditDispatchTable.setItem(rowPosition, 0, QTableWidgetItem(cur_station))
+            # Get station list
+            # Add station to correct index
+            destination_stations = self.CTCDispatcher.all_trains[int(self.redChooseTrain.currentText())-1].station_list
+            destination_stations.append(cur_station)
+            order_list = []
+            for station in destination_stations:
+                order_list.append(self.redLine.line_station_list.index(station))
+            destination_stations = [x for _, x in sorted(zip(order_list, destination_stations))]
+            # Update station
+            self.CTCDispatcher.updateStations(int(self.redChooseTrain.currentText())-1, destination_stations)
 
-            # Remove removed item from combo box
             self.redAddStation.removeItem(self.redAddStation.currentIndex())
             self.redRemoveStation.addItem(cur_station)
 
     # Function to remove from edit desination list
     def removeEditDestinationList(self):
         if self.current_line == "Green":
+
+            # Get current text station
             cur_station = self.greenRemoveStation.currentText()
-            station_rows = self.getGreenEditDestinationList()
-            if cur_station in station_rows:
-                station_rows.remove(cur_station)
+            # Get train stations
+            train_stations = self.CTCDispatcher.all_trains[int(self.greenChooseTrain.currentText())-1].station_list
+            # Remove station from list
+            train_stations.remove(cur_station)
+            # Update station list
+            self.CTCDispatcher.updateStations(int(self.greenChooseTrain.currentText())-1, train_stations)
 
-                # Put all current stations in stations list
-                self.greenEditDispatchTable.setRowCount(0)
-
-                for station in station_rows:
-                    rowPosition = self.greenEditDispatchTable.rowCount()
-                    self.greenEditDispatchTable.insertRow(rowPosition)
-                    self.greenEditDispatchTable.setItem(rowPosition, 0, QTableWidgetItem(station))
-
-                # Remove removed item from combo box
-                self.greenRemoveStation.removeItem(self.greenRemoveStation.currentIndex())
-                self.greenAddStation.addItem(cur_station)
+            # Remove removed item from combo box
+            self.greenRemoveStation.removeItem(self.greenRemoveStation.currentIndex())
+            self.greenAddStation.addItem(cur_station)
 
         elif self.current_line == "Red":
+
+            # Get current text station
             cur_station = self.redRemoveStation.currentText()
-            station_rows = self.getRedEditDestinationList()
-            if cur_station in station_rows:
-                station_rows.remove(cur_station)
+            # Get train stations
+            train_stations = self.CTCDispatcher.all_trains[int(self.redChooseTrain.currentText())-1].station_list
+            # Remove station from list
+            train_stations.remove(cur_station)
+            # Update station list
+            self.CTCDispatcher.updateStations(int(self.redChooseTrain.currentText())-1, train_stations)
 
-                # Put all current stations in stations list
-                self.redEditDispatchTable.setRowCount(0)
-
-                for station in station_rows:
-                    rowPosition = self.redEditDispatchTable.rowCount()
-                    self.redEditDispatchTable.insertRow(rowPosition)
-                    self.redEditDispatchTable.setItem(rowPosition, 0, QTableWidgetItem(station))
-
-                # Remove removed item from combo box
-                self.redRemoveStation.removeItem(self.redRemoveStation.currentIndex())
-                self.redAddStation.addItem(cur_station)
+            # Remove removed item from combo box
+            self.redRemoveStation.removeItem(self.redRemoveStation.currentIndex())
+            self.redAddStation.addItem(cur_station)
 
     # Function to get from destination list
     def getDestinationList(self):
@@ -392,13 +404,13 @@ class CTCApp(QWidget):
         for row in range(0, rowPosition):
             station_rows.append(self.stationsTable.item(row,0).text())
         return station_rows
-    def getGreenEditDestinationList(self):
-        rowPosition = self.greenEditDispatchTable.rowCount()
-        station_rows = []
-        for row in range(0, rowPosition):
-            station_rows.append(self.greenEditDispatchTable.item(row,0).text())
-        return station_rows
-    def getRedEditDestinationList(self):
+    # def getGreenEditDestinationList(self):
+    #     rowPosition = self.greenEditDispatchTable.rowCount()
+    #     station_rows = []
+    #     for row in range(0, rowPosition):
+    #         station_rows.append(self.greenEditDispatchTable.item(row,0).text())
+    #     return station_rows
+    # def getRedEditDestinationList(self):
         rowPosition = self.redEditDispatchTable.rowCount()
         station_rows = []
         for row in range(0, rowPosition):
@@ -451,39 +463,22 @@ class CTCApp(QWidget):
         if self.current_line == "Green":
             cur_train = self.CTCDispatcher.all_trains[int(self.greenChooseTrain.currentText())-1]
             cur_train_stations = cur_train.station_list
-
-            # Put all current stations in stations table
-            self.greenEditDispatchTable.setRowCount(0)
-
-            for station in cur_train_stations:
-                rowPosition = self.greenEditDispatchTable.rowCount()
-                self.greenEditDispatchTable.insertRow(rowPosition)
-                self.greenEditDispatchTable.setItem(rowPosition, 0, QTableWidgetItem(station))
-
             # Put missing stations in add combo box
             self.greenAddStation.clear()
 
             missing_stations = list(set(self.greenLine.line_station_list) - set(cur_train_stations))
             for station in missing_stations:
-                self.greenAddStation.addItem(station)
+                self.greenAddStation.addItem(str(station))
 
             # Put chosen stations in remove combo box
             self.greenRemoveStation.clear()
 
             for station in cur_train_stations:
-                self.greenRemoveStation.addItem(station)
+                self.greenRemoveStation.addItem(str(station))
 
         elif self.current_line == "Red":
             cur_train = self.CTCDispatcher.all_trains[int(self.redChooseTrain.currentText())-1]
             cur_train_stations = cur_train.station_list
-
-            # Put all current stations in stations table
-            self.redEditDispatchTable.setRowCount(0)
-
-            for station in cur_train_stations:
-                rowPosition = self.redEditDispatchTable.rowCount()
-                self.redEditDispatchTable.insertRow(rowPosition)
-                self.redEditDispatchTable.setItem(rowPosition, 0, QTableWidgetItem(station))
 
             # Put missing stations in add combo box
             self.redAddStation.clear()
@@ -498,25 +493,25 @@ class CTCApp(QWidget):
             for station in cur_train_stations:
                 self.redRemoveStation.addItem(station)
 
-    # Function to update train's schedule
-    def updateEditDispatch(self):
-        if self.current_line == "Green":
-            destination_stations = self.getGreenEditDestinationList()
-            order_list = []
-            for station in destination_stations:
-                order_list.append(self.greenLine.line_station_list.index(station))
-            destination_stations = [x for _, x in sorted(zip(order_list, destination_stations))]
-            self.CTCDispatcher.updateStations(int(self.greenChooseTrain.currentText())-1, destination_stations)
+    # # Function to update train's schedule
+    # def updateEditDispatch(self):
+    #     if self.current_line == "Green":
+    #         destination_stations = self.getGreenEditDestinationList()
+    #         order_list = []
+    #         for station in destination_stations:
+    #             order_list.append(self.greenLine.line_station_list.index(station))
+    #         destination_stations = [x for _, x in sorted(zip(order_list, destination_stations))]
+    #         self.CTCDispatcher.updateStations(int(self.greenChooseTrain.currentText())-1, destination_stations)
 
-            # self.greenEditDispatchTable.setRowCount(0)
+    #         # self.greenEditDispatchTable.setRowCount(0)
             
-        elif self.current_line == "Red":
-            destination_stations = self.getRedEditDestinationList()
-            order_list = []
-            for station in destination_stations:
-                order_list.append(self.redLine.line_station_list.index(station))
-            destination_stations = [x for _, x in sorted(zip(order_list, destination_stations))]
-            self.CTCDispatcher.updateStations(int(self.redChooseTrain.currentText())-1, destination_stations)
+    #     elif self.current_line == "Red":
+    #         destination_stations = self.getRedEditDestinationList()
+    #         order_list = []
+    #         for station in destination_stations:
+    #             order_list.append(self.redLine.line_station_list.index(station))
+    #         destination_stations = [x for _, x in sorted(zip(order_list, destination_stations))]
+    #         self.CTCDispatcher.updateStations(int(self.redChooseTrain.currentText())-1, destination_stations)
 
     # Function to update closed blocks when put in maintenance using button
     def putMaintenance(self):

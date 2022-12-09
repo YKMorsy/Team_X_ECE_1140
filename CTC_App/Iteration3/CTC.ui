@@ -238,7 +238,7 @@
       </rect>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="redTrainTableStacked">
       <widget class="QTableWidget" name="redTrainTable">
@@ -317,7 +317,7 @@
       </rect>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="redEditStacked">
       <widget class="QGroupBox" name="redEditDispatch">
@@ -410,7 +410,7 @@
           <x>10</x>
           <y>270</y>
           <width>341</width>
-          <height>161</height>
+          <height>201</height>
          </rect>
         </property>
         <column>
@@ -443,19 +443,6 @@
           <width>201</width>
           <height>31</height>
          </rect>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="redUpdateButton">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>440</y>
-          <width>341</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Update</string>
         </property>
        </widget>
       </widget>
@@ -551,7 +538,7 @@
           <x>10</x>
           <y>270</y>
           <width>341</width>
-          <height>161</height>
+          <height>201</height>
          </rect>
         </property>
         <column>
@@ -584,19 +571,6 @@
           <width>201</width>
           <height>31</height>
          </rect>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="greenUpdateButton">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>440</y>
-          <width>341</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Update</string>
         </property>
        </widget>
       </widget>

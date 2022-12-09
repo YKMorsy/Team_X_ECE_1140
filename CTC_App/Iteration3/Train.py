@@ -2,7 +2,7 @@ from CTC_App.Iteration3.Line import Line
 
 class Train:
 
-    def __init__(self, train_id, station_list, line, train_list):
+    def __init__(self, train_id, station_list, line, train_list, cur_time):
 
         # Initialize variables
         self.train_id = train_id
@@ -12,6 +12,10 @@ class Train:
         # Intialize route using arrival stations
         self.route = line.getRoute()
         self.train_list = train_list
+
+        self.cur_time = cur_time
+        self.stop_time = cur_time
+        self.stop_train = False
 
         if self.line.line_color == 'Green':
             self.cur_section = 'YARD'
@@ -29,9 +33,13 @@ class Train:
     def updateStations(self, station_list):
         self.station_list = station_list
 
+    def update_time(self, cur_time):
+        self.cur_time = cur_time
+
     def setPosition(self, line_color, block_number, occupancy):
         if (block_number == self.route[1] and self.line.line_color == line_color and occupancy == True):
             
+            old_block = self.route[0]
             # Set previous authority to False
             self.line.block_list[self.route[0]].block_authority = False
 
@@ -250,7 +258,7 @@ class Train:
             elif self.line.line_color == 'Red':
                 # Make sure no collisions happen before entering a two way
                 # Get current and next section using current location
-                if block_number >= 1 and block_number <= 9:
+                if self.cur_section == "Yard" and block_number >= 1 and block_number <= 9:
                     self.cur_section = "ABC"
                     self.next_section = "FGH1"
                 elif self.cur_section == "ABC" and block_number >= 16 and block_number <= 27:
@@ -565,11 +573,23 @@ class Train:
                     elif ((next_block_1_station == next_station) and (next_block_1_status == True)):
                         suggested_speed = 0.5*suggested_speed
                     elif (current_station == next_station and (current_status == True)):
-                        suggested_speed = 1
 
-                        # suggested_speed = current_block.block_speed_limit
-                        self.station_list.pop(0)
+                        if current_station.isnumeric() == False:
+                            suggested_speed = 1
+                            # suggested_speed = current_block.block_speed_limit
+                            self.station_list.pop(0)
+                        else:
+                            suggested_speed = 0
+                            # suggested_speed = current_block.block_speed_limit
+                            if self.stop_train == False:
+                                self.stop_time = self.cur_time
+                                self.stop_train = True
+                            else:
+                                if (self.cur_time - self.stop_time) == 30:
+                                    self.stop_train == False
+                                    self.station_list.pop(0)
 
+                            self.route.insert(0, old_block)
 
                     elif (current_status == True):
                         suggested_speed = suggested_speed

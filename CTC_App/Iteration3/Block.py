@@ -22,7 +22,7 @@ class Block:
         self.block_switch_2 = block_switch_2
 
         # Station info
-        self.block_station = block_station
+        self.block_station = str(block_station)
 
     # Function to set switch position
     def setSwitchPos(self, pos_bool):
