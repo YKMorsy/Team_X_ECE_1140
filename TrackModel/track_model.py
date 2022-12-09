@@ -120,7 +120,10 @@ class track_model(object):
             red_line_circuit.append(self.ui.track_list[i].get_circuit_failure())
             i += 1
         return red_line_circuit
-    
+
+    def clear_block_failure(self,block_number):
+        self.ui.track_list[block_number].clear_failure()
+
     def get_red_line_rail_status(self):
         i = 150
         red_line_rail = []
