@@ -65,7 +65,7 @@
       </property>
       <column>
        <property name="text">
-        <string>Stations</string>
+        <string>Stops</string>
        </property>
        <property name="textAlignment">
         <set>AlignCenter</set>
@@ -543,7 +543,7 @@
         </property>
         <column>
          <property name="text">
-          <string>Stations</string>
+          <string>Stops</string>
          </property>
          <property name="textAlignment">
           <set>AlignCenter</set>

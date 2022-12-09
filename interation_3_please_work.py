@@ -91,7 +91,9 @@ class Iteration3(QWidget):
             self.train_controller[train_id].start_driver_ui()
 
             self.new_train.remove(train)
+
         self.ctc_office.greenLine.setThroughput(self.track_model_var.stations.get_throughput())
+        self.ctc_office.redLine.setThroughput(self.track_model_var.stations.get_throughput())
         #Train deletion, wont do this for iteration 3 cause too hard
 
 

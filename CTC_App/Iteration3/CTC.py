@@ -94,7 +94,8 @@ class CTCApp(QWidget):
         ############### CONSTANT UPDATES ###############
         # Initialize timer
         self.start_time = round(time.time())
-        # self.timer = QTimer()
+        self.hour_time_stamp = round(time.time())
+        # self.timer = Qimer()
         # self.timer.timeout.connect(self.updateTimer)
         # self.timer.setInterval(1000)
         # self.timer.start()
@@ -142,6 +143,17 @@ class CTCApp(QWidget):
     def updateThroughPutLabel(self):
         if self.current_line == "Green":
             self.throughPutValue.setText(str(self.greenLine.throughput))
+            # Check if hour has passed and reset throughput
+            if(self.start_time - self.hour_time_stamp >= 3600):
+                self.greenLine.throughput = 0
+                self.hour_time_stamp = self.start_time
+
+        elif self.current_line == "Red":
+            self.throughPutValue.setText(str(self.redLine.throughput))
+            # Check if hour has passed and reset throughput
+            if(self.start_time - self.hour_time_stamp >= 3600):
+                self.redLine.throughput = 0
+                self.hour_time_stamp = self.start_time
 
     # Function to update closed blocks table
     def updateClosedBlocksTable(self):
@@ -154,7 +166,12 @@ class CTCApp(QWidget):
                 self.greenClosedBlocksTable.setItem(rowPosition, 0, QTableWidgetItem(str(block)))
 
         elif self.current_line_maint == "Red":
-            pass
+            self.redClosedBlocksTable.setRowCount(0)
+            closed_blocks = self.redLine.getClosedBlocks()
+            for block in closed_blocks:
+                rowPosition = self.redClosedBlocksTable.rowCount()
+                self.redClosedBlocksTable.insertRow(rowPosition)
+                self.redClosedBlocksTable.setItem(rowPosition, 0, QTableWidgetItem(str(block)))
 
     # Function to update switch state table
     def updateSwitchStateTable(self):
@@ -237,7 +254,13 @@ class CTCApp(QWidget):
     def updateTrainStationTable(self):
         if self.current_line == "Green":
             # Get train station list
-            if len(self.CTCDispatcher.all_trains) > 0:
+            green_line_trains = []
+            ctc_all_trains = self.CTCDispatcher.all_trains
+            for train in ctc_all_trains:
+                if train.line.line_color == "Green":
+                    green_line_trains.append(train)
+
+            if len(green_line_trains) > 0:
                 cur_train = self.CTCDispatcher.all_trains[int(self.greenChooseTrain.currentText())-1]
                 cur_train_stations = cur_train.station_list
 
@@ -249,7 +272,13 @@ class CTCApp(QWidget):
                     self.greenEditDispatchTable.setItem(rowPosition, 0, QTableWidgetItem(station))
 
         elif self.current_line == "Red":
-            if len(self.CTCDispatcher.all_trains) > 0:
+            red_line_trains = []
+            ctc_all_trains = self.CTCDispatcher.all_trains
+            for train in ctc_all_trains:
+                if train.line.line_color == "Red":
+                    red_line_trains.append(train)
+
+            if len(red_line_trains) > 0:
                 # Get train station list
                 cur_train = self.CTCDispatcher.all_trains[int(self.redChooseTrain.currentText())-1]
                 cur_train_stations = cur_train.station_list

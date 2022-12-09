@@ -13,11 +13,96 @@ def connect_ctc_track_controller(dispatcherCTC, greenLineCTC, redLineCTC, trcCon
     
     if manualModeChecked == False:
         greenLineCTC.setSwitchPosition(green_switch_position_trc)
+    else:
+        # Set track controller switch position in CTC Manual Mode
+        green_line_switches = greenLineCTC.getSwitchState()
+        for_ws_3 = {}
+        for_ws_5 = {}
+        for_ws_4 = {}
+        for root in green_line_switches:
+            if ((root[0]) >= 1) and ((root[0]) <= 21):
+                root_block = greenLineCTC.block_list[root[0]]
+                cur_pos = root_block.cur_switch_pos
+                sw_1 = root_block.block_switch_1
+                sw_2 = root_block.block_switch_2
+                if ((sw_2 > sw_1) and cur_pos == sw_2) or ((sw_2 < sw_1) and cur_pos == sw_1):
+                    switch_val = True
+                else:
+                    switch_val = False
+                for_ws_3[root[0]+1000] = switch_val
+            if (((root[0]) >= 35) and ((root[0]) <= 105)) or (root[0]) == 0:
+                root_block = greenLineCTC.block_list[root[0]]
+                cur_pos = root_block.cur_switch_pos
+                sw_1 = root_block.block_switch_1
+                sw_2 = root_block.block_switch_2
+                if ((sw_2 > sw_1) and cur_pos == sw_2) or ((sw_2 < sw_1) and cur_pos == sw_1):
+                    switch_val = True
+                else:
+                    switch_val = False
+                for_ws_5[root[0]+1000] = switch_val
+            if (((root[0]) >= 20) and ((root[0]) <= 36)) or (((root[0]) >= 104) and ((root[0]) <= 150)):
+                root_block = greenLineCTC.block_list[root[0]]
+                cur_pos = root_block.cur_switch_pos
+                sw_1 = root_block.block_switch_1
+                sw_2 = root_block.block_switch_2
+                if ((sw_2 > sw_1) and cur_pos == sw_2) or ((sw_2 < sw_1) and cur_pos == sw_1):
+                    switch_val = True
+                else:
+                    switch_val = False
+                for_ws_4[root[0]+1000] = switch_val
+        
+        # set_switch_positions
+        trcControl[3].set_switch_positions(for_ws_3)
+        trcControl[4].set_switch_positions(for_ws_4)
+        trcControl[5].set_switch_positions(for_ws_5)
+        
 
     red_switch_position_trc = trcControl[0].get_switch_positions() | trcControl[1].get_switch_positions() | trcControl[2].get_switch_positions()
     
     if manualModeChecked == False:
         redLineCTC.setSwitchPosition(red_switch_position_trc)
+    else:
+        # Set track controller switch position in CTC Manual Mode
+        red_line_switches = redLineCTC.getSwitchState()
+        for_ws_0 = {}
+        for_ws_1 = {}
+        for_ws_2 = {}
+        for root in red_line_switches:
+            if ((root[0] >= 1) and (root[0] <= 24)) or root[0] == 0:
+                root_block = redLineCTC.block_list[root[0]]
+                cur_pos = root_block.cur_switch_pos
+                sw_1 = root_block.block_switch_1
+                sw_2 = root_block.block_switch_2
+                if ((sw_2 > sw_1) and cur_pos == sw_2) or ((sw_2 < sw_1) and cur_pos == sw_1):
+                    switch_val = True
+                else:
+                    switch_val = False
+                for_ws_0[root[0]+1000] = switch_val
+            if ((root[0] >= 23) and (root[0] <= 46)) or ((root[0] >= 67) and (root[0] <= 76)):
+                root_block = redLineCTC.block_list[root[0]]
+                cur_pos = root_block.cur_switch_pos
+                sw_1 = root_block.block_switch_1
+                sw_2 = root_block.block_switch_2
+                if ((sw_2 > sw_1) and cur_pos == sw_2) or ((sw_2 < sw_1) and cur_pos == sw_1):
+                    switch_val = True
+                else:
+                    switch_val = False
+                for_ws_1[root[0]+1000] = switch_val
+            if ((root[0] >= 23) and (root[0] <= 46)) or ((root[0] >= 67) and (root[0] <= 76)):
+                root_block = redLineCTC.block_list[root[0]]
+                cur_pos = root_block.cur_switch_pos
+                sw_1 = root_block.block_switch_1
+                sw_2 = root_block.block_switch_2
+                if ((sw_2 > sw_1) and cur_pos == sw_2) or ((sw_2 < sw_1) and cur_pos == sw_1):
+                    switch_val = True
+                else:
+                    switch_val = False
+                for_ws_2[root[0]+1000] = switch_val
+        
+        # set_switch_positions
+        trcControl[0].set_switch_positions(for_ws_0)
+        trcControl[1].set_switch_positions(for_ws_1)
+        trcControl[2].set_switch_positions(for_ws_2)
 
     green_block_status_trc = trcControl[3].get_statuses() | trcControl[4].get_statuses() | trcControl[5].get_statuses()
     greenLineCTC.setBlockStatus(green_block_status_trc)
