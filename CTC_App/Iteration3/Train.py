@@ -22,7 +22,7 @@ class Train:
             self.next_section = 'K'
         elif self.line.line_color == 'Red':
             self.cur_section = 'YARD'
-            self.next_section = 'C'
+            self.next_section = 'CBAFGH1'
 
         # Set authority and suggested speed of yard and next block
         self.line.block_list[self.route[0]].block_authority = True
@@ -258,13 +258,10 @@ class Train:
             elif self.line.line_color == 'Red':
                 # Make sure no collisions happen before entering a two way
                 # Get current and next section using current location
-                if self.cur_section == "Yard" and block_number >= 1 and block_number <= 9:
-                    self.cur_section = "ABC"
-                    self.next_section = "FGH1"
-                elif self.cur_section == "ABC" and block_number >= 16 and block_number <= 27:
-                    self.cur_section = "FGH1"
+                if self.cur_section == "Yard" and block_number >= 1 and block_number <= 27:
+                    self.cur_section = "CBAFGH1"
                     self.next_section = "H2"
-                elif self.cur_section == "FGH1" and block_number >= 28 and block_number <= 32:
+                elif self.cur_section == "CBAFGH1" and block_number >= 28 and block_number <= 32:
                     self.cur_section = "H2"
                     self.next_section = "H3"
                 elif self.cur_section == "H2" and block_number >= 33 and block_number <= 38:
@@ -290,12 +287,9 @@ class Train:
                     self.next_section = "RST"
                 elif self.cur_section == "H3" and block_number >= 72 and block_number <= 76:
                     self.cur_section = "RST"
-                    self.next_section = "FGH1"
-                elif self.cur_section == "RST" and block_number >= 16 and block_number <= 27:
-                    self.cur_section = "FGH1"
-                    self.next_section = "ED"
-                elif self.cur_section == "FGH1" and block_number >= 16 and block_number <= 27:
-                    self.cur_section = "ED"
+                    self.next_section = "CBAFGH1"
+                elif self.cur_section == "RST" and block_number >= 1 and block_number <= 27:
+                    self.cur_section = "CBAFGH1"
                     self.next_section = "YARD"
 
                 # # Check if train is on section J2KLMN and see if train is coming from H5IJ1 to J2KLMN
@@ -461,10 +455,10 @@ class Train:
                             two_way_collision_flag = True
 
                             break
-                # # Check if train is on section RST and see if train is coming from FGH1 to H2
+                # # Check if train is on section RST and see if train is coming from CBAFGH1 to H2
                 elif self.cur_section == "RST":
                     for train in self.train_list:
-                        if train.cur_section == "FGH1" and train.next_section == "H2":
+                        if train.cur_section == "CBAFGH1" and train.next_section == "H2":
                             
                             # Check if train is on the last 4 blocks of OPQ
                             if block_number == 73:
@@ -502,8 +496,7 @@ class Train:
                             two_way_collision_flag = True
 
                             break
-                # # Check if train is on section ABC and see if train is coming from FGH1 to ED
-                elif self.cur_section == "ABC":
+
                     for train in self.train_list:
                         if train.cur_section == "FGH1" and train.next_section == "ED":
                             

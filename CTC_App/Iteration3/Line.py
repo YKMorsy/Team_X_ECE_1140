@@ -95,7 +95,7 @@ class Line:
                                     self.__section_block_dict['R'] + self.__section_block_dict['S'] + self.__section_block_dict['T'] +\
                                     list(reversed(self.__section_block_dict['H1'])) +\
                                     list(reversed(self.__section_block_dict['G'])) + list(reversed(self.__section_block_dict['F'])) +\
-                                    list(reversed(self.__section_block_dict['E'])) + list(reversed(self.__section_block_dict['E'])) +\
+                                    self.__section_block_dict['A'] + self.__section_block_dict['B'] + self.__section_block_dict['C'] +\
                                     self.__section_block_dict['YARD']
             
     def getRoute(self):
