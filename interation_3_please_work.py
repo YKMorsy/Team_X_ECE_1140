@@ -73,7 +73,7 @@ class Iteration3(QWidget):
         self.wayside_sign_in.timer_track_control()
 
         #Peter call your update here
-
+        self.track_model_var.ui.set_block_info_combo()
         #Ryans update
         handler.update(self.time_step, self.track_model_var)
 
