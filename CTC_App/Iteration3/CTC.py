@@ -24,7 +24,7 @@ class CTCApp(QWidget):
     
         uic.loadUi('./CTC_App/Iteration3/CTC.ui', self)
         self.tabWidget.setTabText(0,'Schedule/Trains')
-        self.tabWidget.setTabText(1,'Maintenace')
+        self.tabWidget.setTabText(1,'Track')
         
         # Sizing stuff
         header = self.stationsTable.horizontalHeader() 
