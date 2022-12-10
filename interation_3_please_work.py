@@ -32,9 +32,9 @@ class Iteration3(QWidget):
         
         #Create track model
         self.track_model_var = track_model()
-        #self.track_model_var.show()
+        self.track_model_var.show()
         handler.track_model = self.track_model_var
-        handler.track_model.show()
+        
 
         #Create CTC
         self.green_line = Line("./CTC_App/Iteration3/Track_Layout_Green.xlsx")
@@ -57,7 +57,7 @@ class Iteration3(QWidget):
 
     def update_everything(self):
 
-        connect_ctc_track_model(self.green_line, self.red_line, handler.track_model)
+        connect_ctc_track_model(self.green_line, self.red_line, self.track_model_var)
 
         connect_ctc_track_controller(self.dispatcher, self.green_line, self.red_line, self.wayside_sign_in.get_all_track_controllers(), self.ctc_office.manualModeCheck.isChecked())
 
@@ -78,7 +78,7 @@ class Iteration3(QWidget):
         self.wayside_sign_in.timer_track_control()
 
         #Peter call your update here
-        self.track_model_var.ui.set_block_info_combo()
+        self.track_model_var.ui.set_block_status_table()
         #Ryans update
         handler.update(self.time_step, self.track_model_var)
 
@@ -114,7 +114,7 @@ if __name__ == '__main__':
     timer = QTimer()
     timer.timeout.connect(god_help_us.update_everything)
     handler.update(1)
-    timer.setInterval(int(1000 / fps))
+    timer.setInterval(int(1000/fps))
     timer.start()
 
     fiveO.exec_()
