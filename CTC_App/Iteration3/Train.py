@@ -465,7 +465,7 @@ class Train:
                                     self.stop_train == False
                                     self.station_list.pop(0)
 
-                            self.route.insert(0, old_block)
+                            # self.route.insert(0, old_block)
 
                     elif (current_status == True):
                         suggested_speed = suggested_speed

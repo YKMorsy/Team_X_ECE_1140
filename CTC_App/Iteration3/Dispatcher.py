@@ -19,7 +19,7 @@ class Dispatcher:
     # Function that updates train_schedule list
     def scheduleMultiple(self, filepath, line):
         schedule = pd.read_excel(filepath)
-        schedule = schedule.loc[:,"Time, Line, and Stations"]
+        schedule = schedule.loc[:,"Time and Stations"]
         schedule_time = datetime.timestamp(schedule[0])
         schedule_list = []
         for i in range(1, len(schedule)):
