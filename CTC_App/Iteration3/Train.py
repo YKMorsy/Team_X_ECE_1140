@@ -480,17 +480,9 @@ class Train:
                         self.line.block_list[block_switch_1].block_authority = False
 
 
-
-            # # Set next authority to True
-            # if len(self.route) >= 2:
-            #     self.line.block_list[self.route[1]].block_authority = True
-            #     if two_way_collision_flag == False:
-            #         self.line.block_list[self.route[1]].block_suggested_speed = self.line.block_list[self.route[1]].block_speed_limit
-
-
             # Set current authority to True
             if len(self.route) >= 1:
-                print("Block " + str(self.route[0]) + " " + str(suggested_speed))
+                # print("Block " + str(self.route[0]) + " " + str(suggested_speed))
 
                 if len(self.route) >= 2:
                     self.line.block_list[self.route[1]].block_authority = True
@@ -503,10 +495,5 @@ class Train:
                 self.line.block_list[self.route[0]].block_suggested_speed = suggested_speed
 
             if suggested_speed == 0:
-                print(old_block)
+                # print(old_block)
                 self.route.insert(0, old_block)
-
-                # print("sugg speed on current block " + str(self.route[0]) + " is " + str(self.line.block_list[self.route[0]].block_suggested_speed))
-                # print("sugg speed on next block " + str(self.route[1]) + " is " + str(self.line.block_list[self.route[1]].block_suggested_speed))
-                # print("Authority on current block " + str(self.route[0]) + " is " + str(self.line.block_list[self.route[0]].block_authority))
-                # print("Authority on next block " + str(self.route[1]) + " is " + str(self.line.block_list[self.route[1]].block_authority))
