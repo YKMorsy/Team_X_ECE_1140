@@ -32,8 +32,9 @@ class Iteration3(QWidget):
         
         #Create track model
         self.track_model_var = track_model()
-        self.track_model_var.show()
+        #self.track_model_var.show()
         handler.track_model = self.track_model_var
+        handler.track_model.show()
 
         #Create CTC
         self.green_line = Line("./CTC_App/Iteration3/Track_Layout_Green.xlsx")
@@ -56,7 +57,7 @@ class Iteration3(QWidget):
 
     def update_everything(self):
 
-        connect_ctc_track_model(self.green_line, self.red_line, self.track_model_var)
+        connect_ctc_track_model(self.green_line, self.red_line, handler.track_model)
 
         connect_ctc_track_controller(self.dispatcher, self.green_line, self.red_line, self.wayside_sign_in.get_all_track_controllers(), self.ctc_office.manualModeCheck.isChecked())
 
