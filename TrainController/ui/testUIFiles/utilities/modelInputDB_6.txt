@@ -1,10 +1,7 @@
 0.0
 False
-False
-False
-70
-False
+0.0
 False
 False
 False
-False
+YARD

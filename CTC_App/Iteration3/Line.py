@@ -6,6 +6,7 @@ class Line:
     def __init__(self, file_path):
 
         # Initialize values
+        self.maintenance_blocks = []
         self.block_list = []
         self.throughput = 0
         self.line_color = ''

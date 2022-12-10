@@ -1,8 +1,7 @@
+False
 0.0
 False
 False
-False
-70
 False
 False
 False

@@ -157,6 +157,7 @@ class CTCApp(QWidget):
 
     # Function to update closed blocks table
     def updateClosedBlocksTable(self):
+        
         if self.current_line_maint == "Green":
             self.greenClosedBlocksTable.setRowCount(0)
             closed_blocks = self.greenLine.getClosedBlocks()
@@ -547,15 +548,17 @@ class CTCApp(QWidget):
         if self.manualModeCheck.isChecked() == True:
             if self.current_line_maint == "Green":
                 selected_block = self.greenChooseMaintenanceCombo.currentText()
+                self.greenLine.maintenance_blocks.append(selected_block)
                 # Set block status to True in line object and update choose block list
                 # greenLine.setBlockStatus(int(selected_block), True)
-                self.greenChooseMaintenanceCombo.removeItem(self.greenChooseMaintenanceCombo.currentIndex())
+                # self.greenChooseMaintenanceCombo.removeItem(self.greenChooseMaintenanceCombo.currentIndex())
 
             elif self.current_line_maint == "Red":
                 selected_block = self.redChooseMaintenanceCombo.currentText()
+                self.redLine.maintenance_blocks.append(selected_block)
                 # Set block status to True in line object and update choose block list
                 # greenLine.setBlockStatus(int(selected_block), True)
-                self.redChooseMaintenanceCombo.removeItem(self.redChooseMaintenanceCombo.currentIndex())
+                # self.redChooseMaintenanceCombo.removeItem(self.redChooseMaintenanceCombo.currentIndex())
 
 
     def updateTargetComboBox(self):

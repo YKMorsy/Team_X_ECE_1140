@@ -16,6 +16,7 @@ from TrackModel.track_model import track_model
 from connect_ctc_track_controller import connect_ctc_track_controller
 from Connect_Track_Controller_Model import Connect_Track_Control_And_Model
 from connect_train_model_train_controller import connect_train_model_train_controller
+from connect_ctc_track_model import connect_ctc_track_model
 
 from PyQt6.QtWidgets import QApplication as q6App
 from PyQt5.QtWidgets import QApplication as q5App
@@ -55,6 +56,8 @@ class Iteration3(QWidget):
 
     def update_everything(self):
 
+        connect_ctc_track_model(self.green_line, self.red_line, self.track_model_var)
+
         connect_ctc_track_controller(self.dispatcher, self.green_line, self.red_line, self.wayside_sign_in.get_all_track_controllers(), self.ctc_office.manualModeCheck.isChecked())
 
         Connect_Track_Control_And_Model(self.wayside_sign_in.get_all_track_controllers(), self.track_model_var)
@@ -62,7 +65,8 @@ class Iteration3(QWidget):
         #Ryan and peter connect here
 
         for i in range(len(self.train_controller)):
-            connect_train_model_train_controller(self.train_controller[self.train_id_list[i]], handler.train_list[self.train_id_list[i]])
+            if len(self.train_controller) and len(handler.train_list) > 0:
+                connect_train_model_train_controller(self.train_controller[self.train_id_list[i]], handler.train_list[self.train_id_list[i]])
         
         #Update all modules
         #Yassers update

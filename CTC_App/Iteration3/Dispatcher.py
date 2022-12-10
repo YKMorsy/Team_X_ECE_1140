@@ -13,8 +13,8 @@ class Dispatcher:
     # Function to schedule single train
     def scheduleSingle(self, station_list, line):
         train_id = len(self.all_trains) + 1
-        self.trains.append(Train(train_id, station_list, line, self.trains, self.cur_time))
-        self.all_trains.append(Train(train_id, station_list, line, self.trains, self.cur_time))
+        self.trains.append(Train(train_id, station_list, line, self.all_trains, self.cur_time))
+        self.all_trains.append(Train(train_id, station_list, line, self.all_trains, self.cur_time))
 
     # Function that updates train_schedule list
     def scheduleMultiple(self, filepath, line):
@@ -26,7 +26,7 @@ class Dispatcher:
             schedule_list.append(schedule[i])
 
         train_id = len(self.all_trains) + 1
-        self.all_trains.append(Train(train_id, schedule_list, line, self.trains, self.cur_time))
+        self.all_trains.append(Train(train_id, schedule_list, line, self.all_trains, self.cur_time))
         self.train_schedule.append([schedule_time, schedule_list, train_id])
 
     # Function that updates station list
@@ -39,7 +39,7 @@ class Dispatcher:
             if(train[0]) == self.cur_time:
                 # Create train
                 # self.scheduleSingle(train[1], line)
-                self.trains.append(Train(train[2], train[1], line, self.trains, self.cur_time))
+                self.trains.append(Train(train[2], train[1], line, self.all_trains, self.cur_time))
                 self.train_schedule.remove(train)
 
     # Function to update time in dispatcher

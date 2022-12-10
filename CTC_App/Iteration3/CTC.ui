@@ -317,7 +317,7 @@
       </rect>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="redEditStacked">
       <widget class="QGroupBox" name="redEditDispatch">
@@ -415,7 +415,7 @@
         </property>
         <column>
          <property name="text">
-          <string>Stations</string>
+          <string>Stops</string>
          </property>
          <property name="textAlignment">
           <set>AlignCenter</set>
