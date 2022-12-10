@@ -82,7 +82,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>Choose Stations:</string>
+       <string>Choose Stops:</string>
       </property>
      </widget>
      <widget class="QPushButton" name="addDestinationButton">
@@ -355,7 +355,7 @@
          </rect>
         </property>
         <property name="text">
-         <string>Add Stations:</string>
+         <string>Add Stop:</string>
         </property>
        </widget>
        <widget class="QComboBox" name="redAddStation">
@@ -391,7 +391,7 @@
          </rect>
         </property>
         <property name="text">
-         <string>Remove Stations:</string>
+         <string>Remove Stop:</string>
         </property>
        </widget>
        <widget class="QComboBox" name="redRemoveStation">
