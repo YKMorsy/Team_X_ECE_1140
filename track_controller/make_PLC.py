@@ -8,9 +8,13 @@ with open("track_controller/PLCs/RedLineTop_Red.txt", "w") as f:
         fut = i+1
         if (i == 2001):
             past =  2016
+
         if(i == 2016):
             other = 2001
             f.write("IF ( ( ( A-"+str(past)+" & F-"+str(past)+" & ! O-"+str(past)+" ) | ( A-"+str(fut)+" & F-"+str(fut)+" & ! O-"+str(fut)+" ) | ( A-"+str(other)+" & F-"+str(other)+" & ! O-"+str(other)+" ) ) & O-"+str(i)+" ) {\n")
+        elif(i == 2000):
+            fut = 2009
+            f.write("IF ( ( A-"+str(fut)+" & F-"+str(fut)+" & ! O-"+str(fut)+" ) & O-"+str(i)+" ) {\n")
         elif(i == 2009):
             other = 2000
             f.write("IF ( ( ( A-"+str(past)+" & F-"+str(past)+" & ! O-"+str(past)+" ) | ( A-"+str(fut)+" & F-"+str(fut)+" & ! O-"+str(fut)+" ) | ( A-"+str(other)+" & F-"+str(other)+" & ! O-"+str(other)+" ) ) & O-"+str(i)+" ) {\n")
