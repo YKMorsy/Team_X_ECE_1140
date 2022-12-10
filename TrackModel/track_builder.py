@@ -838,6 +838,7 @@ class Ui_Track_Model(object):
 
     def set_block_info_combo(self):
         i = 0
+        
         if self.select_track_combo.currentText() == "Green" :
             while i < 150 :
                 self.select_block_combo.addItem(self.track_list[i].get_block_name())
