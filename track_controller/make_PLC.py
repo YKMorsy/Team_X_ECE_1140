@@ -349,7 +349,7 @@ with open("track_controller/PLCs/GreenLineBottom_Blue.txt", "w") as f:
         f.write("}\n")
     #switches
     for s in range(len(switches)):
-        f.write("S-"+str(switches[s])+" = 1\n")
+        #f.write("S-"+str(switches[s])+" = 1\n")
         f.write("IF ( O-"+str(lower[s])+" | ( O-"+str(switches[s])+" & A-"+str(lower[s])+" ) ) {\n")
         f.write("S-"+str(switches[s])+" = 0\n")
         f.write("}\n")
