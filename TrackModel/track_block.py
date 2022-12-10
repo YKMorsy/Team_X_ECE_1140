@@ -197,6 +197,8 @@ class block:
                 train.direction = False
             if self.name == "Z150" :
                 train.direction = False
+            if self.name == "N77":
+                return "N78"
             if self.switch == 0:
                 return self.next_loc
             else:
@@ -204,7 +206,7 @@ class block:
         else:
             if self.name == "N77":
                 train.direction = True
-                return self.switch_forward_loc
+                return "R101"
             if self.name == "D13":
                 train.direction = True
                 return self.switch_forward_loc
