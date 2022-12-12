@@ -424,6 +424,7 @@ class track_model(object):
                 self.ui.track_list[temp - 1].set_commanded_speed(com_dic[key])
 
 
+
     def set_lights(self, lights_dic):
         for key in lights_dic:
             temp = key
@@ -473,7 +474,7 @@ class track_model(object):
                 block_number = 228
             else:
                 block_number = int(train.most_recent_block)
-            if train.current_distance_in_block >=  32 and train.current_distance_in_block < self.get_green_line_block_len(block_number) : 
+            if train.current_distance_in_block >=  32 and train.current_distance_in_block <= (self.get_green_line_block_len(block_number)) : 
                 store_curr = self.ui.track_list[block_number - 1].name
                 curr_block = store_curr[1:]
                 train.event_distance_in_block = self.get_green_line_block_len(block_number) 
@@ -486,12 +487,13 @@ class track_model(object):
                 if mr_block == "YARD":
                     train.commanded_speed = 30 * 0.277778
                 else:
-                    train.commanded_speed = self.get_green_line_commanded_speed(last_block )
+                    train.commanded_speed = self.get_green_line_commanded_speed(int(curr_block) )
                 list1 = [] 
                 list1.append(train.most_recent_block)
                 train.block_list = list1
                 return 0
             else:
+                print("called")
                 train.current_distance_in_block -= train.event_distance_in_block
                 train.event_distance_in_block = 32
                 if mr_block == "YARD":
@@ -501,19 +503,19 @@ class track_model(object):
                 next_block = self.ui.track_list[block_number - 1].get_next_block_green(train,self.ui.track_list)
                 if next_block.upper() == "YARD":
                     self.ui.track_list[block_number-1].reset_occupancy()
+                    self.ui.track_list[block_number-2].reset_occupancy()
                     return -1
                 curr_block = next_block[1:]
                 train.block_list.append(curr_block)
                 train.most_recent_block = curr_block
                 new_block = int(curr_block)
+                train.commanded_speed = self.get_green_line_commanded_speed(new_block )
                 if train.direction:
                     train.current_grade = self.get_green_line_grade(new_block)
                 else: 
                     train.current_grade = 0 - self.get_green_line_grade(new_block)
                 self.ui.track_list[new_block - 1].set_occupancy()
                 train.commanded_authority = "True" if self.get_green_line_authority(new_block) else "False"
-
-                train.commanded_speed = self.get_green_line_commanded_speed(new_block -1 )
                 train.beacon_info = self.ui.track_list[new_block -1].get_beacon()
 
                 return 0
@@ -534,7 +536,7 @@ class track_model(object):
                 else:
                     last_block = int(train.block_list[0])
                 if mr_block == "YARD":
-                    train.commanded_speed = 30 * 0.277778
+                    train.commanded_speed = 30
                 else:
                     train.commanded_speed = self.get_red_line_commanded_speed(last_block )
 
@@ -572,11 +574,25 @@ class track_model(object):
         line = train.line_name
         if line.upper() == "GREEN":
             mr_block = train.most_recent_block
+            print(mr_block)
             if mr_block == "YARD":
                 block_number = 228
             else:
                 block_number = int(train.most_recent_block)
-            train.commanded_speed = self.get_green_line_commanded_speed(block_number)
+            mr1_block = train.block_list[0]
+            if mr1_block == "YARD":
+                bl_number = 228
+            else:
+                bl_number = int(train.block_list[0])
+            if self.get_green_line_commanded_speed(block_number) > 0 and self.get_green_line_commanded_speed(block_number) < 2:
+                train.commanded_speed = self.get_green_line_commanded_speed(block_number)
+            elif self.get_green_line_commanded_speed(block_number) < self.get_green_line_commanded_speed(bl_number):
+                train.commanded_speed = self.get_green_line_commanded_speed(bl_number)
+            elif block_number == 101 or block_number == 77 or block_number == 55: 
+                train.commanded_speed = 40
+            else:
+                train.commanded_speed = self.get_green_line_commanded_speed(block_number)
+            #print(self.get_green_line_commanded_speed(block_number))
         else:
             mr_block = train.most_recent_block
             if mr_block == "YARD":
