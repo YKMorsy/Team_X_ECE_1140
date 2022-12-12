@@ -77,7 +77,7 @@ def connect_ctc_track_controller(dispatcherCTC, greenLineCTC, redLineCTC, trcCon
                     switch_val = True
                 else:
                     switch_val = False
-                for_ws_0[root[0]+1000] = switch_val
+                for_ws_0[root[0]+2000] = switch_val
             if ((root[0] >= 23) and (root[0] <= 46)) or ((root[0] >= 67) and (root[0] <= 76)):
                 root_block = redLineCTC.block_list[root[0]]
                 cur_pos = root_block.cur_switch_pos
@@ -87,8 +87,8 @@ def connect_ctc_track_controller(dispatcherCTC, greenLineCTC, redLineCTC, trcCon
                     switch_val = True
                 else:
                     switch_val = False
-                for_ws_1[root[0]+1000] = switch_val
-            if ((root[0] >= 23) and (root[0] <= 46)) or ((root[0] >= 67) and (root[0] <= 76)):
+                for_ws_1[root[0]+2000] = switch_val
+            if (((root[0]) >= 45) and ((root[0]) <= 66)):
                 root_block = redLineCTC.block_list[root[0]]
                 cur_pos = root_block.cur_switch_pos
                 sw_1 = root_block.block_switch_1
@@ -97,7 +97,7 @@ def connect_ctc_track_controller(dispatcherCTC, greenLineCTC, redLineCTC, trcCon
                     switch_val = True
                 else:
                     switch_val = False
-                for_ws_2[root[0]+1000] = switch_val
+                for_ws_2[root[0]+2000] = switch_val
         
         # set_switch_positions
         trcControl[0].set_switch_positions(for_ws_0)

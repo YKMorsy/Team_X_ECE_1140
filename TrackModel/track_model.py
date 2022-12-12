@@ -123,14 +123,6 @@ class track_model(object):
 
     def clear_block_failure(self,block_number):
         self.ui.track_list[block_number].clear_failure()
-        if block_number < 150:
-            self.ui.track_info_table.setItem(1,1,QtWidgets.QTableWidgetItem("Normal"))
-            self.ui.track_info_table.setItem(1,2,QtWidgets.QTableWidgetItem("None"))
-            self.ui.track_info_table.setItem(1,3,QtWidgets.QTableWidgetItem("N/A"))
-        else:
-            self.ui.track_info_table.setItem(0,1,QtWidgets.QTableWidgetItem("Normal"))
-            self.ui.track_info_table.setItem(0,2,QtWidgets.QTableWidgetItem("None"))
-            self.ui.track_info_table.setItem(0,3,QtWidgets.QTableWidgetItem("N/A"))
 
     def get_red_line_rail_status(self):
         i = 150
