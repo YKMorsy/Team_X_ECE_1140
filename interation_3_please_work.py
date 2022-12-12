@@ -60,7 +60,7 @@ class Iteration3(QWidget):
         connect_ctc_track_model(self.green_line, self.red_line, self.track_model_var)
 
         connect_ctc_track_controller(self.dispatcher, self.green_line, self.red_line, self.wayside_sign_in.get_all_track_controllers(), self.ctc_office.manualModeCheck.isChecked())
-
+        self.wayside_sign_in.timer_track_control()
         Connect_Track_Control_And_Model(self.wayside_sign_in.get_all_track_controllers(), self.track_model_var)
 
         #Ryan and peter connect here
@@ -75,7 +75,7 @@ class Iteration3(QWidget):
         for train in new_trains:
             self.new_train.append(train)
         #Sierra call your update here
-        self.wayside_sign_in.timer_track_control()
+        
 
         #Peter call your update here
         self.track_model_var.ui.set_block_status_table()
