@@ -6,7 +6,7 @@ class station(object):
         self.passengers = 0
     
     def get_passengers(self, cap):
-        rand = random.randint(1,15)
+        rand = random.randint(30,90)
         self.passengers += rand
         self.throughput += rand
         

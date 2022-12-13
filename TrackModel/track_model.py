@@ -485,7 +485,7 @@ class track_model(object):
                     last_block = int(train.block_list[0])
                 self.reset_green_line_occupancy(last_block)
                 if mr_block == "YARD":
-                    train.commanded_speed = 30 * 0.277778
+                    train.commanded_speed = self.get_green_line_commanded_speed(228 )
                 else:
                     train.commanded_speed = self.get_green_line_commanded_speed(int(curr_block) )
                 list1 = [] 
@@ -536,7 +536,7 @@ class track_model(object):
                 else:
                     last_block = int(train.block_list[0])
                 if mr_block == "YARD":
-                    train.commanded_speed = 30
+                    train.commanded_speed = self.get_red_line_commanded_speed(77 )
                 else:
                     train.commanded_speed = self.get_red_line_commanded_speed(last_block )
 
@@ -599,9 +599,17 @@ class track_model(object):
                 block_number = 77
             else:
                 block_number = int(train.most_recent_block)
-            train.commanded_speed = self.get_red_line_commanded_speed(block_number)
-            
-        
+            mr1_block = train.block_list[0]
+            if mr1_block == "YARD":
+                bl_number = 77
+            else:
+                bl_number = int(train.block_list[0])
+            if self.get_red_line_commanded_speed(block_number) > 0 and self.get_red_line_commanded_speed(block_number) < 2:
+                train.commanded_speed = self.get_red_line_commanded_speed(block_number)
+            elif self.get_red_line_commanded_speed(block_number) < self.get_red_line_commanded_speed(bl_number):
+                train.commanded_speed = self.get_red_line_commanded_speed(bl_number)
+            else:
+                train.commanded_speed = self.get_red_line_commanded_speed(block_number)
   
     # sys.exit(app.exec_())
 
