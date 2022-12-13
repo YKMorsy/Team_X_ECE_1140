@@ -114,16 +114,19 @@ class CTCApp(QWidget):
 
         if self.current_line == "Green":
             self.CTCDispatcher.checkDispatch(self.greenLine)
+        elif self.current_line == "Red":
+            self.CTCDispatcher.checkDispatch(self.redLine)
 
         output = []
 
-        while (self.train_list_length != len(self.CTCDispatcher.all_trains)):
-            self.greenLine.block_list[0].block_authority = True
-            self.greenLine.block_list[0].block_suggested_speed = self.greenLine.block_list[0].block_speed_limit
+        while (self.train_list_length != len(self.CTCDispatcher.trains)):
+            # self.greenLine.block_list[0].block_authority = True
+            # self.greenLine.block_list[0].block_suggested_speed = self.greenLine.block_list[0].block_speed_limit
 
-            if self.train_list_length <= len(self.CTCDispatcher.all_trains): 
-                output.append((self.CTCDispatcher.all_trains[self.train_list_length]))
+            if self.train_list_length <= len(self.CTCDispatcher.trains): 
+                output.append((self.CTCDispatcher.trains[self.train_list_length]))
                 self.train_list_length += 1
+
 
         # Table updates
         self.updateTrainTable()
@@ -135,8 +138,8 @@ class CTCApp(QWidget):
 
         for train in self.CTCDispatcher.all_trains:
             train.update_time(self.start_time)
-        for train in self.CTCDispatcher.trains:
-            train.update_time(self.start_time)
+        # for train in self.CTCDispatcher.trains:
+        #     train.update_time(self.start_time)
 
         return output
 
@@ -549,6 +552,7 @@ class CTCApp(QWidget):
             if self.current_line_maint == "Green":
                 selected_block = self.greenChooseMaintenanceCombo.currentText()
                 self.greenLine.maintenance_blocks.append(selected_block)
+                self.greenChooseMaintenanceCombo.removeItem(self.greenChooseMaintenanceCombo.currentIndex())
                 # Set block status to True in line object and update choose block list
                 # greenLine.setBlockStatus(int(selected_block), True)
                 # self.greenChooseMaintenanceCombo.removeItem(self.greenChooseMaintenanceCombo.currentIndex())
@@ -556,6 +560,7 @@ class CTCApp(QWidget):
             elif self.current_line_maint == "Red":
                 selected_block = self.redChooseMaintenanceCombo.currentText()
                 self.redLine.maintenance_blocks.append(selected_block)
+                self.redChooseMaintenanceCombo.removeItem(self.greenChooseMaintenanceCombo.currentIndex())
                 # Set block status to True in line object and update choose block list
                 # greenLine.setBlockStatus(int(selected_block), True)
                 # self.redChooseMaintenanceCombo.removeItem(self.redChooseMaintenanceCombo.currentIndex())
