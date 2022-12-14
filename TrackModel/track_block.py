@@ -22,6 +22,7 @@ class block:
     authority = False
     underground = 'n'
     lights = 0
+    beacon = {}
     
     #default constructor
     def __init__(self,ln, n, g, e, s, st, len, nl, sw,cr,u):
