@@ -30,7 +30,8 @@ class Iteration_4(QWidget):
         self.__fps = fps 
         self.__time_step = 1
         self.__count = 0
-        self.__multiplier = 1 
+        self.__multiplier = 1
+        self.__pause = False
         
         #Create track model
         self.__track_model_var = track_model()
@@ -77,6 +78,7 @@ class Iteration_4(QWidget):
     
     def __assemble_layouts(self):
         self.__simulation_layout.setAlignment(Qt.AlignVCenter)
+        self.__simulation_layout.setAlignment(Qt.AlignCenter)
         self.__main_layout.addLayout(self.__simulation_layout, 1)
         self.__main_layout.addWidget(self.__tabs, 9)
     
@@ -87,10 +89,14 @@ class Iteration_4(QWidget):
         self.__simulation_slider.setGeometry(QRect(190, 100, 160, 16))
         self.__simulation_slider.setOrientation(Qt.Horizontal)
         self.__simulation_slider.valueChanged.connect(self.__change_speed)
+        self.__simulation_pause_label = QLabel("Pause Simulation")
+        self.__simulation_pause = QRadioButton()
+        self.__simulation_pause.toggled.connect(self.__pause_simulation)
 
         self.__simulation_layout.addWidget(self.__simulation_label)
         self.__simulation_layout.addWidget(self.__simulation_slider)
-    
+        self.__simulation_layout.addWidget(self.__simulation_pause_label)
+        self.__simulation_layout.addWidget(self.__simulation_pause)
     
     def __change_speed(self, value):
         self.__multiplier = int(value / 10) + 1 
@@ -118,6 +124,9 @@ class Iteration_4(QWidget):
     def __train_controller_show(self, value):
         self.__train_controller[value].start_driver_ui()
     
+    def __pause_simulation(self):
+        self.__pause = self.__simulation_pause.isChecked()
+    
     def __delete_train_controller(self, index):
         self.__train_controller_buttons[index].deleteLater()
         del self.__train_controller_buttons[index]
@@ -125,7 +134,8 @@ class Iteration_4(QWidget):
     
     def update_with_fps(self):
         self.__simulation_label.setText("Current Simulation Speed: " + str(self.__multiplier))
-        self.__count += 1
+        if not self.__pause:
+            self.__count += 1
         if self.__count > (self.__fps / self.__multiplier):
             self.__count = 0
             self.__update_everything()
