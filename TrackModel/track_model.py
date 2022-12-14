@@ -507,7 +507,7 @@ class track_model(object):
                 if next_block.upper() == "YARD":
                     self.ui.track_list[55].reset_occupancy()
                     self.ui.track_list[56].reset_occupancy()
-                    self.ui.track_list[228].reset_occupancy()
+                    self.ui.track_list[227].reset_occupancy()
                     return -1
                 curr_block = next_block[1:]
                 train.block_list.append(curr_block)
