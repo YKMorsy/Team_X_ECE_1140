@@ -30,7 +30,8 @@ class Iteration_4(QWidget):
         self.__fps = fps 
         self.__time_step = 1
         self.__count = 0
-        self.__multiplier = 1 
+        self.__multiplier = 1
+        self.__pause = False
         
         #Create track model
         self.__track_model_var = track_model()
@@ -77,6 +78,7 @@ class Iteration_4(QWidget):
     
     def __assemble_layouts(self):
         self.__simulation_layout.setAlignment(Qt.AlignVCenter)
+        self.__simulation_layout.setAlignment(Qt.AlignCenter)
         self.__main_layout.addLayout(self.__simulation_layout, 1)
         self.__main_layout.addWidget(self.__tabs, 9)
     
@@ -87,10 +89,14 @@ class Iteration_4(QWidget):
         self.__simulation_slider.setGeometry(QRect(190, 100, 160, 16))
         self.__simulation_slider.setOrientation(Qt.Horizontal)
         self.__simulation_slider.valueChanged.connect(self.__change_speed)
+        self.__simulation_pause_label = QLabel("Pause Simulation")
+        self.__simulation_pause = QRadioButton()
+        self.__simulation_pause.toggled.connect(self.__pause_simulation)
 
         self.__simulation_layout.addWidget(self.__simulation_label)
         self.__simulation_layout.addWidget(self.__simulation_slider)
-    
+        self.__simulation_layout.addWidget(self.__simulation_pause_label)
+        self.__simulation_layout.addWidget(self.__simulation_pause)
     
     def __change_speed(self, value):
         self.__multiplier = int(value / 10) + 1 
@@ -110,21 +116,26 @@ class Iteration_4(QWidget):
         newButton.pressed.connect(lambda: self.__train_controller_show(train_id))
         self.__train_controller_layout.addWidget(newButton, self.__train_x_axis, self.__train_y_axis)
         self.__train_controller_buttons[train_id] = newButton
-        self.__train_x_axis += 1
-        if self.__train_x_axis >= 10:
-            self.__train_x_axis = 0
-            self.__train_y_axis += 1
+        self.__train_y_axis += 1
+        if self.__train_y_axis >= 10:
+            self.__train_y_axis = 0
+            self.__train_x_axis += 1
     
     def __train_controller_show(self, value):
         self.__train_controller[value].start_driver_ui()
     
+    def __pause_simulation(self):
+        self.__pause = self.__simulation_pause.isChecked()
+    
     def __delete_train_controller(self, index):
+        self.__train_controller_buttons[index].deleteLater()
         del self.__train_controller_buttons[index]
         del self.__train_controller[index]
     
     def update_with_fps(self):
         self.__simulation_label.setText("Current Simulation Speed: " + str(self.__multiplier))
-        self.__count += 1
+        if not self.__pause:
+            self.__count += 1
         if self.__count > (self.__fps / self.__multiplier):
             self.__count = 0
             self.__update_everything()
@@ -156,6 +167,11 @@ class Iteration_4(QWidget):
         #Ryans update
         to_delete = handler.update(self.__time_step, self.__track_model_var)
 
+        for i in to_delete:
+            print("Deleting Train")
+            self.__train_id_list.remove(i)
+            self.__delete_train_controller(i)
+
         #New train creation, Ryan can you add in the coded needed to create your train
         for train in self.__new_train:
             train_id = train.train_id
@@ -174,19 +190,6 @@ class Iteration_4(QWidget):
         self.__ctc_office.greenLine.setThroughput(self.__track_model_var.stations.get_throughput())
         self.__ctc_office.redLine.setThroughput(self.__track_model_var.stations.get_throughput())
         #Train deletion, wont do this for iteration 3 cause too hard
-
-        for i in to_delete:
-            self.__train_id_list.remove(i)
-            self.__delete_train_controller(i)
-
-
-        # if len(self.__train_controller) > len(handler.train_list):
-        #     for i in range(len(self.__train_controller)):
-        #         if self.__train_id_list[i] not in handler.train_list:
-        #             self.__delete_train_controller(self.__train_id_list[i])
-        #             del self.__train_id_list[i]
-
-
 
 if __name__ == '__main__':
     #Initialize  all objects
