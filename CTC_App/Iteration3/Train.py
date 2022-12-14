@@ -37,7 +37,7 @@ class Train:
         self.cur_time = cur_time
 
     def setPosition(self, line_color, block_number, occupancy):
-        if (block_number == self.route[1] and self.line.line_color == line_color and occupancy == True):
+        if ((len(self.route) >= 2) and block_number == self.route[1] and self.line.line_color == line_color and occupancy == True):
             
             old_block = self.route[0]
             # Set previous authority to False
