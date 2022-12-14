@@ -93,7 +93,7 @@ class Iteration_4(QWidget):
     
     
     def __change_speed(self, value):
-        self.__multiplier = int(value / 10) + 1 
+        self.__multiplier = int(value) + 1 
     
     def __tabs_init(self):
         self.__tabs = QTabWidget()
@@ -131,7 +131,7 @@ class Iteration_4(QWidget):
             self.__update_everything()
             
     def __update_everything(self):
-
+        start_time = time.time()
         connect_ctc_track_model(self.__green_line, self.__red_line, self.__track_model_var)
 
         connect_ctc_track_controller(self.__dispatcher, self.__green_line, self.__red_line, self.__wayside_sign_in.get_all_track_controllers(), self.__ctc_office.manualModeCheck.isChecked())
@@ -180,6 +180,7 @@ class Iteration_4(QWidget):
         self.__ctc_office.greenLine.setThroughput(self.__track_model_var.stations.get_throughput())
         self.__ctc_office.redLine.setThroughput(self.__track_model_var.stations.get_throughput())
         #Train deletion, wont do this for iteration 3 cause too hard
+        print("--- %s seconds ---" % (time.time() - start_time))
 
 if __name__ == '__main__':
     #Initialize  all objects

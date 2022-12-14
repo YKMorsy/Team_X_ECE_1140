@@ -16,6 +16,7 @@ class track_control_display (QtWidgets.QMainWindow, Ui_MainWindow):
         QtWidgets.QMainWindow.__init__(self)
         Ui_MainWindow.__init__(self)
         self.track_data = trc
+        self.new_plc = True
         self.setupUi(self)
 
         self.CurrentlyRunningLabel.setText("Currently Running: "+ self.track_data.get_PLC())
@@ -67,6 +68,7 @@ class track_control_display (QtWidgets.QMainWindow, Ui_MainWindow):
             self.testWind.show()
 
     def openFileNameDialog(self):
+        self.new_plc = True
         if(not(self.track_data.get_maintenance_mode())):
             self.ErrorBoxLabel.setText("Cannot upload new file while not in maintence mode")
             return

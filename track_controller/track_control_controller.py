@@ -365,12 +365,12 @@ class track_control_controller():
         t = list()
         for wayside in self.track_controller_list:
             if(not(wayside.get_maintenance_mode())):
-                #wayside.parse_plc()
-                x =threading.Thread(target=wayside.parse_plc)
-                t.append(x)
-                x.start()
-        for index, thread in enumerate(t):
-            thread.join()
+                wayside.parse_plc()
+                # x =threading.Thread(target=wayside.parse_plc)
+                # t.append(x)
+                # x.start()
+        # for index, thread in enumerate(t):
+        #     thread.join()
     def get_all_track_controllers(self):
         return self.track_controller_list
      

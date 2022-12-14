@@ -17,18 +17,23 @@ class WaysideController ():
         self.speed_limit = {}#0b00010100 #20 in binary
         self.maintencMode = False
         self.line_index = 0
+        self.new_plc = False
+        self.changes = None
 
     def parse_plc(self):
-        changes = self.PLC_info.parse_PLC(self.switch_positions, self.occupancy, self.authority,self.suggested_speed, self.statuses, self.speed_limit)
-        changes2 = self.PLC_info2.parse_PLC(self.switch_positions, self.occupancy, self.authority,self.suggested_speed, self.statuses, self.speed_limit)
-        any_changes = (set(changes) - set(changes2))
-        if(len(any_changes)!=0):
-            print("difference in plc parsing")
-            return
-        if isinstance(changes, str):
-            print("Error " + changes)
+        if self.new_plc or self.changes is None:
+            self.changes = self.PLC_info.parse_PLC(self.switch_positions, self.occupancy, self.authority,self.suggested_speed, self.statuses, self.speed_limit)
+            changes2 = self.PLC_info2.parse_PLC(self.switch_positions, self.occupancy, self.authority,self.suggested_speed, self.statuses, self.speed_limit)
+            self.new_plc = False
+            any_changes = (set(self.changes) - set(changes2))
+            if(len(any_changes)!=0):
+                print("difference in plc parsing")
+                return
+        
+        if isinstance(self.changes, str):
+            print("Error " + self.changes)
             return False
-        for change in changes:
+        for change in self.changes:
             (typeS, bl, val) = change
             if typeS == "S":
                 self.make_changes(change, self.switch_positions)
