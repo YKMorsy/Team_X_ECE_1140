@@ -505,8 +505,8 @@ class track_model(object):
                     block_number = int(train.most_recent_block)
                 next_block = self.ui.track_list[block_number - 1].get_next_block_green(train,self.ui.track_list)
                 if next_block.upper() == "YARD":
-                    self.ui.track_list[block_number-1].reset_occupancy()
-                    self.ui.track_list[block_number-2].reset_occupancy()
+                    self.ui.track_list[55].reset_occupancy()
+                    self.ui.track_list[56].reset_occupancy()
                     return -1
                 curr_block = next_block[1:]
                 train.block_list.append(curr_block)
@@ -558,7 +558,8 @@ class track_model(object):
                     block_number = int(train.most_recent_block)
                 next_block = self.ui.track_list[block_number + 149].get_next_block_red(train,self.ui.track_list)
                 if next_block.upper() == "YARD":
-                    self.ui.track_list[block_number + 149].reset_occupancy()
+                    self.ui.track_list[157].reset_occupancy()
+                    self.ui.track_list[158].reset_occupancy()
                     return -1
                 curr_block = next_block[1:]
                 train.most_recent_block = curr_block
