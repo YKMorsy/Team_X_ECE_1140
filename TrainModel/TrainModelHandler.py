@@ -30,10 +30,17 @@ class TrainModelHandler:
 		for i in delete_IDs:
 			self.delete_train(i)
 
+		#Convert the list of IDs into a list of rows
+		delete_rows = []
 		for i in range(0, self.train_info_model.rowCount()):
 			model_ID = int(self.train_info_model.item(i, 0).text())
 			if model_ID in delete_IDs:
-				self.train_info_model.removeRow(i)
+				delete_rows.append(i)
+
+		#Now, sort the list in reverse order and delete the rows as necessary
+		delete_rows.sort(reverse = True)
+		for i in delete_rows:
+			self.train_info_model.removeRow(i)
 
 		#Check that no trains have crashed into each other
 		blocks_occupied = {}
@@ -51,6 +58,8 @@ class TrainModelHandler:
 
 		for train in self.train_list.values():
 			train_model_var.get_speed(train)
+		
+		return delete_IDs
 
 	def set_authority(self, Authority):
 		for T in self.train_list.values:
