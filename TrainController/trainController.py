@@ -263,6 +263,12 @@ class TrainController:
                 self.__driver_ui_start = False
         if self.__command_set_point > 0:
             self.__train_driver_output.train_movement = True
+        
+        if self.__train_model_input.command_set_point < 0:
+            self.__train_model_input.command_set_point = 0
+        if self.__train_model_input.current_set_point < 0:
+            self.__train_model_input.current_set_point = 0
+
         self.__update_internal_values()
         self.__driver_output_mapper()
         self.__model_output_mapper()
