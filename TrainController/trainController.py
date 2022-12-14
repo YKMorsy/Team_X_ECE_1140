@@ -12,7 +12,7 @@ from multiprocessing import Lock
 from TrainController.ui.support.readAndWriteFiles import *
 from TrainController.resources.findSpeedLimit import *
 import psutil
-import os
+import os, signal
 
 class TrainController:
     def __init__(self, train_number, train_line):
@@ -75,12 +75,6 @@ class TrainController:
         self.__input_driver_driver_ui_file_name = "./TrainController/ui/driverUIFiles/utilities/driverInputDB_" + str(self.__train_number) + ".txt"
         self.__output_driver_driver_ui_file_name = "./TrainController/ui/driverUIFiles/utilities/driverOutputDB_" + str(self.__train_number) + ".txt"
         self.__input_engineer_ui_file_name = "./TrainController/ui/driverUIFiles/utilities/engineerInputDB_" + str(self.__train_number) + ".txt"
-    
-    def __del__(self):
-        if psutil.pid_exists(self.__test_ui_pid):
-            os.kill(self.__test_ui_pid, 0)
-        if psutil.pid_exists(self.__driver_ui_pid):
-            os.kill(self.__driver_ui_pid, 0)
 
     def start_test_ui(self):
         if not self.__test_ui_start:
