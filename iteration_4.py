@@ -51,6 +51,9 @@ class Iteration_4(QWidget):
         #Train Model Handler
         self.__murphy = MurphyUI()
 
+        self.__train_controller_buttons = []
+        self.__train_x_axis = 0
+        self.__train_y_axis = 0
 
         self.__train_id_list = []
         self.__train_controller = {}
@@ -102,13 +105,26 @@ class Iteration_4(QWidget):
         self.__train_controller_tab.setLayout(self.__train_controller_layout)
         self.__tabs.addTab(self.__train_controller_tab, "Train Controller")
     
+    def __add_train_button(self, train_id):
+        newButton = QPushButton("Train " + str(train_id))
+        newButton.pressed.connect(lambda: self.__train_controller_show(train_id))
+        self.__train_controller_layout.addWidget(newButton, self.__train_x_axis, self.__train_y_axis)
+        self.__train_controller_buttons.append(newButton)
+        self.__train_x_axis += 1
+        if self.__train_x_axis >= 10:
+            self.__train_x_axis = 0
+            self.__train_y_axis += 1
+    
+    def __train_controller_show(self, value):
+        self.__train_controller[value].start_driver_ui()
+    
     def update_with_fps(self):
         self.__simulation_label.setText("Current Simulation Speed: " + str(self.__multiplier))
         self.__count += 1
         if self.__count > (self.__fps / self.__multiplier):
             self.__count = 0
             self.__update_everything()
-
+            
     def __update_everything(self):
 
         connect_ctc_track_model(self.__green_line, self.__red_line, self.__track_model_var)
@@ -147,7 +163,7 @@ class Iteration_4(QWidget):
             else:
                 self.__train_controller[train_id] = TrainController(train_id, 1)
                 handler.create_train(ID=train_id, line_name='Green')
-            
+            self.__add_train_button(train_id)
 
             self.__new_train.remove(train)
 
