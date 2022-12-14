@@ -119,6 +119,7 @@ class Iteration_4(QWidget):
         self.__train_controller[value].start_driver_ui()
     
     def __delete_train_controller(self, index):
+        self.__train_controller_buttons[index].deleteLater()
         del self.__train_controller_buttons[index]
         del self.__train_controller[index]
     
@@ -178,13 +179,6 @@ class Iteration_4(QWidget):
         for i in to_delete:
             self.__train_id_list.remove(i)
             self.__delete_train_controller(i)
-
-
-        # if len(self.__train_controller) > len(handler.train_list):
-        #     for i in range(len(self.__train_controller)):
-        #         if self.__train_id_list[i] not in handler.train_list:
-        #             self.__delete_train_controller(self.__train_id_list[i])
-        #             del self.__train_id_list[i]
 
 
 
