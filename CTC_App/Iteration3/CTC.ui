@@ -13,404 +13,48 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QTabWidget" name="tabWidget">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>10</y>
-     <width>1141</width>
-     <height>631</height>
-    </rect>
-   </property>
-   <property name="currentIndex">
-    <number>0</number>
-   </property>
-   <widget class="QWidget" name="Schedule">
-    <property name="enabled">
-     <bool>true</bool>
-    </property>
-    <attribute name="title">
-     <string>Tab 1</string>
-    </attribute>
-    <widget class="QGroupBox" name="singleDispatch">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>100</y>
-       <width>361</width>
-       <height>371</height>
-      </rect>
-     </property>
-     <property name="title">
-      <string>Single Dispatch</string>
-     </property>
-     <widget class="QComboBox" name="chooseStationCombo">
-      <property name="geometry">
-       <rect>
-        <x>150</x>
-        <y>34</y>
-        <width>201</width>
-        <height>31</height>
-       </rect>
-      </property>
-     </widget>
-     <widget class="QTableWidget" name="stationsTable">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>120</y>
-        <width>341</width>
-        <height>192</height>
-       </rect>
-      </property>
-      <column>
-       <property name="text">
-        <string>Stops</string>
-       </property>
-       <property name="textAlignment">
-        <set>AlignCenter</set>
-       </property>
-      </column>
-     </widget>
-     <widget class="QLabel" name="chooseStationLabel">
-      <property name="geometry">
-       <rect>
-        <x>20</x>
-        <y>40</y>
-        <width>121</width>
-        <height>17</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Choose Stops:</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="addDestinationButton">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>80</y>
-        <width>341</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Add</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="dispatchButton">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>330</y>
-        <width>341</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Dispatch</string>
-      </property>
-     </widget>
-    </widget>
-    <widget class="QGroupBox" name="autoDispatch">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>490</y>
-       <width>361</width>
-       <height>91</height>
-      </rect>
-     </property>
-     <property name="title">
-      <string>Automatic Dispatch</string>
-     </property>
-     <widget class="QPushButton" name="openFile">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>40</y>
-        <width>341</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Open File</string>
-      </property>
-     </widget>
-    </widget>
-    <widget class="QPushButton" name="redLineButton">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>30</y>
-       <width>171</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Red Line</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="greenLineButton">
-     <property name="geometry">
-      <rect>
-       <x>210</x>
-       <y>30</y>
-       <width>171</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Green Line</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="throughputLabel">
-     <property name="geometry">
-      <rect>
-       <x>480</x>
-       <y>60</y>
-       <width>91</width>
-       <height>41</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Throughput:</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-    <widget class="QLabel" name="throughPutValue">
-     <property name="geometry">
-      <rect>
-       <x>600</x>
-       <y>60</y>
-       <width>101</width>
-       <height>41</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>--</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-    <widget class="QLabel" name="currentLineValue">
-     <property name="geometry">
-      <rect>
-       <x>600</x>
-       <y>30</y>
-       <width>101</width>
-       <height>41</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>--</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-    <widget class="QLabel" name="currentLineLabel">
-     <property name="geometry">
-      <rect>
-       <x>480</x>
-       <y>30</y>
-       <width>91</width>
-       <height>41</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Current Line:</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-    <widget class="QStackedWidget" name="trainTableStacked">
-     <property name="geometry">
-      <rect>
-       <x>810</x>
-       <y>10</y>
-       <width>311</width>
-       <height>571</height>
-      </rect>
-     </property>
-     <property name="currentIndex">
-      <number>1</number>
-     </property>
-     <widget class="QWidget" name="redTrainTableStacked">
-      <widget class="QTableWidget" name="redTrainTable">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>0</y>
-         <width>311</width>
-         <height>561</height>
-        </rect>
-       </property>
-       <property name="autoFillBackground">
-        <bool>false</bool>
-       </property>
-       <attribute name="horizontalHeaderCascadingSectionResizes">
-        <bool>false</bool>
-       </attribute>
-       <column>
-        <property name="text">
-         <string>Train ID</string>
-        </property>
-       </column>
-       <column>
-        <property name="text">
-         <string>Block</string>
-        </property>
-       </column>
-       <column>
-        <property name="text">
-         <string>Next Stop</string>
-        </property>
-       </column>
-      </widget>
-     </widget>
-     <widget class="QWidget" name="greenTrainTableStacked">
-      <widget class="QTableWidget" name="greenTrainTable">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>0</y>
-         <width>311</width>
-         <height>561</height>
-        </rect>
-       </property>
-       <property name="autoFillBackground">
-        <bool>false</bool>
-       </property>
-       <attribute name="horizontalHeaderCascadingSectionResizes">
-        <bool>false</bool>
-       </attribute>
-       <column>
-        <property name="text">
-         <string>Train ID</string>
-        </property>
-       </column>
-       <column>
-        <property name="text">
-         <string>Block</string>
-        </property>
-       </column>
-       <column>
-        <property name="text">
-         <string>Next Stop</string>
-        </property>
-       </column>
-      </widget>
-     </widget>
-    </widget>
-    <widget class="QStackedWidget" name="editDispatchStacked">
-     <property name="geometry">
-      <rect>
-       <x>410</x>
-       <y>90</y>
-       <width>391</width>
-       <height>521</height>
-      </rect>
-     </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
       <number>0</number>
      </property>
-     <widget class="QWidget" name="redEditStacked">
-      <widget class="QGroupBox" name="redEditDispatch">
+     <widget class="QWidget" name="Schedule">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <attribute name="title">
+       <string>Tab 1</string>
+      </attribute>
+      <widget class="QGroupBox" name="singleDispatch">
        <property name="geometry">
         <rect>
-         <x>10</x>
-         <y>20</y>
+         <x>20</x>
+         <y>100</y>
          <width>361</width>
-         <height>481</height>
+         <height>371</height>
         </rect>
        </property>
        <property name="title">
-        <string>Edit Dispatch</string>
+        <string>Single Dispatch</string>
        </property>
-       <widget class="QPushButton" name="redAddButton">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>130</y>
-          <width>341</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Add</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="redAddStationLabel">
-        <property name="geometry">
-         <rect>
-          <x>20</x>
-          <y>90</y>
-          <width>121</width>
-          <height>17</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Add Stop:</string>
-        </property>
-       </widget>
-       <widget class="QComboBox" name="redAddStation">
+       <widget class="QComboBox" name="chooseStationCombo">
         <property name="geometry">
          <rect>
           <x>150</x>
-          <y>84</y>
+          <y>34</y>
           <width>201</width>
           <height>31</height>
          </rect>
         </property>
        </widget>
-       <widget class="QPushButton" name="redRemoveButton">
+       <widget class="QTableWidget" name="stationsTable">
         <property name="geometry">
          <rect>
           <x>10</x>
-          <y>226</y>
+          <y>120</y>
           <width>341</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Remove</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="redRemoveStationLabel">
-        <property name="geometry">
-         <rect>
-          <x>20</x>
-          <y>186</y>
-          <width>121</width>
-          <height>17</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Remove Stop:</string>
-        </property>
-       </widget>
-       <widget class="QComboBox" name="redRemoveStation">
-        <property name="geometry">
-         <rect>
-          <x>150</x>
-          <y>180</y>
-          <width>201</width>
-          <height>31</height>
-         </rect>
-        </property>
-       </widget>
-       <widget class="QTableWidget" name="redEditDispatchTable">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>270</y>
-          <width>341</width>
-          <height>201</height>
+          <height>192</height>
          </rect>
         </property>
         <column>
@@ -422,49 +66,24 @@
          </property>
         </column>
        </widget>
-       <widget class="QLabel" name="redChooseTrainLabel">
+       <widget class="QLabel" name="chooseStationLabel">
         <property name="geometry">
          <rect>
           <x>20</x>
-          <y>36</y>
+          <y>40</y>
           <width>121</width>
           <height>17</height>
          </rect>
         </property>
         <property name="text">
-         <string>Choose Train:</string>
+         <string>Choose Stops:</string>
         </property>
        </widget>
-       <widget class="QComboBox" name="redChooseTrain">
-        <property name="geometry">
-         <rect>
-          <x>150</x>
-          <y>30</y>
-          <width>201</width>
-          <height>31</height>
-         </rect>
-        </property>
-       </widget>
-      </widget>
-     </widget>
-     <widget class="QWidget" name="greenEditStacked">
-      <widget class="QGroupBox" name="greenEditDispatch">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>20</y>
-         <width>361</width>
-         <height>481</height>
-        </rect>
-       </property>
-       <property name="title">
-        <string>Edit Dispatch</string>
-       </property>
-       <widget class="QPushButton" name="greenAddButton">
+       <widget class="QPushButton" name="addDestinationButton">
         <property name="geometry">
          <rect>
           <x>10</x>
-          <y>130</y>
+          <y>80</y>
           <width>341</width>
           <height>25</height>
          </rect>
@@ -473,696 +92,1073 @@
          <string>Add</string>
         </property>
        </widget>
-       <widget class="QLabel" name="greenAddStationLabel">
-        <property name="geometry">
-         <rect>
-          <x>20</x>
-          <y>90</y>
-          <width>121</width>
-          <height>17</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Add Stations:</string>
-        </property>
-       </widget>
-       <widget class="QComboBox" name="greenAddStation">
-        <property name="geometry">
-         <rect>
-          <x>150</x>
-          <y>84</y>
-          <width>201</width>
-          <height>31</height>
-         </rect>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="greenRemoveButton">
+       <widget class="QPushButton" name="dispatchButton">
         <property name="geometry">
          <rect>
           <x>10</x>
-          <y>226</y>
+          <y>330</y>
           <width>341</width>
           <height>25</height>
          </rect>
         </property>
         <property name="text">
-         <string>Remove</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="greenRemoveStationLabel">
-        <property name="geometry">
-         <rect>
-          <x>20</x>
-          <y>186</y>
-          <width>121</width>
-          <height>17</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Remove Stations:</string>
-        </property>
-       </widget>
-       <widget class="QComboBox" name="greenRemoveStation">
-        <property name="geometry">
-         <rect>
-          <x>150</x>
-          <y>180</y>
-          <width>201</width>
-          <height>31</height>
-         </rect>
-        </property>
-       </widget>
-       <widget class="QTableWidget" name="greenEditDispatchTable">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>270</y>
-          <width>341</width>
-          <height>201</height>
-         </rect>
-        </property>
-        <column>
-         <property name="text">
-          <string>Stops</string>
-         </property>
-         <property name="textAlignment">
-          <set>AlignCenter</set>
-         </property>
-        </column>
-       </widget>
-       <widget class="QLabel" name="greenChooseTrainLabel">
-        <property name="geometry">
-         <rect>
-          <x>20</x>
-          <y>36</y>
-          <width>121</width>
-          <height>17</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Choose Train:</string>
-        </property>
-       </widget>
-       <widget class="QComboBox" name="greenChooseTrain">
-        <property name="geometry">
-         <rect>
-          <x>150</x>
-          <y>30</y>
-          <width>201</width>
-          <height>31</height>
-         </rect>
+         <string>Dispatch</string>
         </property>
        </widget>
       </widget>
-     </widget>
-    </widget>
-    <widget class="QLabel" name="timeLabel">
-     <property name="geometry">
-      <rect>
-       <x>480</x>
-       <y>0</y>
-       <width>91</width>
-       <height>41</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Time:</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-    <widget class="QLabel" name="timeValue">
-     <property name="geometry">
-      <rect>
-       <x>560</x>
-       <y>0</y>
-       <width>181</width>
-       <height>41</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>--</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-   </widget>
-   <widget class="QWidget" name="Maintenance">
-    <attribute name="title">
-     <string>Tab 2</string>
-    </attribute>
-    <widget class="QPushButton" name="greenLineButton_2">
-     <property name="geometry">
-      <rect>
-       <x>210</x>
-       <y>30</y>
-       <width>171</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Green Line</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="redLineButton_2">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>30</y>
-       <width>171</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Red Line</string>
-     </property>
-    </widget>
-    <widget class="QStackedWidget" name="maintenanceStack">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>90</y>
-       <width>1101</width>
-       <height>501</height>
-      </rect>
-     </property>
-     <property name="currentIndex">
-      <number>1</number>
-     </property>
-     <widget class="QWidget" name="redInfo">
-      <widget class="QGroupBox" name="redClosedBlocksGroup">
+      <widget class="QGroupBox" name="autoDispatch">
        <property name="geometry">
         <rect>
          <x>20</x>
-         <y>180</y>
-         <width>331</width>
-         <height>321</height>
-        </rect>
-       </property>
-       <property name="title">
-        <string>Closed Blocks</string>
-       </property>
-       <widget class="QTableWidget" name="redClosedBlocksTable">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>30</y>
-          <width>311</width>
-          <height>281</height>
-         </rect>
-        </property>
-        <column>
-         <property name="text">
-          <string>Block Number</string>
-         </property>
-         <property name="textAlignment">
-          <set>AlignCenter</set>
-         </property>
-        </column>
-       </widget>
-      </widget>
-      <widget class="QGroupBox" name="redSwitchStateGroup">
-       <property name="geometry">
-        <rect>
-         <x>390</x>
-         <y>230</y>
+         <y>490</y>
          <width>361</width>
-         <height>271</height>
+         <height>91</height>
         </rect>
        </property>
        <property name="title">
-        <string>Switch State</string>
+        <string>Automatic Dispatch</string>
        </property>
-       <widget class="QTableWidget" name="redSwitchStateTable">
+       <widget class="QPushButton" name="openFile">
         <property name="geometry">
          <rect>
           <x>10</x>
-          <y>30</y>
-          <width>341</width>
-          <height>231</height>
-         </rect>
-        </property>
-        <column>
-         <property name="text">
-          <string>Origin Block</string>
-         </property>
-         <property name="textAlignment">
-          <set>AlignCenter</set>
-         </property>
-        </column>
-        <column>
-         <property name="text">
-          <string>Target Block</string>
-         </property>
-         <property name="textAlignment">
-          <set>AlignCenter</set>
-         </property>
-        </column>
-       </widget>
-      </widget>
-      <widget class="QGroupBox" name="redChangeSwitchGroup">
-       <property name="geometry">
-        <rect>
-         <x>390</x>
-         <y>10</y>
-         <width>361</width>
-         <height>201</height>
-        </rect>
-       </property>
-       <property name="title">
-        <string>Switch Position</string>
-       </property>
-       <widget class="QComboBox" name="redChooseOriginCombo">
-        <property name="geometry">
-         <rect>
-          <x>190</x>
-          <y>44</y>
-          <width>151</width>
-          <height>31</height>
-         </rect>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="redSetState">
-        <property name="geometry">
-         <rect>
-          <x>20</x>
-          <y>150</y>
-          <width>321</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Set</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="label_4">
-        <property name="geometry">
-         <rect>
-          <x>20</x>
-          <y>50</y>
-          <width>151</width>
-          <height>17</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Choose Origin Block:</string>
-        </property>
-       </widget>
-       <widget class="QComboBox" name="redChooseTargetCombo">
-        <property name="geometry">
-         <rect>
-          <x>190</x>
-          <y>90</y>
-          <width>151</width>
-          <height>31</height>
-         </rect>
-        </property>
-       </widget>
-       <widget class="QLabel" name="label_5">
-        <property name="geometry">
-         <rect>
-          <x>20</x>
-          <y>90</y>
-          <width>151</width>
-          <height>17</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Choose Target Block:</string>
-        </property>
-       </widget>
-      </widget>
-      <widget class="QGroupBox" name="redCrossingGroup">
-       <property name="geometry">
-        <rect>
-         <x>790</x>
-         <y>10</y>
-         <width>291</width>
-         <height>491</height>
-        </rect>
-       </property>
-       <property name="title">
-        <string>Crossing Status</string>
-       </property>
-       <widget class="QTableWidget" name="redCrossingTable">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>30</y>
-          <width>271</width>
-          <height>451</height>
-         </rect>
-        </property>
-        <column>
-         <property name="text">
-          <string>Block Number</string>
-         </property>
-         <property name="textAlignment">
-          <set>AlignCenter</set>
-         </property>
-        </column>
-        <column>
-         <property name="text">
-          <string>Status</string>
-         </property>
-         <property name="textAlignment">
-          <set>AlignCenter</set>
-         </property>
-        </column>
-       </widget>
-      </widget>
-      <widget class="QGroupBox" name="redMaintenanceGroup">
-       <property name="geometry">
-        <rect>
-         <x>20</x>
-         <y>10</y>
-         <width>331</width>
-         <height>151</height>
-        </rect>
-       </property>
-       <property name="title">
-        <string>Block Maintenance</string>
-       </property>
-       <widget class="QComboBox" name="redChooseMaintenanceCombo">
-        <property name="geometry">
-         <rect>
-          <x>170</x>
           <y>40</y>
-          <width>141</width>
-          <height>31</height>
-         </rect>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="redMaintenanceButton">
-        <property name="geometry">
-         <rect>
-          <x>18</x>
-          <y>100</y>
-          <width>291</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Put In Maintenace</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="label_6">
-        <property name="geometry">
-         <rect>
-          <x>20</x>
-          <y>50</y>
-          <width>111</width>
-          <height>17</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Choose Block:</string>
-        </property>
-       </widget>
-      </widget>
-     </widget>
-     <widget class="QWidget" name="greenInfo">
-      <widget class="QGroupBox" name="greenClosedBlocksGroup">
-       <property name="geometry">
-        <rect>
-         <x>20</x>
-         <y>180</y>
-         <width>331</width>
-         <height>321</height>
-        </rect>
-       </property>
-       <property name="title">
-        <string>Closed Blocks</string>
-       </property>
-       <widget class="QTableWidget" name="greenClosedBlocksTable">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>30</y>
-          <width>311</width>
-          <height>281</height>
-         </rect>
-        </property>
-        <column>
-         <property name="text">
-          <string>Block Number</string>
-         </property>
-         <property name="textAlignment">
-          <set>AlignCenter</set>
-         </property>
-        </column>
-       </widget>
-      </widget>
-      <widget class="QGroupBox" name="greenMaintenanceGroup">
-       <property name="geometry">
-        <rect>
-         <x>20</x>
-         <y>10</y>
-         <width>331</width>
-         <height>151</height>
-        </rect>
-       </property>
-       <property name="title">
-        <string>Block Maintenance</string>
-       </property>
-       <widget class="QComboBox" name="greenChooseMaintenanceCombo">
-        <property name="geometry">
-         <rect>
-          <x>170</x>
-          <y>40</y>
-          <width>141</width>
-          <height>31</height>
-         </rect>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="greenMaintenanceButton">
-        <property name="geometry">
-         <rect>
-          <x>18</x>
-          <y>100</y>
-          <width>291</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Put In Maintenace</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="greenChooseBlockLabel">
-        <property name="geometry">
-         <rect>
-          <x>20</x>
-          <y>50</y>
-          <width>111</width>
-          <height>17</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Choose Block:</string>
-        </property>
-       </widget>
-      </widget>
-      <widget class="QGroupBox" name="greenChangeSwitchGroup">
-       <property name="geometry">
-        <rect>
-         <x>390</x>
-         <y>10</y>
-         <width>361</width>
-         <height>201</height>
-        </rect>
-       </property>
-       <property name="title">
-        <string>Switch Position</string>
-       </property>
-       <widget class="QComboBox" name="greenChooseOriginCombo">
-        <property name="geometry">
-         <rect>
-          <x>190</x>
-          <y>44</y>
-          <width>151</width>
-          <height>31</height>
-         </rect>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="greenSetState">
-        <property name="geometry">
-         <rect>
-          <x>20</x>
-          <y>150</y>
-          <width>321</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Set</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="label_2">
-        <property name="geometry">
-         <rect>
-          <x>20</x>
-          <y>50</y>
-          <width>151</width>
-          <height>17</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Choose Origin Block:</string>
-        </property>
-       </widget>
-       <widget class="QComboBox" name="greenChooseTargetCombo">
-        <property name="geometry">
-         <rect>
-          <x>190</x>
-          <y>90</y>
-          <width>151</width>
-          <height>31</height>
-         </rect>
-        </property>
-       </widget>
-       <widget class="QLabel" name="label_3">
-        <property name="geometry">
-         <rect>
-          <x>20</x>
-          <y>90</y>
-          <width>151</width>
-          <height>17</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Choose Target Block:</string>
-        </property>
-       </widget>
-      </widget>
-      <widget class="QGroupBox" name="greenCrossingGroup">
-       <property name="geometry">
-        <rect>
-         <x>790</x>
-         <y>10</y>
-         <width>291</width>
-         <height>491</height>
-        </rect>
-       </property>
-       <property name="title">
-        <string>Crossing Status</string>
-       </property>
-       <widget class="QTableWidget" name="greenCrossingTable">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>30</y>
-          <width>271</width>
-          <height>451</height>
-         </rect>
-        </property>
-        <column>
-         <property name="text">
-          <string>Block Number</string>
-         </property>
-         <property name="textAlignment">
-          <set>AlignCenter</set>
-         </property>
-        </column>
-        <column>
-         <property name="text">
-          <string>Status</string>
-         </property>
-         <property name="textAlignment">
-          <set>AlignCenter</set>
-         </property>
-        </column>
-       </widget>
-      </widget>
-      <widget class="QGroupBox" name="greenSwitchStateGroup">
-       <property name="geometry">
-        <rect>
-         <x>390</x>
-         <y>230</y>
-         <width>361</width>
-         <height>271</height>
-        </rect>
-       </property>
-       <property name="title">
-        <string>Switch State</string>
-       </property>
-       <widget class="QTableWidget" name="greenSwitchStateTable">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>30</y>
           <width>341</width>
-          <height>231</height>
+          <height>31</height>
          </rect>
         </property>
-        <column>
-         <property name="text">
-          <string>Origin Block</string>
-         </property>
-         <property name="textAlignment">
-          <set>AlignCenter</set>
-         </property>
-        </column>
-        <column>
-         <property name="text">
-          <string>Target Block</string>
-         </property>
-         <property name="textAlignment">
-          <set>AlignCenter</set>
-         </property>
-        </column>
+        <property name="text">
+         <string>Open File</string>
+        </property>
        </widget>
+      </widget>
+      <widget class="QPushButton" name="redLineButton">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>30</y>
+         <width>171</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Red Line</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="greenLineButton">
+       <property name="geometry">
+        <rect>
+         <x>210</x>
+         <y>30</y>
+         <width>171</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Green Line</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="throughputLabel">
+       <property name="geometry">
+        <rect>
+         <x>480</x>
+         <y>60</y>
+         <width>91</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Throughput:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+      <widget class="QLabel" name="throughPutValue">
+       <property name="geometry">
+        <rect>
+         <x>600</x>
+         <y>60</y>
+         <width>101</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>--</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+      <widget class="QLabel" name="currentLineValue">
+       <property name="geometry">
+        <rect>
+         <x>600</x>
+         <y>30</y>
+         <width>101</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>--</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+      <widget class="QLabel" name="currentLineLabel">
+       <property name="geometry">
+        <rect>
+         <x>480</x>
+         <y>30</y>
+         <width>91</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Current Line:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+      <widget class="QStackedWidget" name="trainTableStacked">
+       <property name="geometry">
+        <rect>
+         <x>810</x>
+         <y>10</y>
+         <width>311</width>
+         <height>571</height>
+        </rect>
+       </property>
+       <property name="currentIndex">
+        <number>1</number>
+       </property>
+       <widget class="QWidget" name="redTrainTableStacked">
+        <widget class="QTableWidget" name="redTrainTable">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>0</y>
+           <width>311</width>
+           <height>561</height>
+          </rect>
+         </property>
+         <property name="autoFillBackground">
+          <bool>false</bool>
+         </property>
+         <attribute name="horizontalHeaderCascadingSectionResizes">
+          <bool>false</bool>
+         </attribute>
+         <column>
+          <property name="text">
+           <string>Train ID</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Block</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Next Stop</string>
+          </property>
+         </column>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="greenTrainTableStacked">
+        <widget class="QTableWidget" name="greenTrainTable">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>0</y>
+           <width>311</width>
+           <height>561</height>
+          </rect>
+         </property>
+         <property name="autoFillBackground">
+          <bool>false</bool>
+         </property>
+         <attribute name="horizontalHeaderCascadingSectionResizes">
+          <bool>false</bool>
+         </attribute>
+         <column>
+          <property name="text">
+           <string>Train ID</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Block</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Next Stop</string>
+          </property>
+         </column>
+        </widget>
+       </widget>
+      </widget>
+      <widget class="QStackedWidget" name="editDispatchStacked">
+       <property name="geometry">
+        <rect>
+         <x>410</x>
+         <y>90</y>
+         <width>391</width>
+         <height>521</height>
+        </rect>
+       </property>
+       <property name="currentIndex">
+        <number>0</number>
+       </property>
+       <widget class="QWidget" name="redEditStacked">
+        <widget class="QGroupBox" name="redEditDispatch">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>20</y>
+           <width>361</width>
+           <height>481</height>
+          </rect>
+         </property>
+         <property name="title">
+          <string>Edit Dispatch</string>
+         </property>
+         <widget class="QPushButton" name="redAddButton">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>130</y>
+            <width>341</width>
+            <height>25</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Add</string>
+          </property>
+         </widget>
+         <widget class="QLabel" name="redAddStationLabel">
+          <property name="geometry">
+           <rect>
+            <x>20</x>
+            <y>90</y>
+            <width>121</width>
+            <height>17</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Add Stop:</string>
+          </property>
+         </widget>
+         <widget class="QComboBox" name="redAddStation">
+          <property name="geometry">
+           <rect>
+            <x>150</x>
+            <y>84</y>
+            <width>201</width>
+            <height>31</height>
+           </rect>
+          </property>
+         </widget>
+         <widget class="QPushButton" name="redRemoveButton">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>226</y>
+            <width>341</width>
+            <height>25</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Remove</string>
+          </property>
+         </widget>
+         <widget class="QLabel" name="redRemoveStationLabel">
+          <property name="geometry">
+           <rect>
+            <x>20</x>
+            <y>186</y>
+            <width>121</width>
+            <height>17</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Remove Stop:</string>
+          </property>
+         </widget>
+         <widget class="QComboBox" name="redRemoveStation">
+          <property name="geometry">
+           <rect>
+            <x>150</x>
+            <y>180</y>
+            <width>201</width>
+            <height>31</height>
+           </rect>
+          </property>
+         </widget>
+         <widget class="QTableWidget" name="redEditDispatchTable">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>270</y>
+            <width>341</width>
+            <height>201</height>
+           </rect>
+          </property>
+          <column>
+           <property name="text">
+            <string>Stops</string>
+           </property>
+           <property name="textAlignment">
+            <set>AlignCenter</set>
+           </property>
+          </column>
+         </widget>
+         <widget class="QLabel" name="redChooseTrainLabel">
+          <property name="geometry">
+           <rect>
+            <x>20</x>
+            <y>36</y>
+            <width>121</width>
+            <height>17</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Choose Train:</string>
+          </property>
+         </widget>
+         <widget class="QComboBox" name="redChooseTrain">
+          <property name="geometry">
+           <rect>
+            <x>150</x>
+            <y>30</y>
+            <width>201</width>
+            <height>31</height>
+           </rect>
+          </property>
+         </widget>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="greenEditStacked">
+        <widget class="QGroupBox" name="greenEditDispatch">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>20</y>
+           <width>361</width>
+           <height>481</height>
+          </rect>
+         </property>
+         <property name="title">
+          <string>Edit Dispatch</string>
+         </property>
+         <widget class="QPushButton" name="greenAddButton">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>130</y>
+            <width>341</width>
+            <height>25</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Add</string>
+          </property>
+         </widget>
+         <widget class="QLabel" name="greenAddStationLabel">
+          <property name="geometry">
+           <rect>
+            <x>20</x>
+            <y>90</y>
+            <width>121</width>
+            <height>17</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Add Stations:</string>
+          </property>
+         </widget>
+         <widget class="QComboBox" name="greenAddStation">
+          <property name="geometry">
+           <rect>
+            <x>150</x>
+            <y>84</y>
+            <width>201</width>
+            <height>31</height>
+           </rect>
+          </property>
+         </widget>
+         <widget class="QPushButton" name="greenRemoveButton">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>226</y>
+            <width>341</width>
+            <height>25</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Remove</string>
+          </property>
+         </widget>
+         <widget class="QLabel" name="greenRemoveStationLabel">
+          <property name="geometry">
+           <rect>
+            <x>20</x>
+            <y>186</y>
+            <width>121</width>
+            <height>17</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Remove Stations:</string>
+          </property>
+         </widget>
+         <widget class="QComboBox" name="greenRemoveStation">
+          <property name="geometry">
+           <rect>
+            <x>150</x>
+            <y>180</y>
+            <width>201</width>
+            <height>31</height>
+           </rect>
+          </property>
+         </widget>
+         <widget class="QTableWidget" name="greenEditDispatchTable">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>270</y>
+            <width>341</width>
+            <height>201</height>
+           </rect>
+          </property>
+          <column>
+           <property name="text">
+            <string>Stops</string>
+           </property>
+           <property name="textAlignment">
+            <set>AlignCenter</set>
+           </property>
+          </column>
+         </widget>
+         <widget class="QLabel" name="greenChooseTrainLabel">
+          <property name="geometry">
+           <rect>
+            <x>20</x>
+            <y>36</y>
+            <width>121</width>
+            <height>17</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Choose Train:</string>
+          </property>
+         </widget>
+         <widget class="QComboBox" name="greenChooseTrain">
+          <property name="geometry">
+           <rect>
+            <x>150</x>
+            <y>30</y>
+            <width>201</width>
+            <height>31</height>
+           </rect>
+          </property>
+         </widget>
+        </widget>
+       </widget>
+      </widget>
+      <widget class="QLabel" name="timeLabel">
+       <property name="geometry">
+        <rect>
+         <x>480</x>
+         <y>0</y>
+         <width>91</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Time:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+      <widget class="QLabel" name="timeValue">
+       <property name="geometry">
+        <rect>
+         <x>560</x>
+         <y>0</y>
+         <width>181</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>--</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QWidget" name="Maintenance">
+      <attribute name="title">
+       <string>Tab 2</string>
+      </attribute>
+      <widget class="QPushButton" name="greenLineButton_2">
+       <property name="geometry">
+        <rect>
+         <x>210</x>
+         <y>30</y>
+         <width>171</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Green Line</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="redLineButton_2">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>30</y>
+         <width>171</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Red Line</string>
+       </property>
+      </widget>
+      <widget class="QStackedWidget" name="maintenanceStack">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>90</y>
+         <width>1101</width>
+         <height>501</height>
+        </rect>
+       </property>
+       <property name="currentIndex">
+        <number>1</number>
+       </property>
+       <widget class="QWidget" name="redInfo">
+        <widget class="QGroupBox" name="redClosedBlocksGroup">
+         <property name="geometry">
+          <rect>
+           <x>20</x>
+           <y>180</y>
+           <width>331</width>
+           <height>321</height>
+          </rect>
+         </property>
+         <property name="title">
+          <string>Closed Blocks</string>
+         </property>
+         <widget class="QTableWidget" name="redClosedBlocksTable">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>30</y>
+            <width>311</width>
+            <height>281</height>
+           </rect>
+          </property>
+          <column>
+           <property name="text">
+            <string>Block Number</string>
+           </property>
+           <property name="textAlignment">
+            <set>AlignCenter</set>
+           </property>
+          </column>
+         </widget>
+        </widget>
+        <widget class="QGroupBox" name="redSwitchStateGroup">
+         <property name="geometry">
+          <rect>
+           <x>390</x>
+           <y>230</y>
+           <width>361</width>
+           <height>271</height>
+          </rect>
+         </property>
+         <property name="title">
+          <string>Switch State</string>
+         </property>
+         <widget class="QTableWidget" name="redSwitchStateTable">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>30</y>
+            <width>341</width>
+            <height>231</height>
+           </rect>
+          </property>
+          <column>
+           <property name="text">
+            <string>Origin Block</string>
+           </property>
+           <property name="textAlignment">
+            <set>AlignCenter</set>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Target Block</string>
+           </property>
+           <property name="textAlignment">
+            <set>AlignCenter</set>
+           </property>
+          </column>
+         </widget>
+        </widget>
+        <widget class="QGroupBox" name="redChangeSwitchGroup">
+         <property name="geometry">
+          <rect>
+           <x>390</x>
+           <y>10</y>
+           <width>361</width>
+           <height>201</height>
+          </rect>
+         </property>
+         <property name="title">
+          <string>Switch Position</string>
+         </property>
+         <widget class="QComboBox" name="redChooseOriginCombo">
+          <property name="geometry">
+           <rect>
+            <x>190</x>
+            <y>44</y>
+            <width>151</width>
+            <height>31</height>
+           </rect>
+          </property>
+         </widget>
+         <widget class="QPushButton" name="redSetState">
+          <property name="geometry">
+           <rect>
+            <x>20</x>
+            <y>150</y>
+            <width>321</width>
+            <height>25</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Set</string>
+          </property>
+         </widget>
+         <widget class="QLabel" name="label_4">
+          <property name="geometry">
+           <rect>
+            <x>20</x>
+            <y>50</y>
+            <width>151</width>
+            <height>17</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Choose Origin Block:</string>
+          </property>
+         </widget>
+         <widget class="QComboBox" name="redChooseTargetCombo">
+          <property name="geometry">
+           <rect>
+            <x>190</x>
+            <y>90</y>
+            <width>151</width>
+            <height>31</height>
+           </rect>
+          </property>
+         </widget>
+         <widget class="QLabel" name="label_5">
+          <property name="geometry">
+           <rect>
+            <x>20</x>
+            <y>90</y>
+            <width>151</width>
+            <height>17</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Choose Target Block:</string>
+          </property>
+         </widget>
+        </widget>
+        <widget class="QGroupBox" name="redCrossingGroup">
+         <property name="geometry">
+          <rect>
+           <x>790</x>
+           <y>10</y>
+           <width>291</width>
+           <height>491</height>
+          </rect>
+         </property>
+         <property name="title">
+          <string>Crossing Status</string>
+         </property>
+         <widget class="QTableWidget" name="redCrossingTable">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>30</y>
+            <width>271</width>
+            <height>451</height>
+           </rect>
+          </property>
+          <column>
+           <property name="text">
+            <string>Block Number</string>
+           </property>
+           <property name="textAlignment">
+            <set>AlignCenter</set>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Status</string>
+           </property>
+           <property name="textAlignment">
+            <set>AlignCenter</set>
+           </property>
+          </column>
+         </widget>
+        </widget>
+        <widget class="QGroupBox" name="redMaintenanceGroup">
+         <property name="geometry">
+          <rect>
+           <x>20</x>
+           <y>10</y>
+           <width>331</width>
+           <height>151</height>
+          </rect>
+         </property>
+         <property name="title">
+          <string>Block Maintenance</string>
+         </property>
+         <widget class="QComboBox" name="redChooseMaintenanceCombo">
+          <property name="geometry">
+           <rect>
+            <x>170</x>
+            <y>40</y>
+            <width>141</width>
+            <height>31</height>
+           </rect>
+          </property>
+         </widget>
+         <widget class="QPushButton" name="redMaintenanceButton">
+          <property name="geometry">
+           <rect>
+            <x>18</x>
+            <y>100</y>
+            <width>291</width>
+            <height>25</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Put In Maintenace</string>
+          </property>
+         </widget>
+         <widget class="QLabel" name="label_6">
+          <property name="geometry">
+           <rect>
+            <x>20</x>
+            <y>50</y>
+            <width>111</width>
+            <height>17</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Choose Block:</string>
+          </property>
+         </widget>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="greenInfo">
+        <widget class="QGroupBox" name="greenClosedBlocksGroup">
+         <property name="geometry">
+          <rect>
+           <x>20</x>
+           <y>180</y>
+           <width>331</width>
+           <height>321</height>
+          </rect>
+         </property>
+         <property name="title">
+          <string>Closed Blocks</string>
+         </property>
+         <widget class="QTableWidget" name="greenClosedBlocksTable">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>30</y>
+            <width>311</width>
+            <height>281</height>
+           </rect>
+          </property>
+          <column>
+           <property name="text">
+            <string>Block Number</string>
+           </property>
+           <property name="textAlignment">
+            <set>AlignCenter</set>
+           </property>
+          </column>
+         </widget>
+        </widget>
+        <widget class="QGroupBox" name="greenMaintenanceGroup">
+         <property name="geometry">
+          <rect>
+           <x>20</x>
+           <y>10</y>
+           <width>331</width>
+           <height>151</height>
+          </rect>
+         </property>
+         <property name="title">
+          <string>Block Maintenance</string>
+         </property>
+         <widget class="QComboBox" name="greenChooseMaintenanceCombo">
+          <property name="geometry">
+           <rect>
+            <x>170</x>
+            <y>40</y>
+            <width>141</width>
+            <height>31</height>
+           </rect>
+          </property>
+         </widget>
+         <widget class="QPushButton" name="greenMaintenanceButton">
+          <property name="geometry">
+           <rect>
+            <x>18</x>
+            <y>100</y>
+            <width>291</width>
+            <height>25</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Put In Maintenace</string>
+          </property>
+         </widget>
+         <widget class="QLabel" name="greenChooseBlockLabel">
+          <property name="geometry">
+           <rect>
+            <x>20</x>
+            <y>50</y>
+            <width>111</width>
+            <height>17</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Choose Block:</string>
+          </property>
+         </widget>
+        </widget>
+        <widget class="QGroupBox" name="greenChangeSwitchGroup">
+         <property name="geometry">
+          <rect>
+           <x>390</x>
+           <y>10</y>
+           <width>361</width>
+           <height>201</height>
+          </rect>
+         </property>
+         <property name="title">
+          <string>Switch Position</string>
+         </property>
+         <widget class="QComboBox" name="greenChooseOriginCombo">
+          <property name="geometry">
+           <rect>
+            <x>190</x>
+            <y>44</y>
+            <width>151</width>
+            <height>31</height>
+           </rect>
+          </property>
+         </widget>
+         <widget class="QPushButton" name="greenSetState">
+          <property name="geometry">
+           <rect>
+            <x>20</x>
+            <y>150</y>
+            <width>321</width>
+            <height>25</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Set</string>
+          </property>
+         </widget>
+         <widget class="QLabel" name="label_2">
+          <property name="geometry">
+           <rect>
+            <x>20</x>
+            <y>50</y>
+            <width>151</width>
+            <height>17</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Choose Origin Block:</string>
+          </property>
+         </widget>
+         <widget class="QComboBox" name="greenChooseTargetCombo">
+          <property name="geometry">
+           <rect>
+            <x>190</x>
+            <y>90</y>
+            <width>151</width>
+            <height>31</height>
+           </rect>
+          </property>
+         </widget>
+         <widget class="QLabel" name="label_3">
+          <property name="geometry">
+           <rect>
+            <x>20</x>
+            <y>90</y>
+            <width>151</width>
+            <height>17</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Choose Target Block:</string>
+          </property>
+         </widget>
+        </widget>
+        <widget class="QGroupBox" name="greenCrossingGroup">
+         <property name="geometry">
+          <rect>
+           <x>790</x>
+           <y>10</y>
+           <width>291</width>
+           <height>491</height>
+          </rect>
+         </property>
+         <property name="title">
+          <string>Crossing Status</string>
+         </property>
+         <widget class="QTableWidget" name="greenCrossingTable">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>30</y>
+            <width>271</width>
+            <height>451</height>
+           </rect>
+          </property>
+          <column>
+           <property name="text">
+            <string>Block Number</string>
+           </property>
+           <property name="textAlignment">
+            <set>AlignCenter</set>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Status</string>
+           </property>
+           <property name="textAlignment">
+            <set>AlignCenter</set>
+           </property>
+          </column>
+         </widget>
+        </widget>
+        <widget class="QGroupBox" name="greenSwitchStateGroup">
+         <property name="geometry">
+          <rect>
+           <x>390</x>
+           <y>230</y>
+           <width>361</width>
+           <height>271</height>
+          </rect>
+         </property>
+         <property name="title">
+          <string>Switch State</string>
+         </property>
+         <widget class="QTableWidget" name="greenSwitchStateTable">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>30</y>
+            <width>341</width>
+            <height>231</height>
+           </rect>
+          </property>
+          <column>
+           <property name="text">
+            <string>Origin Block</string>
+           </property>
+           <property name="textAlignment">
+            <set>AlignCenter</set>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Target Block</string>
+           </property>
+           <property name="textAlignment">
+            <set>AlignCenter</set>
+           </property>
+          </column>
+         </widget>
+        </widget>
+       </widget>
+      </widget>
+      <widget class="QCheckBox" name="manualModeCheck">
+       <property name="geometry">
+        <rect>
+         <x>530</x>
+         <y>60</y>
+         <width>121</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Manual Mode</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="currentLineLabel_2">
+       <property name="geometry">
+        <rect>
+         <x>500</x>
+         <y>10</y>
+         <width>91</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Current Line:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+      <widget class="QLabel" name="currentLineValue_2">
+       <property name="geometry">
+        <rect>
+         <x>610</x>
+         <y>10</y>
+         <width>101</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>--</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
       </widget>
      </widget>
     </widget>
-    <widget class="QCheckBox" name="manualModeCheck">
-     <property name="geometry">
-      <rect>
-       <x>530</x>
-       <y>60</y>
-       <width>121</width>
-       <height>23</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Manual Mode</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="currentLineLabel_2">
-     <property name="geometry">
-      <rect>
-       <x>500</x>
-       <y>10</y>
-       <width>91</width>
-       <height>41</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Current Line:</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-    <widget class="QLabel" name="currentLineValue_2">
-     <property name="geometry">
-      <rect>
-       <x>610</x>
-       <y>10</y>
-       <width>101</width>
-       <height>41</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>--</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-   </widget>
-  </widget>
+   </item>
+  </layout>
  </widget>
  <resources/>
  <connections/>
