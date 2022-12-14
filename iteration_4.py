@@ -110,10 +110,10 @@ class Iteration_4(QWidget):
         newButton.pressed.connect(lambda: self.__train_controller_show(train_id))
         self.__train_controller_layout.addWidget(newButton, self.__train_x_axis, self.__train_y_axis)
         self.__train_controller_buttons[train_id] = newButton
-        self.__train_x_axis += 1
-        if self.__train_x_axis >= 10:
-            self.__train_x_axis = 0
-            self.__train_y_axis += 1
+        self.__train_y_axis += 1
+        if self.__train_y_axis >= 10:
+            self.__train_y_axis = 0
+            self.__train_x_axis += 1
     
     def __train_controller_show(self, value):
         self.__train_controller[value].start_driver_ui()
@@ -157,6 +157,11 @@ class Iteration_4(QWidget):
         #Ryans update
         to_delete = handler.update(self.__time_step, self.__track_model_var)
 
+        for i in to_delete:
+            print("Deleting Train")
+            self.__train_id_list.remove(i)
+            self.__delete_train_controller(i)
+
         #New train creation, Ryan can you add in the coded needed to create your train
         for train in self.__new_train:
             train_id = train.train_id
@@ -175,12 +180,6 @@ class Iteration_4(QWidget):
         self.__ctc_office.greenLine.setThroughput(self.__track_model_var.stations.get_throughput())
         self.__ctc_office.redLine.setThroughput(self.__track_model_var.stations.get_throughput())
         #Train deletion, wont do this for iteration 3 cause too hard
-
-        for i in to_delete:
-            self.__train_id_list.remove(i)
-            self.__delete_train_controller(i)
-
-
 
 if __name__ == '__main__':
     #Initialize  all objects

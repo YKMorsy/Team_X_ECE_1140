@@ -401,5 +401,5 @@ def driver_ui(train, lock_output_file, lock_input_file, lock_engineer_input):
     timer.setInterval(int(1000 / fps))
     timer.start()
     window.show()
-    app.exec()
+    sys.exit(app.exec_())
     

@@ -496,7 +496,6 @@ class track_model(object):
                 train.block_list = list1
                 return 0
             else:
-                print("called")
                 train.current_distance_in_block -= train.event_distance_in_block
                 train.event_distance_in_block = 32
                 if mr_block == "YARD":
@@ -519,7 +518,7 @@ class track_model(object):
                     train.current_grade = 0 - self.get_green_line_grade(new_block)
                 self.ui.track_list[new_block - 1].set_occupancy()
                 train.commanded_authority = "True" if self.get_green_line_authority(new_block) else "False"
-                train.beacon_info = self.ui.track_list[new_block -1].get_beacon()
+                train.beacon_data = self.ui.track_list[new_block -1].get_beacon()
 
                 return 0
                 
@@ -578,7 +577,6 @@ class track_model(object):
         line = train.line_name
         if line.upper() == "GREEN":
             mr_block = train.most_recent_block
-            print(mr_block)
             if mr_block == "YARD":
                 block_number = 228
             else:
