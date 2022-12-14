@@ -51,7 +51,7 @@ class Iteration_4(QWidget):
         #Train Model Handler
         self.__murphy = MurphyUI()
 
-        self.__train_controller_buttons = []
+        self.__train_controller_buttons = {}
         self.__train_x_axis = 0
         self.__train_y_axis = 0
 
@@ -109,7 +109,7 @@ class Iteration_4(QWidget):
         newButton = QPushButton("Train " + str(train_id))
         newButton.pressed.connect(lambda: self.__train_controller_show(train_id))
         self.__train_controller_layout.addWidget(newButton, self.__train_x_axis, self.__train_y_axis)
-        self.__train_controller_buttons.append(newButton)
+        self.__train_controller_buttons[train_id] = newButton
         self.__train_x_axis += 1
         if self.__train_x_axis >= 10:
             self.__train_x_axis = 0
@@ -117,6 +117,10 @@ class Iteration_4(QWidget):
     
     def __train_controller_show(self, value):
         self.__train_controller[value].start_driver_ui()
+    
+    def __delete_train_controller(self, index):
+        del self.__train_controller_buttons[index]
+        del self.__train_controller[index]
     
     def update_with_fps(self):
         self.__simulation_label.setText("Current Simulation Speed: " + str(self.__multiplier))
@@ -135,7 +139,7 @@ class Iteration_4(QWidget):
 
         #Ryan and peter connect here
 
-        for i in range(len(self.__train_controller)):
+        for i in range(len(handler.train_list)):
             if len(self.__train_controller) and len(handler.train_list) > 0:
                 connect_train_model_train_controller(self.__train_controller[self.__train_id_list[i]], handler.train_list[self.__train_id_list[i]])
         
@@ -170,6 +174,12 @@ class Iteration_4(QWidget):
         self.__ctc_office.greenLine.setThroughput(self.__track_model_var.stations.get_throughput())
         self.__ctc_office.redLine.setThroughput(self.__track_model_var.stations.get_throughput())
         #Train deletion, wont do this for iteration 3 cause too hard
+
+        if len(self.__train_controller) > len(handler.train_list):
+            for i in range(len(self.__train_controller)):
+                if self.__train_id_list[i] not in handler.train_list:
+                    self.__delete_train_controller(self.__train_id_list[i])
+                    del self.__train_id_list[i]
 
 
 
