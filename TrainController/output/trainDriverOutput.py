@@ -13,3 +13,5 @@ class TrainDriverOutput:
     signal_pickup_failure: bool = False
     authority: bool = False
     next_stop: str = ""
+    train_movement: bool = False
+    power: float = 0.0

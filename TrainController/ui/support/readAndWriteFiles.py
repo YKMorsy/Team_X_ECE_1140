@@ -30,6 +30,8 @@ def read_driver_output_file(output_file_name, lock_output_file, driver_output):
     driver_output.signal_pickup_failure = output_file.readline()[0:4] == 'True'
     driver_output.authority = output_file.readline()[0:4] == 'True'
     driver_output.next_stop = output_file.readline().strip()
+    driver_output.train_movement = output_file.readline()[0:4] == 'True'
+    driver_output.power = float(output_file.readline())
 
     output_file.close()
     lock_output_file.release()
@@ -65,6 +67,8 @@ def write_driver_output_file(output_file_name, lockdriver_output, traindriver_ou
     output_file.write(str(traindriver_output.signal_pickup_failure) + "\n")
     output_file.write(str(traindriver_output.authority) + "\n")
     output_file.write(str(traindriver_output.next_stop) + "\n")
+    output_file.write(str(traindriver_output.train_movement) + "\n")
+    output_file.write(str(traindriver_output.power) + "\n")
 
     output_file.close()
     lockdriver_output.release()
