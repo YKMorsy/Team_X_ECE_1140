@@ -16,6 +16,9 @@ class track_model(object):
     def show(self):
         self.Track_Model.show()
     
+    def get_widget(self):
+        return self.Track_Model
+    
     def get_commanded_speed_dict(self):
         out = {}
         i = 0
