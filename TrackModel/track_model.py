@@ -506,7 +506,7 @@ class track_model(object):
                 if next_block.upper() == "YARD":
                     self.ui.track_list[55].reset_occupancy()
                     self.ui.track_list[56].reset_occupancy()
-                    self.ui.track_list[228].reset_occupancy()
+                    self.ui.track_list[227].reset_occupancy()
                     return -1
                 curr_block = next_block[1:]
                 train.block_list.append(curr_block)
@@ -520,6 +520,7 @@ class track_model(object):
                 self.ui.track_list[new_block - 1].set_occupancy()
                 train.commanded_authority = "True" if self.get_green_line_authority(new_block) else "False"
                 train.beacon_data = self.ui.track_list[new_block -1].get_beacon()
+
 
                 return 0
                 
