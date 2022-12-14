@@ -11,6 +11,8 @@ from multiprocessing import Process
 from multiprocessing import Lock
 from TrainController.ui.support.readAndWriteFiles import *
 from TrainController.resources.findSpeedLimit import *
+import psutil
+import os
 
 class TrainController:
     def __init__(self, train_number, train_line):
@@ -19,6 +21,8 @@ class TrainController:
         self.__lock_model_input = Lock()
         self.__lock_model_output = Lock()
         self.__lock_engineer_input = Lock()
+        self.__driver_ui_pid = -1
+        self.__test_ui_pid = -1
 
         self.__train_number = train_number
         self.__train_line = train_line
@@ -50,7 +54,8 @@ class TrainController:
         self.__distance = 0.0
         self.__begin_slow_down = False
         self.__distance_to_station = 1
-        self.__door_side = 0
+        self.__door_side_left = False
+        self.__door_side_right = False
         self.__stopping_at_station = False
         self.__waiting_time = 30
         self.__past_time = 0
@@ -70,22 +75,31 @@ class TrainController:
         self.__input_driver_driver_ui_file_name = "./TrainController/ui/driverUIFiles/utilities/driverInputDB_" + str(self.__train_number) + ".txt"
         self.__output_driver_driver_ui_file_name = "./TrainController/ui/driverUIFiles/utilities/driverOutputDB_" + str(self.__train_number) + ".txt"
         self.__input_engineer_ui_file_name = "./TrainController/ui/driverUIFiles/utilities/engineerInputDB_" + str(self.__train_number) + ".txt"
-
-        write_driver_input_file(self.__input_driver_driver_ui_file_name, self.__lock_driver_input, self.__train_driver_input)
-        write_driver_output_file(self.__output_driver_driver_ui_file_name, self.__lock_driver_output, self.__train_driver_output)
-        write_train_model_input_file(self.__input_model_test_ui_file_name, self.__lock_model_input, self.__train_model_input)
-        write_train_model_output_file(self.__output_model_test_ui_file_name, self.__lock_model_output, self.__train_model_output)
-        write_engineer_input_file(self.__input_engineer_ui_file_name, self.__lock_engineer_input, self.__engineer_input.kp, self.__engineer_input.ki)
+    
+    def __del__(self):
+        if psutil.pid_exists(self.__test_ui_pid):
+            os.kill(self.__test_ui_pid, 0)
+        if psutil.pid_exists(self.__driver_ui_pid):
+            os.kill(self.__driver_ui_pid, 0)
 
     def start_test_ui(self):
-        self.__test_ui_start = True
-        test_ui_process = Process(target=test_ui, args=(self, self.__lock_model_output, self.__lock_model_input))
-        test_ui_process.start()
+        if not self.__test_ui_start:
+            write_train_model_input_file(self.__input_model_test_ui_file_name, self.__lock_model_input, self.__train_model_input)
+            write_train_model_output_file(self.__output_model_test_ui_file_name, self.__lock_model_output, self.__train_model_output)
+            self.__test_ui_start = True
+            test_ui_process = Process(target=test_ui, args=(self, self.__lock_model_output, self.__lock_model_input))
+            test_ui_process.start()
+            self.__test_ui_pid = test_ui_process.pid
     
     def start_driver_ui(self):
-        self.__driver_ui_start = True
-        driver_ui_process = Process(target=driver_ui, args=(self, self.__lock_driver_output, self.__lock_driver_input, self.__lock_engineer_input))
-        driver_ui_process.start()
+        if not self.__driver_ui_start:
+            write_driver_input_file(self.__input_driver_driver_ui_file_name, self.__lock_driver_input, self.__train_driver_input)
+            write_driver_output_file(self.__output_driver_driver_ui_file_name, self.__lock_driver_output, self.__train_driver_output)
+            write_engineer_input_file(self.__input_engineer_ui_file_name, self.__lock_engineer_input, self.__engineer_input.kp, self.__engineer_input.ki)
+            self.__driver_ui_start = True
+            driver_ui_process = Process(target=driver_ui, args=(self, self.__lock_driver_output, self.__lock_driver_input, self.__lock_engineer_input))
+            driver_ui_process.start()
+            self.__driver_ui_pid = driver_ui_process.pid
     
     def set_train_driver_input(self, train_driver_input):
         self.__train_driver_input = train_driver_input
@@ -121,11 +135,12 @@ class TrainController:
         self.__train_driver_output.signal_pickup_failure = self.__train_model_input.signal_pickup_failure
         self.__train_driver_output.authority = self.__train_model_input.authority and self.__authority
         self.__train_driver_output.next_stop = self.__next_station
+        self.__train_driver_output.power = self.__power
 
     def __model_output_mapper(self):
         self.__train_model_output.service_brake = self.__train_driver_input.service_brake or self.__service_brakes
         self.__train_model_output.emergency_brake = self.__train_driver_input.emergency_brake or self.__emergency_brakes
-        self.__train_model_output.engine_power = self.__power * 2500
+        self.__train_model_output.engine_power = self.__power
         if self.__train_model_input.current_set_point == 0:
             self.__train_model_output.left_side_doors = self.__train_driver_input.left_side_doors or self.__left_side_doors                                
             self.__train_model_output.right_side_doors = self.__train_driver_input.right_side_doors or self.__right_side_doors
@@ -181,10 +196,8 @@ class TrainController:
             self.__approaching_station()
             if self.__command_set_point == 0 and self.__train_model_input.current_set_point == 0:
                 self.__begin_wait = True
-                if self.__door_side:
-                    self.__right_side_doors = True
-                else:
-                    self.__left_side_doors = True
+                self.__left_side_doors = self.__door_side_left
+                self.__right_side_doors = self.__door_side_right
         
         if self.__begin_wait:
             self.__past_time += self.__time_step
@@ -198,12 +211,10 @@ class TrainController:
         
         if not self.__service_brakes and not self.__emergency_brakes:
             self.__calculate_power()
-        
-        if self.__power > self.__max_power:
-            self.__power = self.__max_power
             
         if (self.__train_model_input.current_set_point + self.__acceleration * self.__time_step) > self.__speed_limit or (self.__train_model_input.current_set_point + self.__acceleration * self.__time_step) > self.__command_set_point:
             self.__power = 0.0
+            self.__u_value /= 1.5
             self.__service_brakes = True
         elif self.__authority:
             self.__service_brakes = self.__train_driver_input.service_brake
@@ -216,17 +227,19 @@ class TrainController:
             
     def __calculate_power(self):
         if self.__power < self.__max_power:
-            self.__u_value = self.__u_value + (self.__time_step / 2 * (self.__command_set_point - self.__train_model_input.current_set_point + self.__e_value))
+            self.__u_value = self.__u_value + ((self.__time_step / 2) * (self.__command_set_point - self.__train_model_input.current_set_point + self.__e_value))
         self.__power = self.__engineer_input.kp * (self.__command_set_point - self.__train_model_input.current_set_point) + self.__engineer_input.ki * self.__u_value
         if self.__power < 0:
             self.__power = 0
+        if self.__power > self.__max_power:
+            self.__power = self.__max_power
 
     def __get_speed_limit(self):
         self.__speed_limit = self.__train_model_input.command_set_point
         if self.__train_line == 1:
-            self.__direction, self.__next_station, self.__outside_lights, self.__inside_lights, self.__distance_to_station, self.__door_side = get_speed_limit_green(self.__last_station, self.__direction, self.__distance)
+            self.__direction, self.__next_station, self.__outside_lights, self.__inside_lights, self.__distance_to_station, self.__door_side_left, self.__door_side_right = get_speed_limit_green(self.__last_station, self.__direction, self.__distance)
         else:
-            self.__direction, self.__next_station, self.__outside_lights, self.__inside_lights, self.__distance_to_station = get_speed_limit_red(self.__last_station, self.__direction, self.__distance)
+            self.__direction, self.__next_station, self.__outside_lights, self.__inside_lights, self.__distance_to_station, self.__door_side_left, self.__door_side_right = get_speed_limit_red(self.__last_station, self.__direction, self.__distance)
 
     def beaconCall(self, station):
         self.__last_station = station
@@ -236,14 +249,26 @@ class TrainController:
         self.__e_value = self.__command_set_point - self.__train_model_input.current_set_point
 
         if(self.__test_ui_start):
-            self.__old_current_set_point = self.__train_driver_output.current_set_point
-            write_train_model_output_file(self.__output_model_test_ui_file_name, self.__lock_model_output, self.__train_model_output)
-            read_train_model_input_file(self.__input_model_test_ui_file_name, self.__lock_model_input, self.__train_model_input)
+            if psutil.pid_exists(self.__test_ui_pid):
+                self.__old_current_set_point = self.__train_driver_output.current_set_point
+                write_train_model_output_file(self.__output_model_test_ui_file_name, self.__lock_model_output, self.__train_model_output)
+                read_train_model_input_file(self.__input_model_test_ui_file_name, self.__lock_model_input, self.__train_model_input)
+            else:
+                os.remove(self.__output_model_test_ui_file_name)
+                os.remove(self.__input_model_test_ui_file_name)
+                self.__test_ui_start = False
         if(self.__driver_ui_start):
-            write_driver_output_file(self.__output_driver_driver_ui_file_name, self.__lock_driver_output, self.__train_driver_output)
-            read_driver_input_file(self.__input_driver_driver_ui_file_name, self.__lock_driver_input, self.__train_driver_input)
-            self.__engineer_input.kp, self.__engineer_input.ki = read_engineer_input_file(self.__input_engineer_ui_file_name, self.__lock_engineer_input)
-        
+            if psutil.pid_exists(self.__driver_ui_pid):
+                write_driver_output_file(self.__output_driver_driver_ui_file_name, self.__lock_driver_output, self.__train_driver_output)
+                read_driver_input_file(self.__input_driver_driver_ui_file_name, self.__lock_driver_input, self.__train_driver_input)
+                self.__engineer_input.kp, self.__engineer_input.ki = read_engineer_input_file(self.__input_engineer_ui_file_name, self.__lock_engineer_input)
+            else:
+                os.remove(self.__output_driver_driver_ui_file_name)
+                os.remove(self.__input_driver_driver_ui_file_name)
+                os.remove(self.__input_engineer_ui_file_name)
+                self.__driver_ui_start = False
+        if self.__command_set_point > 0:
+            self.__train_driver_output.train_movement = True
         self.__update_internal_values()
         self.__driver_output_mapper()
         self.__model_output_mapper()

@@ -1,4 +1,5 @@
 import sys
+import os
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
@@ -78,6 +79,7 @@ class LoginForm(QWidget):
 
         self.setLayout(layout)
 
+
     def check_password(self):
         if self.lineEdit_username.text() == "admin" and self.lineEdit_password.text() ==  "password":
             self.close()
@@ -119,7 +121,8 @@ class MainWindow(QWidget):
 
         self.__assemble_layouts()
         self.setLayout(self.__main_layout)
-    
+
+
     def __layout_init(self):
         self.__main_layout = QVBoxLayout()
 
@@ -150,6 +153,7 @@ class MainWindow(QWidget):
     def __assemble_layouts(self):
         self.__left_layout.addLayout(self.__speed_info_layout)
         self.__left_layout.addLayout(self.__speed_change_layout)
+        self.__left_layout.addWidget(self.__power)
         self.__left_layout.addWidget(self.__service_brake_button)
 
         self.__fault_layout.addLayout(self.__fault_label_layout, 8)
@@ -178,7 +182,7 @@ class MainWindow(QWidget):
         self.__engineer_login = QPushButton("Engineer Login")
         self.__engineer_login.clicked.connect(self.__login_window)
         
-        self.__date_and_time = QLabel("10/8/2022\n5:00 PM")
+        self.__date_and_time = QLabel("Pittsburgh\nPennsylvania")
         self.__date_and_time.setAlignment(Qt.AlignCenter)
 
         self.__train_information = QLabel("Flexity Tram 2 Train " + str(self.__train_number))
@@ -294,6 +298,7 @@ class MainWindow(QWidget):
         self.__authority_output = QLabel()
         self.__authority_output.setAlignment(Qt.AlignCenter)
         self.__next_stop = QLabel()
+        self.__power = QLabel()
     
     def __update_output_widgets(self):
         self.__current_set_point_output.setText("Current Speed: " + str(int(self.__driver_output.current_set_point * 2.237)) + " mph")
@@ -313,6 +318,7 @@ class MainWindow(QWidget):
         else:
             self.__speed_bar.setValue(int(self.__driver_output.current_set_point / self.__driver_output.speed_limit * 100))
         self.__next_stop.setText("Next Stop: " + self.__driver_output.next_stop)
+        self.__power.setText("Power: " + str(int(self.__driver_output.power)))
     
     def update(self):
         read_driver_output_file(self.__output_file_name, self.__lock_output_file, self.__driver_output)
@@ -339,9 +345,15 @@ class MainWindow(QWidget):
     
     def __left_side_doors_toggle(self):
         self.__driver_input.left_side_doors = self.__toggle_left_side_doors_button.isChecked()
+        if self.__driver_output.current_set_point > 0:
+            self.__driver_input.left_side_doors = False
+            self.__toggle_left_side_doors_button.setChecked(False)
     
     def __right_side_doors_toggle(self):
         self.__driver_input.right_side_doors = self.__toggle_right_side_doors_button.isChecked()
+        if self.__driver_output.current_set_point > 0:
+            self.__driver_input.right_side_doors = False
+            self.__toggle_right_side_doors_button.setChecked(False)
     
     def __inside_lights_toggle(self):
         self.__driver_input.inside_lights = self.__toggle_inside_lights_button.isChecked()
@@ -374,8 +386,9 @@ class MainWindow(QWidget):
             self.__driver_input.interior_temperature_control -= 1
     
     def __login_window(self):
-        self.__new_login = LoginForm(self.__lock_engineer_file, self.__train_number)
-        self.__new_login.show()
+        if not self.__driver_output.train_movement:
+            self.__new_login = LoginForm(self.__lock_engineer_file, self.__train_number)
+            self.__new_login.show()
         
     
 
