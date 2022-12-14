@@ -154,7 +154,7 @@ class Iteration_4(QWidget):
         #Peter call your update here
         self.__track_model_var.ui.set_block_status_table()
         #Ryans update
-        handler.update(self.__time_step, self.__track_model_var)
+        to_delete = handler.update(self.__time_step, self.__track_model_var)
 
         #New train creation, Ryan can you add in the coded needed to create your train
         for train in self.__new_train:
@@ -175,11 +175,16 @@ class Iteration_4(QWidget):
         self.__ctc_office.redLine.setThroughput(self.__track_model_var.stations.get_throughput())
         #Train deletion, wont do this for iteration 3 cause too hard
 
-        if len(self.__train_controller) > len(handler.train_list):
-            for i in range(len(self.__train_controller)):
-                if self.__train_id_list[i] not in handler.train_list:
-                    self.__delete_train_controller(self.__train_id_list[i])
-                    del self.__train_id_list[i]
+        for i in to_delete:
+            self.__train_id_list.remove(i)
+            self.__delete_train_controller(i)
+
+
+        # if len(self.__train_controller) > len(handler.train_list):
+        #     for i in range(len(self.__train_controller)):
+        #         if self.__train_id_list[i] not in handler.train_list:
+        #             self.__delete_train_controller(self.__train_id_list[i])
+        #             del self.__train_id_list[i]
 
 
 
