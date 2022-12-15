@@ -111,7 +111,7 @@ class TrainModelHandler:
 		#Build the brake, fault, lights, and doors strings
 		brake = "No"
 		if T.service_brake: brake = "Service"
-		if T.emergency_brake: brake = "Emergency"
+		if T.emergency_brake or T.passenger_emergency_brake: brake = "Emergency"
 
 		fault = "None"
 		if T.brake_failure and not T.engine_failure and not T.signal_failure: fault = "Brake Failure"

@@ -52,18 +52,18 @@ class PassengerUI(QFrame):
         self.emergency_button.setText("Activated")
 
         #Set the associated train's emergency brake, and update the table's value
-        handler.train_list[self.ID].emergency_brake = True
+        handler.train_list[self.ID].passenger_emergency_brake = True
         
         for i in range(self.my_murphy_UI.train_info_model.rowCount()):
             if int(self.my_murphy_UI.train_info_model.item(i, 0).text()) == self.ID:
-                self.my_murphy_UI.train_info_model.setItem(i, 5, QStandardItem("Emergency"))
+                self.my_murphy_UI.train_info_model.setItem(i, 6, QStandardItem("Emergency"))
 
     def emergency_brake_released(self):
         #If the brake is released, then the button should say "Emergency Brake (Hold to Activate)", the train brake should be turn off, and the table should be updated
         self.emergency_button.setText("Emergency Brake (Hold to Activate)")
 
         #Reset the associated train's emergency brake, and update the table's value		
-        handler.train_list[self.ID].emergency_brake = False
+        handler.train_list[self.ID].passenger_emergency_brake = False
         
         #If the service brake is on, we should update the table with "Service". Otherwise, we should update it with "No"
         brake = "No"
@@ -71,4 +71,4 @@ class PassengerUI(QFrame):
         
         for i in range(self.my_murphy_UI.train_info_model.rowCount()):
             if int(self.my_murphy_UI.train_info_model.item(i, 0).text()) == self.ID:
-                self.my_murphy_UI.train_info_model.setItem(i, 5, QStandardItem(brake))
+                self.my_murphy_UI.train_info_model.setItem(i, 6, QStandardItem(brake))

@@ -50,6 +50,7 @@ class TrainModel:
         self.engine_power = 0.0
         self.service_brake = False
         self.emergency_brake = False
+        self.passenger_emergency_brake = False
         self.passenger_count = 0
         self.brake_failure = False
         self.engine_failure = False
@@ -147,7 +148,7 @@ class TrainModel:
 
             if self.service_brake: velocity_change = (-self.service_deceleration * (self.mass/total_mass) - 9.8*sin(2*pi*self.current_grade/360)) * time_step
 
-        if self.emergency_brake: velocity_change = (-self.emergency_deceleration * (self.mass/total_mass) - 9.8*sin(2*pi*self.current_grade/360)) * time_step
+        if self.emergency_brake or self.passenger_emergency_brake: velocity_change = (-self.emergency_deceleration * (self.mass/total_mass) - 9.8*sin(2*pi*self.current_grade/360)) * time_step
         
         #Set the new velocity in a temp variable
         new_velocity = self.velocity + velocity_change
