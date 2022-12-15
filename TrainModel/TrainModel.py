@@ -32,7 +32,7 @@ class TrainModel:
             self.most_recent_block = "YARD"
             self.direction = False
             self.commanded_authority = "True"
-            self.commanded_speed = 8.33333
+            self.commanded_speed = 0.0
             self.current_grade = 0.0
             if self.track_model is not None: self.track_model.set_red_line_occupancy(77)
         else:
@@ -41,7 +41,7 @@ class TrainModel:
             self.most_recent_block = "YARD"
             self.direction = True
             self.commanded_authority = "True"
-            self.commanded_speed = 8.33333
+            self.commanded_speed = 0.0
             self.current_grade = 0.0
             if self.track_model is not None: self.track_model.set_green_line_occupancy(228)
 

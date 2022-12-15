@@ -14,7 +14,7 @@ class PLC_Parser ():
 	def parse_PLC (self, switchPos, Occupancy, Authority, sugSpeed, status, speedLim):
 		logic_queue = queue.LifoQueue()
 		if(self.PLC_file == ""):
-			return "PLC_file is null";
+			return "PLC_file is null"
 		try: 
 			plcFile = open(self.PLC_file, 'r')
 		except:
