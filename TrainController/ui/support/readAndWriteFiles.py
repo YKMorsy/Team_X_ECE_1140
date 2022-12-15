@@ -101,6 +101,8 @@ def read_train_model_output_file(output_file_name, lock_model_output, train_mode
     train_model_output.inside_lights = output_file.readline()[0:4] == 'True'
     train_model_output.outside_lights = output_file.readline()[0:4] == 'True'
     train_model_output.activate_announcement = output_file.readline()[0:4] == 'True'
+    train_model_output.current_stop = output_file.read_line().strip()
+    train_model_output.play_ad = output_file.readline()[0:4] == 'True'
 
     output_file.close()
     lock_model_output.release()
@@ -133,6 +135,8 @@ def write_train_model_output_file(output_file_name, lock_model_output, train_mod
     output_file.write(str(train_model_output.inside_lights) + "\n")
     output_file.write(str(train_model_output.outside_lights) + "\n")
     output_file.write(str(train_model_output.activate_announcement) + "\n")
+    output_file.write(str(train_model_output.current_stop) + "\n")
+    output_file.write(str(train_model_output.play_ad) + "\n")
 
     output_file.close()
     lock_model_output.release()

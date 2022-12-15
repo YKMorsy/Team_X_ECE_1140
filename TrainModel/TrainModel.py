@@ -59,6 +59,11 @@ class TrainModel:
         self.left_doors_opened = False
         self.right_doors_opened = False
 
+        self.activate_anouncement = False
+        self.anounce_stop = False
+        self.play_ad = False
+        self.current_stop = ""
+
         
     def modify_train(self, ID, mass, crew_count, passenger_capacity, speed_limit, acceleration_limit, 
     service_deceleration, emergency_deceleration, max_engine_power, length, height, width, car_count):

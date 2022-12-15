@@ -62,6 +62,7 @@ class TrainController:
         self.__begin_wait = False
         self.__acceleration = 0.0
         self.__completed_stop = False
+        self.__ad_count = 0
 
         self.__train_driver_input = TrainDriverInput()
         self.__train_model_input = TrainModelInput()
@@ -145,6 +146,7 @@ class TrainController:
         self.__train_model_output.inside_lights = self.__inside_lights or self.__train_driver_input.inside_lights
         self.__train_model_output.outside_lights = self.__outside_lights or self.__train_driver_input.outside_lights
         self.__train_model_output.activate_announcement = self.__train_driver_input.activate_announcement or self.__activate_announcment
+        self.__train_model_output.current_stop = self.__last_station
 
     def __update_internal_values(self):
         self.__distance += .5 * (self.__train_model_input.current_set_point + self.__old_current_set_point) * self.__time_step
@@ -188,6 +190,7 @@ class TrainController:
                 self.__command_set_point = self.__speed_limit
         else:
             self.__approaching_station()
+            self.__announce_stop = True
             if self.__command_set_point == 0 and self.__train_model_input.current_set_point == 0:
                 self.__begin_wait = True
                 self.__left_side_doors = self.__door_side_left
@@ -202,6 +205,7 @@ class TrainController:
             self.__past_time = 0
             self.__stopping_at_station = False
             self.__begin_wait = False
+            self.__announce_stop = False
         
         if not self.__service_brakes and not self.__emergency_brakes:
             self.__calculate_power()
@@ -240,6 +244,11 @@ class TrainController:
         self.__distance = 0
     
     def update(self):
+        self.__ad_count += 1
+        if self.__ad_count > 60:
+            self.__ad_count = 0
+            self.__train_model_output.play_ad = not self.__train_model_output.play_ad
+        
         self.__e_value = self.__command_set_point - self.__train_model_input.current_set_point
 
         if(self.__test_ui_start):
@@ -274,7 +283,7 @@ class TrainController:
         self.__model_output_mapper()
     
     def get_train_model_output(self):
-        return self.__train_model_output.service_brake, self.__train_model_output.engine_power, self.__train_model_output.emergency_brake, self.__train_model_output.left_side_doors, self.__train_model_output.right_side_doors, self.__train_model_output.announce_stop, self.__train_model_output.inside_lights, self.__train_model_output.outside_lights, self.__train_model_output.activate_announcement
+        return self.__train_model_output.service_brake, self.__train_model_output.engine_power, self.__train_model_output.emergency_brake, self.__train_model_output.left_side_doors, self.__train_model_output.right_side_doors, self.__train_model_output.announce_stop, self.__train_model_output.inside_lights, self.__train_model_output.outside_lights, self.__train_model_output.activate_announcement, self.__train_model_output.current_stop, self.__train_model_output.play_ad
     
     def set_train_model_input(self, command_set_point, authority, current_set_point, brake_failure, signal_pickup_failure, engine_failure, station_name):
         self.__old_current_set_point = self.__train_driver_output.current_set_point
