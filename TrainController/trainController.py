@@ -150,7 +150,6 @@ class TrainController:
 
     def __update_internal_values(self):
         self.__distance += .5 * (self.__train_model_input.current_set_point + self.__old_current_set_point) * self.__time_step
-
         if self.__last_station != self.__train_model_input.station_name and self.__train_model_input.station_name != "N/A":
             self.beaconCall(self.__train_model_input.station_name)
             self.__completed_stop = False
