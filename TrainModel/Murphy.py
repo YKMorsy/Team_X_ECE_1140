@@ -36,18 +36,6 @@ class MurphyUI(QFrame):
         self.train_failure_removal_button = QPushButton("Remove all Failures for Selected Train")
         self.all_failure_removal_button = QPushButton("Remove all Train Failures")
         self.brake_failure_button = QPushButton("Generate Brake Failure for Selected Train")
-        self.random_failure_generation_label = QLabel("Random Train Failure Generation")
-        self.radiobuttonOff = QRadioButton("Off")
-        self.radiobuttonOn = QRadioButton("On")
-        self.random_engine_generation_label = QLabel("Number of Engine Failures per Train per Hour: ")
-        self.random_engine_generation_slider = QSlider(Qt.Orientation.Horizontal)
-        self.random_engine_generation_value = QLabel("0.0")
-        self.random_signal_generation_label = QLabel("Number of Signal Pickup Failures per Train per Hour: ")
-        self.random_signal_generation_slider = QSlider(Qt.Orientation.Horizontal)
-        self.random_signal_generation_value = QLabel("0.0")
-        self.random_brake_generation_label = QLabel("Number of Brake Failures per Train per Hour: ")
-        self.random_brake_generation_slider = QSlider(Qt.Orientation.Horizontal)
-        self.random_brake_generation_value = QLabel("0.0")
         self.passenger_UI_button = QPushButton("Open Passenger UI for Selected Train")
             
         #Set up button functions
@@ -63,10 +51,12 @@ class MurphyUI(QFrame):
         #Set up the table settings
         self.train_proxy_model.setSourceModel(self.train_info_model)
         self.train_info_select_table.setModel(self.train_proxy_model)
-        self.train_info_model.setHorizontalHeaderLabels(['Train ID', 'Velocity\n(MPH)', 'Distance\n(Feet)', 'Commanded Engine Power\n(Watts)', 'Total Mass\n(Tons)', 'Braking', 
+        self.train_info_model.setHorizontalHeaderLabels(['Train ID', 'Velocity\n(MPH)', 'Distance\n(Feet)', 'Acceleration\n(Feet/s^2)', 'Commanded Engine Power\n(Watts)', 'Total Mass\n(Tons)', 'Braking', 
                                                                 'Track Grade\n(°)', 'Passenger Count', 'Fault(s)', 'Interior Temperature\n(Fahrenheit)',
                                                                 'Interior Lights\n(On/Off)', 'Exterior Lights\n(On/Off)', 'Left Doors\n(Open/Closed)', 
-                                                                'Right Doors\n(Open/Closed)','Commanded Authority\n(True/False)', 'Commanded Setpoint Speed\n(MPH)'])
+                                                                'Right Doors\n(Open/Closed)','Commanded Authority\n(True/False)', 'Commanded Setpoint Speed\n(MPH)',
+                                                                'Total Length\n(Feet)', 'Width\n(Feet)', 'Height\n(Feet)',
+                                                                'PA\n(On/Off)', 'Stop Announcement\n(On/Off)', 'Stop Text', 'Ad Displayed\n(Displayed/Off)'])
 
         self.train_info_select_table.verticalHeader().hide()
         self.train_info_select_table.setSortingEnabled(True)
@@ -77,9 +67,9 @@ class MurphyUI(QFrame):
         self.train_info_select_table.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
         
         #Rearrange table s.t. faults are the first column
-        self.train_info_select_table.horizontalHeader().moveSection(8,1)
+        self.train_info_select_table.horizontalHeader().moveSection(9,1)
 	
-	#Hide Distance Column
+	    #Hide Distance Column
         self.train_info_select_table.setColumnHidden(2, True)
 
         #Set label fonts & buttons
@@ -96,15 +86,6 @@ class MurphyUI(QFrame):
         self.failure_removal_label.setFont(section_font)
         self.train_failure_removal_button.setFont(normal_font)
         self.all_failure_removal_button.setFont(normal_font)
-        self.random_failure_generation_label.setFont(section_font)
-        self.radiobuttonOff.setFont(normal_font)
-        self.radiobuttonOn.setFont(normal_font)
-        self.random_engine_generation_label.setFont(normal_font)
-        self.random_engine_generation_value.setFont(normal_font)
-        self.random_signal_generation_label.setFont(normal_font)
-        self.random_signal_generation_value.setFont(normal_font)
-        self.random_brake_generation_label.setFont(normal_font)
-        self.random_brake_generation_value.setFont(normal_font)
         self.passenger_UI_button.setFont(small_font)
 
         #Color labels & buttons
@@ -120,35 +101,7 @@ class MurphyUI(QFrame):
         self.failure_removal_label.setStyleSheet(section_label_stylesheet)
         self.train_failure_removal_button.setStyleSheet(green_button_stylesheet)
         self.all_failure_removal_button.setStyleSheet(green_button_stylesheet)
-        self.random_failure_generation_label.setStyleSheet(section_label_stylesheet)
-        self.radiobuttonOff.setStyleSheet(radio_stylesheet)
-        self.radiobuttonOn.setStyleSheet(radio_stylesheet)
-        self.random_engine_generation_label.setStyleSheet(normal_label_stylesheet)
-        self.random_engine_generation_value.setStyleSheet(normal_label_stylesheet)
-        self.random_signal_generation_label.setStyleSheet(normal_label_stylesheet)
-        self.random_signal_generation_value.setStyleSheet(normal_label_stylesheet)
-        self.random_brake_generation_label.setStyleSheet(normal_label_stylesheet)
-        self.random_brake_generation_value.setStyleSheet(normal_label_stylesheet)
         self.passenger_UI_button.setStyleSheet(blue_button_stylesheet)
-
-        #Connect Radio Button Functionality
-        self.radiobuttonOff.clicked.connect(self.radioButtonClicked)
-        self.radiobuttonOn.clicked.connect(self.radioButtonClicked)
-
-        #Set Slider Ranges
-        self.random_engine_generation_slider.setMinimum(0)
-        self.random_engine_generation_slider.setMaximum(100)
-
-        self.random_signal_generation_slider.setMinimum(0)
-        self.random_signal_generation_slider.setMaximum(100)
-
-        self.random_brake_generation_slider.setMinimum(0)
-        self.random_brake_generation_slider.setMaximum(100)
-
-        #Make sliders update labels
-        self.random_engine_generation_slider.valueChanged.connect(self.random_engine_failure_update)
-        self.random_signal_generation_slider.valueChanged.connect(self.random_signal_failure_update)
-        self.random_brake_generation_slider.valueChanged.connect(self.random_brake_failure_update)
 
         #Make the buttons as small as possible
         self.testing_button.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
@@ -156,10 +109,6 @@ class MurphyUI(QFrame):
         self.signal_pickup_failure_button.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
         self.brake_failure_button.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
         self.passenger_UI_button.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
-
-        #Set the random train generation off by default
-        self.radiobuttonOff.setChecked(True)
-
 
         #Declare the grid and add the necessary widgets to it
         murphy_grid = QGridLayout()
@@ -175,31 +124,6 @@ class MurphyUI(QFrame):
         murphy_grid.addWidget(self.failure_removal_label, 8, 0, 1, 4, alignment=Qt.AlignCenter)
         murphy_grid.addWidget(self.train_failure_removal_button, 9, 0, 1, 4, alignment=Qt.AlignCenter)
         murphy_grid.addWidget(self.all_failure_removal_button, 10, 0, 1, 4, alignment=Qt.AlignCenter)
-        murphy_grid.addWidget(self.random_failure_generation_label, 11, 0, 1, 4, alignment=Qt.AlignCenter)
-        murphy_grid.addWidget(self.radiobuttonOff, 12, 0, 1, 1, alignment=Qt.AlignRight)
-        murphy_grid.addWidget(self.radiobuttonOn, 12, 1, 1, 1, alignment=Qt.AlignRight)
-        murphy_grid.addWidget(self.random_engine_generation_label, 13, 0, 1, 2, alignment=Qt.AlignRight)
-        murphy_grid.addWidget(self.random_engine_generation_slider, 13, 2, 1, 1, alignment=Qt.AlignCenter)
-        murphy_grid.addWidget(self.random_engine_generation_value, 13, 3, 1, 1, alignment=Qt.AlignLeft)
-        murphy_grid.addWidget(self.random_signal_generation_label, 14, 0, 1, 2, alignment=Qt.AlignRight)
-        murphy_grid.addWidget(self.random_signal_generation_slider, 14, 2, 1, 1, alignment=Qt.AlignCenter)
-        murphy_grid.addWidget(self.random_signal_generation_value, 14, 3, 1, 1, alignment=Qt.AlignLeft)
-        murphy_grid.addWidget(self.random_brake_generation_label, 15, 0, 1, 2, alignment=Qt.AlignRight)
-        murphy_grid.addWidget(self.random_brake_generation_slider, 15, 2, 1, 1, alignment=Qt.AlignCenter)
-        murphy_grid.addWidget(self.random_brake_generation_value, 15, 3, 1, 1, alignment=Qt.AlignLeft)
-
-        #Disable widgets that should be disabled on startup
-        self.random_engine_generation_label.setEnabled(False)
-        self.random_engine_generation_slider.setEnabled(False)
-        self.random_engine_generation_value.setEnabled(False)
-
-        self.random_signal_generation_label.setEnabled(False)
-        self.random_signal_generation_slider.setEnabled(False)
-        self.random_signal_generation_value.setEnabled(False)
-
-        self.random_brake_generation_label.setEnabled(False)
-        self.random_brake_generation_slider.setEnabled(False)
-        self.random_brake_generation_value.setEnabled(False)
 
         #Set up the window color pallete
         self.setObjectName("MurphyWindow")
@@ -379,33 +303,9 @@ class MurphyUI(QFrame):
 
     #This function launches the test UI
     def test_launch(self):
-        if(my_warning("Are you sure that you want to launch the testing windows? \n         (All other activity will be stopped while testing)", title = "Test Launch Confirmation", parent = murphy_window).exec()):
+        if(my_warning("Are you sure that you want to launch the testing windows? \n         (All other activity will be stopped while testing)", title = "Test Launch Confirmation", parent = self).exec()):
             self.my_Test_UI = TestUI()
             self.my_Test_UI.show()
-
-    #These functions update the slider labels
-    def random_engine_failure_update(self, value):
-        self.random_engine_generation_value.setText(str(value/100.0))
-
-    def random_signal_failure_update(self, value):
-        self.random_signal_generation_value.setText(str(value/100.0))
-
-    def random_brake_failure_update(self, value):
-        self.random_brake_generation_value.setText(str(value/100.0))
-
-    #This function enables/disables sliders
-    def radioButtonClicked(self):
-        self.random_engine_generation_label.setEnabled(self.radiobuttonOn.isChecked())
-        self.random_engine_generation_slider.setEnabled(self.radiobuttonOn.isChecked())
-        self.random_engine_generation_value.setEnabled(self.radiobuttonOn.isChecked())
-
-        self.random_signal_generation_label.setEnabled(self.radiobuttonOn.isChecked())
-        self.random_signal_generation_slider.setEnabled(self.radiobuttonOn.isChecked())
-        self.random_signal_generation_value.setEnabled(self.radiobuttonOn.isChecked())
-
-        self.random_brake_generation_label.setEnabled(self.radiobuttonOn.isChecked())
-        self.random_brake_generation_slider.setEnabled(self.radiobuttonOn.isChecked())
-        self.random_brake_generation_value.setEnabled(self.radiobuttonOn.isChecked())
 
     def update(self):
 		#Update the trains and get the data back
