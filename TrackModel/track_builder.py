@@ -891,10 +891,10 @@ class Ui_Track_Model(object):
             if self.track_list[i].get_line_name() == self.select_track_combo.currentText():
                 if self.track_list[i].get_block_name() == self.select_block_combo.currentText():
                     self.block_status_table.setItem(0,0,QtWidgets.QTableWidgetItem(self.track_list[i].get_block_name()))
-                    self.block_status_table.setItem(0,1,QtWidgets.QTableWidgetItem(str(self.track_list[i].get_length()) + " m"))
+                    self.block_status_table.setItem(0,1,QtWidgets.QTableWidgetItem(str(self.track_list[i].get_length() * 3.281) + " ft"))
                     self.block_status_table.setItem(0,2,QtWidgets.QTableWidgetItem(str(self.track_list[i].get_grade()) + "%"))
-                    self.block_status_table.setItem(0,3,QtWidgets.QTableWidgetItem(str(self.track_list[i].get_elevation()) + " m"))
-                    self.block_status_table.setItem(0,4,QtWidgets.QTableWidgetItem(str(self.track_list[i].get_speed()) + " Km/Hr"))
+                    self.block_status_table.setItem(0,3,QtWidgets.QTableWidgetItem(str(self.track_list[i].get_elevation() * 3.281) + " ft"))
+                    self.block_status_table.setItem(0,4,QtWidgets.QTableWidgetItem(str(int(self.track_list[i].get_speed() * 0.621)) + " MPH"))
                     if self.track_list[i].get_underground() == 'n':
                         self.block_status_table.setItem(0,5,QtWidgets.QTableWidgetItem("Above"))
                     else :
