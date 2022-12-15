@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import QApplication, QFrame, QGridLayout, QAbstractItemView
 from PyQt5.QtWidgets import QLabel, QPushButton, QRadioButton, QSlider, QSizePolicy, QTableWidget, QTableView, QAbstractItemView, QHeaderView
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QStandardItem
-from fbs_runtime.application_context.PyQt5 import ApplicationContext
+# from fbs_runtime.application_context.PyQt5 import ApplicationContext
 
 from TrainModel.Test import TestUI, ExpandedTableUI
 from TrainModel.Passenger import PassengerUI

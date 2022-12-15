@@ -491,10 +491,12 @@ class Train:
                 # print("Block " + str(self.route[0]) + " " + str(suggested_speed))
 
                 if len(self.route) >= 2:
-                    self.line.block_list[self.route[1]].block_authority = True
+                    if self.line.block_list[self.route[1]].status == False:
+                        self.line.block_list[self.route[1]].block_authority = False
+                    else:
+                        self.line.block_list[self.route[1]].block_authority = True
 
-                    if self.line.block_list[self.route[1]].occupancy == True:
-                        
+                    if self.line.block_list[self.route[1]].occupancy == True or self.line.block_list[self.route[1]].status == False:
                         suggested_speed = 0
 
                 self.line.block_list[self.route[0]].block_authority = True
