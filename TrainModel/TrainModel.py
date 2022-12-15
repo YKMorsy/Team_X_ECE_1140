@@ -34,7 +34,7 @@ class TrainModel:
             self.commanded_authority = "True"
             self.commanded_speed = 8.33333
             self.current_grade = 0.0
-            self.track_model.set_red_line_occupancy(77)
+            if self.track_model is not None: self.track_model.set_red_line_occupancy(77)
         else:
             self.event_distance_in_block = 75.0
             self.block_list = ["YARD"]
@@ -43,7 +43,7 @@ class TrainModel:
             self.commanded_authority = "True"
             self.commanded_speed = 8.33333
             self.current_grade = 0.0
-            self.track_model.set_green_line_occupancy(228)
+            if self.track_model is not None: self.track_model.set_green_line_occupancy(228)
 
         self.beacon_data = {}
         self.line_name = line_name
@@ -116,7 +116,7 @@ class TrainModel:
 
         self.engine_power = value
 
-    def update(self, time_step):
+    def update(self, time_step, test = False):
         #First, calculate total mass from # of passengers and crew
         total_mass = self.mass + (self.passenger_count + self.crew_count)*75.0
 
@@ -167,9 +167,10 @@ class TrainModel:
         #Actually set the new velocity
         self.velocity = new_velocity
 
-        #If we exceed the event distance, call the track model event update function
-        if self.current_distance_in_block > self.event_distance_in_block:
-            delete = self.track_model.set_train_status(self)
-            if delete == -1: return -1
+        if not test:
+            #If we exceed the event distance, call the track model event update function
+            if self.current_distance_in_block > self.event_distance_in_block:
+                delete = self.track_model.set_train_status(self)
+                if delete == -1: return -1
             
         return 0

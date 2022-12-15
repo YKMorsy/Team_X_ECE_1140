@@ -16,14 +16,14 @@ class TrainModelHandler:
 				#q.setToolTip(row_tool_tip)
 				self.train_info_model.setItem(i, j, q)
 
-	def update(self, time_step = 0, train_model_var= None):
+	def update(self, time_step = 0, train_model_var= None, test = False):
 		#This function will build a list of all the train rows, and return it back to the thread that called it
 		list_of_lists = []
 		
 		#Build the list of lists, and keep a list of IDs that should be deleted
 		delete_IDs = []
 		for T in self.train_list.values():
-			delete = T.update(time_step)
+			delete = T.update(time_step, test)
 			if delete != -1: list_of_lists.append(self.UI_train_row(T))
 			else: delete_IDs.append(T.ID)
 				
@@ -43,21 +43,23 @@ class TrainModelHandler:
 			self.train_info_model.removeRow(i)
 
 		#Check that no trains have crashed into each other
-		blocks_occupied = {}
-		for T in self.train_list.values():
-			for B in T.block_list:
-				if (B in blocks_occupied.keys()) and (B!="YARD"):
-					#The dictionary consists of blocks for the keys and IDs for the values, so if the block is already in the dicionary, a crash is assumed
-					print("TRAIN " + str(blocks_occupied[B]) + " AND TRAIN " + str(T.ID) + " HAVE BOTH ENTERED BLOCK " + str(B) + ".\nA CRASH HAS BEEN ASSUMED.")
-				else:
-					blocks_occupied[B] = T.ID
+		if not test:
+			blocks_occupied = {}
+			for T in self.train_list.values():
+				for B in T.block_list:
+					if (B in blocks_occupied.keys()) and (B!="YARD"):
+						#The dictionary consists of blocks for the keys and IDs for the values, so if the block is already in the dicionary, a crash is assumed
+						print("TRAIN " + str(blocks_occupied[B]) + " AND TRAIN " + str(T.ID) + " HAVE BOTH ENTERED BLOCK " + str(B) + ".\nA CRASH HAS BEEN ASSUMED.")
+					else:
+						blocks_occupied[B] = T.ID
 
 		#Update the UI
 
 		self.UI_update(list_of_lists)
 
-		for train in self.train_list.values():
-			train_model_var.get_speed(train)
+		if not test:
+			for train in self.train_list.values():
+				train_model_var.get_speed(train)
 		
 		return delete_IDs
 
