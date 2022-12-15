@@ -37,7 +37,7 @@ class Train:
         self.cur_time = cur_time
 
     def setPosition(self, line_color, block_number, occupancy):
-        if ((len(self.route) >= 2) and block_number == self.route[1] and self.line.line_color == line_color and occupancy == True):
+        if (block_number == self.route[1] and self.line.line_color == line_color and occupancy == True):
             
             old_block = self.route[0]
             # Set previous authority to False
@@ -112,6 +112,8 @@ class Train:
                                 print("Possible Two Way Collision... Avoiding")
                             elif block_number == 98:
                                 suggested_speed = 0
+                            elif block_number == 99:
+                                suggested_speed = 0
                                 # self.line.block_list[self.route[0]].block_suggested_speed = suggested_speed
                                 # self.line.block_list[self.route[1]].block_suggested_speed = self.line.block_list[self.route[1]].block_speed_limit
                                 # self.route.insert(0, 98)
@@ -144,6 +146,10 @@ class Train:
                                 print("Possible Two Way Collision... Avoiding")
                             elif block_number == 74:
                                 suggested_speed = 0
+                            elif block_number == 75:
+                                suggested_speed = 0
+                            elif block_number == 76:
+                                suggested_speed = 0
                                 # self.line.block_list[self.route[0]].block_suggested_speed = suggested_speed
                                 # self.line.block_list[self.route[1]].block_suggested_speed = self.line.block_list[self.route[1]].block_speed_limit
                                 # self.route.insert(0, 74)
@@ -164,17 +170,17 @@ class Train:
                         if train.cur_section == "FED" and train.next_section == "GHI":
                             
                             # Check if train is on the last 4 blocks of OPQ
-                            if block_number == 146:
+                            if block_number == 145:
                                 suggested_speed = 0.75*current_block.block_speed_limit
                                 # self.line.block_list[self.route[0]].block_suggested_speed = suggested_speed
                                 # self.line.block_list[self.route[1]].block_suggested_speed = self.line.block_list[self.route[1]].block_speed_limit
                                 print("Possible Two Way Collision... Avoiding")
-                            elif block_number == 147:
+                            elif block_number == 146:
                                 suggested_speed = 0.5*current_block.block_speed_limit
                                 # self.line.block_list[self.route[0]].block_suggested_speed = suggested_speed
                                 # self.line.block_list[self.route[1]].block_suggested_speed = self.line.block_list[self.route[1]].block_speed_limit
                                 print("Possible Two Way Collision... Avoiding")
-                            elif block_number == 148:
+                            elif block_number == 147:
                                 suggested_speed = 0
                                 # self.line.block_list[self.route[0]].block_suggested_speed = suggested_speed
                                 # self.line.block_list[self.route[1]].block_suggested_speed = self.line.block_list[self.route[1]].block_speed_limit
@@ -488,12 +494,19 @@ class Train:
                     self.line.block_list[self.route[1]].block_authority = True
 
                     if self.line.block_list[self.route[1]].occupancy == True:
+                        
                         suggested_speed = 0
 
                 self.line.block_list[self.route[0]].block_authority = True
 
-                self.line.block_list[self.route[0]].block_suggested_speed = suggested_speed
+                if ((old_block == 55 or old_block == 56 or old_block == 57 or old_block == 0) and self.line.line_color == 'Green'):
+                    print(self.route[0])
+                    suggested_speed = current_block.block_speed_limit
+                    self.line.block_list[self.route[0]].block_suggested_speed = current_block.block_speed_limit
+                else:
+                    self.line.block_list[self.route[0]].block_suggested_speed = suggested_speed
+
 
             if suggested_speed == 0:
-                # print(old_block)
+                print(old_block)
                 self.route.insert(0, old_block)

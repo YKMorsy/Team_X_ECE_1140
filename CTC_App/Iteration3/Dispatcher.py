@@ -62,4 +62,5 @@ class Dispatcher:
                     # if len(train.route) <= 1:
                     #     self.trains.remove(train)
                     # else:
-                    train.setPosition(line_color, cur_key, True)
+                    if len(train.route) > 1:
+                        train.setPosition(line_color, cur_key, True)
