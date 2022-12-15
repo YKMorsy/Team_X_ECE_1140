@@ -16,7 +16,7 @@ def connect_train_model_train_controller(train_controller, train_model):
 
     train_controller.set_train_model_input(command_set_point, authority, current_set_point, brake_failure, signal_failure, engine_failure, station_name)
     train_controller.update()
-    service_brake, engine_power, emergency_brake, left_side_doors, right_side_doors, announce_stop, inside_lights, outside_lights, activate_announcement = train_controller.get_train_model_output()
+    service_brake, engine_power, emergency_brake, left_side_doors, right_side_doors, announce_stop, inside_lights, outside_lights, activate_announcement, current_stop, play_ad = train_controller.get_train_model_output()
 
     if ((left_side_doors and not train_model.left_doors_opened) or (right_side_doors and not train_model.right_doors_opened)):
         train_model.passenger_count -= random.randint(0,train_model.passenger_count)
@@ -31,6 +31,10 @@ def connect_train_model_train_controller(train_controller, train_model):
     #PA link
     train_model.interior_lights = inside_lights
     train_model.exterior_lights = outside_lights
+    train_model.activate_anouncement = activate_announcement
+    train_model.announce_stop = announce_stop
+    train_model.play_ad = play_ad
+    train_model.current_stop = current_stop
     #PA Link
 
     

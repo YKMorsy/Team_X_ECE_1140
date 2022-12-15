@@ -12,3 +12,5 @@ class TrainModelOutput:
     inside_lights: bool = False
     outside_lights: bool = False
     activate_announcement: bool = False
+    current_stop: str = ""
+    play_ad: bool = False
