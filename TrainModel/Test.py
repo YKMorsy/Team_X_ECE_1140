@@ -1103,12 +1103,18 @@ class ExpandedTableUI(QFrame):
 		self.train_info_select_table.setStyleSheet(table_stylesheet)
 		self.train_info_select_table.setAlternatingRowColors(True);
 
+        #Rearrange table s.t. faults are the first column
+		self.train_info_select_table.horizontalHeader().moveSection(9,1)
+	
+	    #Hide Distance Column
+		self.train_info_select_table.setColumnHidden(2, True)
+
 		#Put the table on the grid
 		self.grid_layout.addWidget(self.train_info_select_table, 0, 0)
 			
 		#Make the table completely fill the grid
-		self.grid_layout.setSpacing(0);
-		self.grid_layout.setContentsMargins(0, 0, 0, 0);
+		self.grid_layout.setSpacing(0)
+		self.grid_layout.setContentsMargins(0, 0, 0, 0)
 		
 		#Connect grid to window
 		self.setLayout(self.grid_layout)
