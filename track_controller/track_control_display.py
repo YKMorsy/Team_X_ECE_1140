@@ -41,6 +41,9 @@ class track_control_display (QtWidgets.QMainWindow, Ui_MainWindow):
     def maintence_box_checked(self):
         self.update_tables()
         self.track_data.set_maintenance_mode(self.maintenance_check_box.isChecked())
+        self.update_tables()
+        self.update_table(self.track_data.get_statuses(), self.maint_StatusTable, self.maintenance_check_box.isChecked())
+
 
     def item_changed(self, item):
         if item.column() ==1:
