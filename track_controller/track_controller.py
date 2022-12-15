@@ -166,7 +166,7 @@ class WaysideController ():
         return self.commanded_speed[key]
     def get_speed_limit (self):
         return self.speed_limit
-    def get_an_speed_lim(self, key):
+    def get_a_speed_lim(self, key):
         return self.speed_limit[key]
     def get_maintenance_mode (self):
         return self.maintencMode
