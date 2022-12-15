@@ -188,6 +188,7 @@ class TrainController:
                 self.__command_set_point = self.__speed_limit
         else:
             self.__approaching_station()
+            self.__announce_stop = True
             if self.__command_set_point == 0 and self.__train_model_input.current_set_point == 0:
                 self.__begin_wait = True
                 self.__left_side_doors = self.__door_side_left
@@ -202,6 +203,7 @@ class TrainController:
             self.__past_time = 0
             self.__stopping_at_station = False
             self.__begin_wait = False
+            self.__announce_stop = False
         
         if not self.__service_brakes and not self.__emergency_brakes:
             self.__calculate_power()

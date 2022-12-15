@@ -99,7 +99,7 @@ class Iteration_4(QWidget):
         self.__simulation_layout.addWidget(self.__simulation_pause)
     
     def __change_speed(self, value):
-        self.__multiplier = int(value / 10) + 1 
+        self.__multiplier = int(value) + 1 
     
     def __tabs_init(self):
         self.__tabs = QTabWidget()
