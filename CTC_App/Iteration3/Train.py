@@ -500,7 +500,7 @@ class Train:
                 self.line.block_list[self.route[0]].block_authority = True
 
                 if ((old_block == 55 or old_block == 56 or old_block == 57 or old_block == 0) and self.line.line_color == 'Green') or ((old_block == 7 or old_block == 8 or old_block == 9 or old_block == 0) and self.line.line_color == 'Red'):
-                    print(self.route[0])
+                    # print(self.route[0])
                     suggested_speed = current_block.block_speed_limit
                     self.line.block_list[self.route[0]].block_suggested_speed = current_block.block_speed_limit
                 else:
@@ -508,5 +508,5 @@ class Train:
 
 
             if suggested_speed == 0:
-                print(old_block)
+                # print(old_block)
                 self.route.insert(0, old_block)
