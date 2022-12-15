@@ -726,7 +726,7 @@ class Ui_Track_Model(object):
         self.track_list[122].beacon = {123 : [["OVERBROOK", 1], ["OVERBROOK", 1]]}
         self.track_list[131].beacon = {132 : [["INGLEWOOD", 0], ["INGLEWOOD", 0]]}
         self.track_list[140].beacon = {141 : [["CENTRAL", 1], ["CENTRAL", 1]]}
-        self.track_list[155].beacon = {6 : [["SHADYSIDE", 0], ["SHADYSIDE", 1]]}
+        self.track_list[156].beacon = {7 : [["SHADYSIDE", 0], ["SHADYSIDE", 1]]}
         self.track_list[165].beacon = {16 : [["HERRON AVE", 0], ["HERRON AVE", 1]]}
         self.track_list[170].beacon = {21 : [["SWISSVILLE", 0], ["SWISSVILLE", 1]]}
         self.track_list[174].beacon = {25 : [["PENN STATION", 1], ["PENN STATION", 0]]}
