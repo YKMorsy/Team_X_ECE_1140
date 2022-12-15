@@ -55,15 +55,11 @@ class WaysideController ():
     def make_light_changes(self, change, table):
         t= len(table)
         (typeS, bl, val) = change
-        if(val[0]=='1'):
-            val1 = True
+        if(val=='True'):
+            table[int(bl)] = [True, True]
         else:
-            val1 = False
-        if(val[0]=='1'):
-            val2 = True
-        else:
-            val2 = False
-        table[int(bl)] = [val1, val2]
+            table[int(bl)] = [False, False]
+        
 
     #----setters----
     def set_wayside_id(self, wid):

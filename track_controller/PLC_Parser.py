@@ -112,9 +112,9 @@ class PLC_Parser ():
 							else:
 								return "You can't make desicions off of the Commanded Speed"
 						elif(state == "="):
-							if(var[0] == '0'):
+							if(var[0] == '0' or var[0] == '00'):
 								theBool = "False"
-							elif(var[0] == '1'):
+							elif(var[0] == '1' or var[0] == '11'):
 								theBool = "True"
 
 							if(set_var[0] == "C"):

@@ -42,6 +42,15 @@ with open("track_controller/PLCs/RedLineTop_Red.txt", "w") as f:
         f.write("}\n")
 
     #write lights logic
+    light = [2000,2001,2006,2008,2009,2010,2015,2016,2017,2020,2022]
+    for l in light:
+        f.write("IF ( O-"+str(l)+" ) {\n")
+        f.write("L-"+str(l)+" = 11\n")
+        f.write("}\n")
+        f.write("ELSE {\n")
+        f.write("L-"+str(l)+" = 00\n")
+        f.write("}\n")
+
 
 with open("track_controller/PLCs/RedLineMiddle_Blue.txt", "w") as f:
     for i in range(2024, 2046):
@@ -96,6 +105,14 @@ with open("track_controller/PLCs/RedLineMiddle_Blue.txt", "w") as f:
         f.write("}\n")
 
     #write lights logic
+    light = [2024,2025,2027,2028,2032,2033,2038,2039,2043,2044,2067,2071,2072,2076]
+    for l in light:
+        f.write("IF ( O-"+str(l)+" ) {\n")
+        f.write("L-"+str(l)+" = 11\n")
+        f.write("}\n")
+        f.write("ELSE {\n")
+        f.write("L-"+str(l)+" = 00\n")
+        f.write("}\n")
 
 with open("track_controller/PLCs/RedLineBottom_Yellow.txt", "w") as f:
     for i in range(2046, 2067):
@@ -133,6 +150,15 @@ with open("track_controller/PLCs/RedLineBottom_Yellow.txt", "w") as f:
     f.write("}\n")
 
     #write lights logic
+    light = [2046,2047,2049,2052,2053,2059,2061,2066]
+    for l in light:
+        f.write("IF ( O-"+str(l)+" ) {\n")
+        f.write("L-"+str(l)+" = 11\n")
+        f.write("}\n")
+        f.write("ELSE {\n")
+        f.write("L-"+str(l)+" = 00\n")
+        f.write("}\n")
+
 
 with open("track_controller/PLCs/GreenLineTop_Red.txt", "w") as f:
     switches = [1013]
@@ -212,6 +238,8 @@ with open("track_controller/PLCs/GreenLineTop_Red.txt", "w") as f:
         f.write("L-"+str(l+1)+" = 11\n")
         f.write("L-"+str(l-1)+" = 00\n")
         f.write("}\n")
+    sw = [1001, 1012, 1013]
+
 
     #Authority
     #for i in range(1001, 1021):
