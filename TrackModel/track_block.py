@@ -50,6 +50,7 @@ class block:
     def toggle_fault_circuit(self):
         if self.fault_cir == 0:
             self.fault_cir = 1
+            self.occupancy = 1
             return 1
         else:
             self.fault_cir = 0
@@ -150,6 +151,7 @@ class block:
         self.fault_cir = 0
         self.fault_pow = 0
         self.fault_rail = 0
+        self.occupancy = 0
     
     def get_circuit_failure(self):
         return self.fault_cir
