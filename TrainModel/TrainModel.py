@@ -24,6 +24,7 @@ class TrainModel:
 
 
         self.velocity = 0.0
+        self.acceleration = 0.0
         self.current_distance_in_block = 0.0
         if line_name == "Red":
             self.event_distance_in_block = 75.0
@@ -60,7 +61,7 @@ class TrainModel:
         self.right_doors_opened = False
 
         self.activate_anouncement = False
-        self.anounce_stop = False
+        self.announce_stop = False
         self.play_ad = False
         self.current_stop = ""
 
@@ -150,7 +151,10 @@ class TrainModel:
         
         #Set the new velocity in a temp variable
         new_velocity = self.velocity + velocity_change
-        
+
+        #Set the acceleration as well
+        self.acceleration = velocity_change/time_step
+
         #The velocity should never be negative.
         if new_velocity<0.0: new_velocity = 0.0 
         

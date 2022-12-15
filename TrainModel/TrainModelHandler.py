@@ -134,10 +134,22 @@ class TrainModelHandler:
 
 		total_mass = (T.mass + (T.passenger_count + T.crew_count)*75.0)/907.185
 
+		PA = "Off"
+		if T.activate_anouncement: PA = "On"
+
+		stop_announce = "Off"
+		if T.announce_stop: stop_announce = "On"
+
+		ad_displayed = "Off"
+		if T.play_ad: ad_displayed = "Displayed"
+
 		#Return back the fully assembled list
-		return [str(T.ID), "{:.2f}".format(round(T.velocity/0.44704, 2)), "{:.2f}".format(round(T.current_distance_in_block/0.3048, 2)), str(round(T.engine_power)), "{:.2f}".format(round(total_mass, 2)), brake,
-				str(round(T.current_grade)), str(T.passenger_count), str(fault), str(T.interior_temperature), interior_lights,
-				exterior_lights, left_doors, right_doors, T.commanded_authority, str(T.commanded_speed)]
+		return [str(T.ID), "{:.2f}".format(round(T.velocity/0.44704, 2)), "{:.2f}".format(round(T.current_distance_in_block/0.3048, 2)), "{:.2f}".format(round(T.acceleration/0.3048, 2)),
+				str(round(T.engine_power)), "{:.2f}".format(round(total_mass, 2)), brake, str(round(T.current_grade)), str(T.passenger_count), 
+				str(fault), str(T.interior_temperature), interior_lights,
+				exterior_lights, left_doors, right_doors, T.commanded_authority, str(T.commanded_speed),
+				"{:.2f}".format(round(T.length/0.3048, 2)), "{:.2f}".format(round(T.width/0.3048, 2)), "{:.2f}".format(round(T.height/0.3048, 2)),
+				PA, stop_announce, T.current_stop, ad_displayed]
 	
 	def create_train(self, ID, mass = 40.9, crew_count = 2, passenger_capacity = 222, speed_limit = 43.50, acceleration_limit = 3.00, 
     service_deceleration = 3.94, emergency_deceleration = 8.96, max_engine_power = 480000, length = 106, height = 11.2, width = 8.69, 
