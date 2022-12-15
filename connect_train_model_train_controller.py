@@ -36,5 +36,3 @@ def connect_train_model_train_controller(train_controller, train_model):
     train_model.play_ad = play_ad
     train_model.current_stop = current_stop
     #PA Link
-
-    
